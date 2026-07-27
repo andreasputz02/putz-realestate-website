@@ -25,7 +25,28 @@ if (navToggle && mobileMenu) {
       navToggle.classList.remove("is-active");
     });
   });
+
+  document.addEventListener("click", (e) => {
+    if (!mobileMenu.classList.contains("is-open")) return;
+    if (mobileMenu.contains(e.target) || navToggle.contains(e.target)) return;
+    mobileMenu.classList.remove("is-open");
+    document.body.classList.remove("nav-open");
+    navToggle.classList.remove("is-active");
+  });
 }
+
+// ---------- Mobile nav collapsible group (Über Uns) ----------
+document.querySelectorAll(".mobile-nav-group").forEach((group) => {
+  const toggle = group.querySelector(".mobile-nav-toggle");
+  const panel = group.querySelector(".mobile-nav-panel");
+  if (!toggle || !panel) return;
+
+  toggle.addEventListener("click", () => {
+    const isOpen = group.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    panel.style.maxHeight = isOpen ? panel.scrollHeight + "px" : null;
+  });
+});
 
 // ---------- Scroll reveal ----------
 const revealEls = document.querySelectorAll("[data-reveal]");
