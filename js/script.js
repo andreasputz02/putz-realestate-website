@@ -84,21 +84,43 @@ filterButtons.forEach((btn) => {
   });
 });
 
-// ---------- Animated counters ----------
+// ---------- Animated counters (slot-machine digit reveal) ----------
 document.querySelectorAll(".counter").forEach((el) => {
   const target = parseInt(el.dataset.target, 10) || 0;
   const suffix = el.dataset.suffix || "";
-  const duration = 2200;
-  const start = performance.now();
+  const finalText = target.toLocaleString("de-DE") + suffix;
+  const digitCount = (finalText.match(/[0-9]/g) || []).length;
+  const tickMs = 65;
+  const ticksPerLock = 3;
+  const totalTicks = digitCount * ticksPerLock;
 
-  const tick = (now) => {
-    const progress = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const current = Math.round(target * eased);
-    el.textContent = current.toLocaleString("de-DE") + suffix;
-    if (progress < 1) requestAnimationFrame(tick);
+  let tick = 0;
+  let locked = 0;
+
+  const render = () => {
+    let digitIndex = 0;
+    let out = "";
+    for (const ch of finalText) {
+      if (/[0-9]/.test(ch)) {
+        out += digitIndex < locked ? ch : Math.floor(Math.random() * 10);
+        digitIndex++;
+      } else {
+        out += ch;
+      }
+    }
+    el.textContent = out;
   };
-  requestAnimationFrame(tick);
+
+  const spin = setInterval(() => {
+    tick++;
+    if (tick % ticksPerLock === 0) locked++;
+    if (locked >= digitCount) {
+      el.textContent = finalText;
+      clearInterval(spin);
+      return;
+    }
+    render();
+  }, tickMs);
 });
 
 // ---------- Forms (visual-only placeholder until email delivery is connected) ----------
