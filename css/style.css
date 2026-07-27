@@ -525,8 +525,47 @@ body.nav-open { overflow: hidden; }
 .section-dark { background: var(--black); color: var(--cream); }
 .section-dark h2, .section-dark h3 { color: var(--white); }
 .section-dark p.lede { color: rgba(255,255,255,0.68); }
-.section-cream { background: var(--cream); }
-.section-white { background: var(--white); }
+.section-dark .eyebrow { color: var(--gold-light); }
+
+.section-gold { background: linear-gradient(165deg, var(--gold-light), var(--gold)); }
+.section-gold .eyebrow { color: var(--ink); }
+.section-gold .eyebrow::before { background: var(--ink); }
+
+/* Dark-section overrides for components originally styled for light backgrounds */
+.section-dark .value-card h3 { color: var(--white); }
+.section-dark .value-card p { color: rgba(255, 255, 255, 0.6); }
+
+.section-dark .stat-row div strong { color: var(--white); }
+.section-dark .stat-row div span { color: rgba(255, 255, 255, 0.55); }
+
+.section-dark .profile-quote { color: var(--cream); }
+.section-dark .profile-quote em { color: var(--gold-light); }
+.section-dark .profile-signature .sig-line { color: var(--white); }
+.section-dark .profile-signature .sig-meta { color: rgba(255, 255, 255, 0.55); }
+
+.section-dark .partner-feature { border-color: var(--line-dark); }
+.section-dark .partner-feature .p-mark { color: var(--white); }
+.section-dark .partner-feature p { color: rgba(255, 255, 255, 0.6); }
+
+.section-dark .accordion-item { border-color: var(--line-dark); }
+.section-dark .accordion-head { color: var(--white); }
+.section-dark .accordion-head .plus::before,
+.section-dark .accordion-head .plus::after { background: var(--cream); }
+.section-dark .accordion-item.open .accordion-head { color: var(--gold-light); }
+.section-dark .accordion-panel-inner { color: rgba(255, 255, 255, 0.6); }
+
+.section-dark .field-note { color: rgba(255, 255, 255, 0.55); }
+
+.section-dark .listing-filters button {
+  color: rgba(255, 255, 255, 0.6);
+  border-color: var(--line-dark);
+}
+.section-dark .listing-filters button.active,
+.section-dark .listing-filters button:hover {
+  background: var(--gold);
+  color: var(--black);
+  border-color: var(--gold);
+}
 
 .section-head {
   display: flex;
