@@ -293,7 +293,7 @@ body.page-dark .site-header:not(.is-scrolled) { background: transparent; }
   position: fixed;
   top: 82px;
   right: 22px;
-  width: min(320px, calc(100vw - 44px));
+  width: min(250px, calc(100vw - 64px));
   max-height: calc(100vh - 104px);
   overflow-y: auto;
   z-index: 150;
@@ -308,7 +308,7 @@ body.page-dark .site-header:not(.is-scrolled) { background: transparent; }
 }
 .mobile-menu.is-open { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
 
-.mobile-menu ul { display: flex; flex-direction: column; gap: 2px; }
+.mobile-menu ul { display: flex; flex-direction: column; gap: 10px; }
 .mobile-menu a {
   font-family: var(--font-display);
   font-size: 21px;
