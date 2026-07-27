@@ -84,43 +84,23 @@ filterButtons.forEach((btn) => {
   });
 });
 
-// ---------- Animated counters (slot-machine digit reveal) ----------
+// ---------- Animated counters (smooth premium ease-out) ----------
 document.querySelectorAll(".counter").forEach((el) => {
   const target = parseInt(el.dataset.target, 10) || 0;
   const suffix = el.dataset.suffix || "";
-  const finalText = target.toLocaleString("de-DE") + suffix;
-  const digitCount = (finalText.match(/[0-9]/g) || []).length;
-  const tickMs = 65;
-  const ticksPerLock = 3;
-  const totalTicks = digitCount * ticksPerLock;
+  const duration = 2600;
+  const start = performance.now();
 
-  let tick = 0;
-  let locked = 0;
+  const easeOutExpo = (t) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
 
-  const render = () => {
-    let digitIndex = 0;
-    let out = "";
-    for (const ch of finalText) {
-      if (/[0-9]/.test(ch)) {
-        out += digitIndex < locked ? ch : Math.floor(Math.random() * 10);
-        digitIndex++;
-      } else {
-        out += ch;
-      }
-    }
-    el.textContent = out;
+  const tick = (now) => {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = easeOutExpo(progress);
+    const current = Math.round(target * eased);
+    el.textContent = current.toLocaleString("de-DE") + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
   };
-
-  const spin = setInterval(() => {
-    tick++;
-    if (tick % ticksPerLock === 0) locked++;
-    if (locked >= digitCount) {
-      el.textContent = finalText;
-      clearInterval(spin);
-      return;
-    }
-    render();
-  }, tickMs);
+  requestAnimationFrame(tick);
 });
 
 // ---------- Forms (visual-only placeholder until email delivery is connected) ----------
