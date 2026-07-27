@@ -84,6 +84,23 @@ filterButtons.forEach((btn) => {
   });
 });
 
+// ---------- Animated counters ----------
+document.querySelectorAll(".counter").forEach((el) => {
+  const target = parseInt(el.dataset.target, 10) || 0;
+  const suffix = el.dataset.suffix || "";
+  const duration = 2200;
+  const start = performance.now();
+
+  const tick = (now) => {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(target * eased);
+    el.textContent = current.toLocaleString("de-DE") + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+});
+
 // ---------- Forms (visual-only placeholder until email delivery is connected) ----------
 document.querySelectorAll("form[data-contact-form]").forEach((form) => {
   form.addEventListener("submit", (e) => {
