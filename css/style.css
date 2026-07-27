@@ -219,24 +219,33 @@ body.page-dark .site-header:not(.is-scrolled) { background: transparent; }
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translate(-50%, -6px);
-  margin-top: 18px;
-  min-width: 230px;
-  background: var(--black-soft);
-  border: 1px solid var(--line-dark);
-  border-radius: var(--radius-sm);
-  padding: 8px;
+  transform: translateX(-50%);
+  padding-top: 18px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+  transition: opacity 0.25s var(--ease);
   z-index: 10;
 }
 
 .main-nav .has-dropdown:hover .dropdown,
 .main-nav .has-dropdown:focus-within .dropdown {
   opacity: 1;
-  transform: translate(-50%, 0);
   pointer-events: auto;
+}
+
+.main-nav .dropdown-panel {
+  min-width: 230px;
+  background: var(--black-soft);
+  border: 1px solid var(--line-dark);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  transform: translateY(-6px);
+  transition: transform 0.25s var(--ease);
+}
+
+.main-nav .has-dropdown:hover .dropdown-panel,
+.main-nav .has-dropdown:focus-within .dropdown-panel {
+  transform: translateY(0);
 }
 
 .main-nav .dropdown a {
