@@ -25,10 +25,58 @@
 
   function buildGallery(gradient) {
     let html = `<div class="gallery-tile is-main" style="background:${gradient}"><span class="placeholder-icon">${cameraIcon}</span></div>`;
-    for (let i = 0; i < 8; i++) {
-      html += `<div class="gallery-tile" style="background:${gradient}; opacity:${(0.9 - i * 0.05).toFixed(2)}"><span class="placeholder-icon">${cameraIcon}</span></div>`;
+    for (let i = 0; i < 4; i++) {
+      const isLast = i === 3;
+      const opacity = (0.9 - i * 0.08).toFixed(2);
+      const inner = isLast ? `<span class="gallery-more">+</span>` : `<span class="placeholder-icon">${cameraIcon}</span>`;
+      html += `<div class="gallery-tile${isLast ? " is-more" : ""}" style="background:${gradient}; opacity:${opacity}">${inner}</div>`;
     }
     return html;
+  }
+
+  function setupLightbox(galleryEl, gradient) {
+    const lightbox = document.querySelector("[data-lightbox]");
+    if (!lightbox) return;
+    const tiles = [...galleryEl.querySelectorAll(".gallery-tile")];
+    const slides = tiles.map((t) => ({ background: t.style.background, opacity: t.style.opacity || "1" }));
+    const stage = lightbox.querySelector("[data-lightbox-stage]");
+    const counter = lightbox.querySelector("[data-lightbox-counter]");
+    const prevBtn = lightbox.querySelector("[data-lightbox-prev]");
+    const nextBtn = lightbox.querySelector("[data-lightbox-next]");
+    const closeBtn = lightbox.querySelector("[data-lightbox-close]");
+    let current = 0;
+
+    const show = (index) => {
+      current = (index + slides.length) % slides.length;
+      stage.style.background = slides[current].background;
+      stage.style.opacity = slides[current].opacity;
+      counter.textContent = `${current + 1} / ${slides.length}`;
+    };
+
+    const open = (index) => {
+      show(index);
+      lightbox.hidden = false;
+      document.body.classList.add("lightbox-open");
+    };
+
+    const close = () => {
+      lightbox.hidden = true;
+      document.body.classList.remove("lightbox-open");
+    };
+
+    tiles.forEach((tile, i) => tile.addEventListener("click", () => open(i)));
+    if (closeBtn) closeBtn.addEventListener("click", close);
+    if (prevBtn) prevBtn.addEventListener("click", () => show(current - 1));
+    if (nextBtn) nextBtn.addEventListener("click", () => show(current + 1));
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) close();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (lightbox.hidden) return;
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowLeft") show(current - 1);
+      if (e.key === "ArrowRight") show(current + 1);
+    });
   }
 
   function notFoundMarkup() {
@@ -80,7 +128,10 @@
       setText("price", listing.price);
 
       const galleryEl = detailRoot.querySelector('[data-field="gallery"]');
-      if (galleryEl) galleryEl.innerHTML = buildGallery(listing.gradient);
+      if (galleryEl) {
+        galleryEl.innerHTML = buildGallery(listing.gradient);
+        setupLightbox(galleryEl, listing.gradient);
+      }
 
       const descEl = detailRoot.querySelector('[data-field="description"]');
       if (descEl) descEl.innerHTML = listing.description.map((p) => `<p>${p}</p>`).join("");
