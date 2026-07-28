@@ -34,7 +34,7 @@ html { scroll-behavior: smooth; }
 body {
   font-family: var(--font-body);
   color: var(--ink);
-  background: var(--cream);
+  background: var(--black);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -566,6 +566,29 @@ body.nav-open { overflow: hidden; }
   color: var(--black);
   border-color: var(--gold);
 }
+
+/* Self-contained white cards keep their own light-card text colors
+   even when nested inside a dark section (broader .section-dark rules
+   above would otherwise wash them out to near-invisible on white). */
+.section-dark .feature-card .eyebrow,
+.section-dark .listing-card .eyebrow,
+.section-dark .partner-card .eyebrow,
+.section-dark .location-card .eyebrow,
+.section-dark .form-card .eyebrow,
+.section-dark .testimonial-card .eyebrow {
+  color: var(--gold-dim);
+}
+.section-dark .location-card .field-note,
+.section-dark .form-card .field-note {
+  color: var(--ink-soft);
+}
+
+.section-dark .back-link { color: rgba(255, 255, 255, 0.55); }
+.section-dark .back-link:hover { color: var(--gold-light); }
+.section-dark .property-specs-bar span { color: rgba(255, 255, 255, 0.55); }
+.section-dark .property-description p { color: rgba(255, 255, 255, 0.68); }
+
+.section-gold .btn-outline-dark:hover { border-color: var(--black); color: var(--black); }
 
 .section-head {
   display: flex;
