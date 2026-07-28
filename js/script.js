@@ -130,25 +130,43 @@ document.querySelectorAll(".video-slider-track").forEach((track) => {
   if (!wrap) return;
   const prevBtn = wrap.querySelector('[data-dir="-1"]');
   const nextBtn = wrap.querySelector('[data-dir="1"]');
+  const hintBtn = wrap.querySelector(".slider-hint");
+  const dots = [...wrap.querySelectorAll(".slider-dot")];
+  const gap = 28;
 
-  const scrollByDir = (dir) => {
+  const slideAmount = () => {
     const slide = track.querySelector(".video-slide");
-    const gap = 28;
-    const amount = (slide ? slide.getBoundingClientRect().width : track.clientWidth) + gap;
-    track.scrollBy({ left: dir * amount, behavior: "smooth" });
+    return (slide ? slide.getBoundingClientRect().width : track.clientWidth) + gap;
   };
+
+  const scrollByDir = (dir) => track.scrollBy({ left: dir * slideAmount(), behavior: "smooth" });
+  const scrollToIndex = (index) => track.scrollTo({ left: index * slideAmount(), behavior: "smooth" });
 
   if (prevBtn) prevBtn.addEventListener("click", () => scrollByDir(-1));
   if (nextBtn) nextBtn.addEventListener("click", () => scrollByDir(1));
+  if (hintBtn) hintBtn.addEventListener("click", () => scrollByDir(1));
+
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => scrollToIndex(Number(dot.dataset.index)));
+  });
 
   const updateArrows = () => {
     const maxScroll = track.scrollWidth - track.clientWidth - 4;
-    if (prevBtn) prevBtn.disabled = track.scrollLeft <= 4;
-    if (nextBtn) nextBtn.disabled = track.scrollLeft >= maxScroll;
+    const atStart = track.scrollLeft <= 4;
+    const atEnd = track.scrollLeft >= maxScroll;
+    if (prevBtn) prevBtn.disabled = atStart;
+    if (nextBtn) nextBtn.disabled = atEnd;
+    if (hintBtn) hintBtn.classList.toggle("is-hidden", atEnd);
+
+    if (dots.length) {
+      const activeIndex = Math.round(track.scrollLeft / slideAmount());
+      dots.forEach((dot, i) => dot.classList.toggle("is-active", i === activeIndex));
+    }
   };
   track.addEventListener("scroll", updateArrows, { passive: true });
   window.addEventListener("resize", updateArrows);
   updateArrows();
+  if (dots.length) dots[0].classList.add("is-active");
 });
 
 // ---------- Forms (visual-only placeholder until email delivery is connected) ----------
