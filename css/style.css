@@ -582,6 +582,12 @@ body.nav-open { overflow: hidden; }
 .section-dark .form-card .field-note {
   color: var(--ink-soft);
 }
+.section-dark .feature-card h3,
+.section-dark .listing-card h3,
+.section-dark .location-card h3,
+.section-dark .form-card h3 {
+  color: var(--ink);
+}
 
 .section-dark .back-link { color: rgba(255, 255, 255, 0.55); }
 .section-dark .back-link:hover { color: var(--gold-light); }
@@ -610,6 +616,7 @@ body.nav-open { overflow: hidden; }
 
 .feature-card {
   background: var(--white);
+  color: var(--ink);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   padding: 38px 32px;
@@ -651,6 +658,7 @@ body.nav-open { overflow: hidden; }
 
 .listing-card {
   background: var(--white);
+  color: var(--ink);
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--line);
@@ -916,6 +924,7 @@ body.nav-open { overflow: hidden; }
 .location-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
 .location-card {
   background: var(--white);
+  color: var(--ink);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -935,6 +944,7 @@ body.nav-open { overflow: hidden; }
 
 .form-card {
   background: var(--white);
+  color: var(--ink);
   border-radius: var(--radius-lg);
   padding: 44px;
   border: 1px solid var(--line);
@@ -1149,6 +1159,7 @@ body.lightbox-open { overflow: hidden; }
 
 .agent-card {
   background: var(--white);
+  color: var(--ink);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   padding: 24px 26px;
@@ -1184,6 +1195,7 @@ body.lightbox-open { overflow: hidden; }
 .partner-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .partner-card {
   background: var(--white);
+  color: var(--ink);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   padding: 34px 22px;
