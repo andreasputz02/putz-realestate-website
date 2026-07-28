@@ -86,6 +86,7 @@
       if (descEl) descEl.innerHTML = listing.description.map((p) => `<p>${p}</p>`).join("");
 
       const videoWrap = detailRoot.querySelector('[data-field="video-wrap"]');
+      const topEl = detailRoot.querySelector(".property-top");
       if (videoWrap && listing.video) {
         videoWrap.hidden = false;
         const player = videoWrap.querySelector(".video-feature-player");
@@ -95,6 +96,8 @@
         videoEl.setAttribute("poster", listing.video.poster);
         sourceEl.setAttribute("src", listing.video.src);
         videoEl.load();
+      } else if (topEl) {
+        topEl.classList.add("no-video");
       }
 
       const subjectField = detailRoot.querySelector('[data-field="form-subject"]');

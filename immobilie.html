@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=17">
+<link rel="stylesheet" href="css/style.css?v=18">
 </head>
 <body class="page-dark">
 
@@ -81,81 +81,79 @@
       </a>
 
       <div data-property-body>
-        <div class="property-layout">
-          <div class="property-main">
-            <div class="property-gallery" data-field="gallery"></div>
+        <div class="property-top">
+          <div class="property-gallery" data-field="gallery"></div>
 
-            <div class="property-specs-bar">
-              <div><strong data-field="area">–</strong><span>Wohnfläche</span></div>
-              <div><strong data-field="rooms">–</strong><span>Zimmer</span></div>
-              <div><strong data-field="baths">–</strong><span data-field="baths-label">Bäder</span></div>
-              <div class="price-highlight"><strong data-field="price">–</strong><span>Preis</span></div>
-            </div>
-
-            <div class="property-description" data-field="description"></div>
-
-            <div class="property-video" data-field="video-wrap" hidden>
-              <h2>Video-Rundgang</h2>
-              <div class="video-feature-player">
-                <video controls preload="metadata">
-                  <source src="" type="video/mp4">
-                  Ihr Browser unterstützt das Video-Element leider nicht.
-                </video>
-              </div>
+          <div class="property-video" data-field="video-wrap" hidden>
+            <h2>Video-Rundgang</h2>
+            <div class="video-feature-player">
+              <video controls preload="metadata">
+                <source src="" type="video/mp4">
+                Ihr Browser unterstützt das Video-Element leider nicht.
+              </video>
             </div>
           </div>
+        </div>
 
-          <aside class="property-sidebar">
-            <div class="form-card" data-reveal>
-              <p class="eyebrow">Interesse geweckt?</p>
-              <h3 style="font-size:20px; margin-top:10px; margin-bottom:24px; font-weight:600;">Anfrage senden</h3>
-              <form data-contact-form>
-                <div class="form-row">
-                  <div class="field">
-                    <label for="p-vorname">Vorname</label>
-                    <input type="text" id="p-vorname" name="vorname" required>
-                  </div>
-                  <div class="field">
-                    <label for="p-nachname">Nachname</label>
-                    <input type="text" id="p-nachname" name="nachname" required>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="field">
-                    <label for="p-email">E-Mail</label>
-                    <input type="email" id="p-email" name="email" required>
-                  </div>
-                  <div class="field">
-                    <label for="p-telefon">Telefon</label>
-                    <input type="tel" id="p-telefon" name="telefon">
-                  </div>
+        <div class="property-specs-bar">
+          <div><strong data-field="area">–</strong><span>Wohnfläche</span></div>
+          <div><strong data-field="rooms">–</strong><span>Zimmer</span></div>
+          <div><strong data-field="baths">–</strong><span data-field="baths-label">Bäder</span></div>
+          <div class="price-highlight"><strong data-field="price">–</strong><span>Preis</span></div>
+        </div>
+
+        <div class="property-description" data-field="description"></div>
+
+        <div class="property-inquiry">
+          <div class="form-card" data-reveal>
+            <p class="eyebrow">Interesse geweckt?</p>
+            <h3 style="font-size:20px; margin-top:10px; margin-bottom:24px; font-weight:600;">Anfrage senden</h3>
+            <form data-contact-form>
+              <div class="form-row">
+                <div class="field">
+                  <label for="p-vorname">Vorname</label>
+                  <input type="text" id="p-vorname" name="vorname" required>
                 </div>
                 <div class="field">
-                  <label for="p-objekt">Ihre Anfrage betrifft</label>
-                  <input type="text" id="p-objekt" name="objekt" data-field="form-subject" readonly>
+                  <label for="p-nachname">Nachname</label>
+                  <input type="text" id="p-nachname" name="nachname" required>
                 </div>
-                <div class="field">
-                  <label for="p-nachricht">Nachricht</label>
-                  <textarea id="p-nachricht" name="nachricht" required>Ich interessiere mich für dieses Objekt und hätte gerne weitere Informationen.</textarea>
-                </div>
-                <button type="submit" class="btn btn-gold btn-block">
-                  Anfrage senden
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                </button>
-                <p class="field-note">Ihre Anfrage geht direkt an office@putzrealestate.at. Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Daten gemäß unserer <a href="datenschutz.html" style="text-decoration:underline;">Datenschutzerklärung</a> zu.</p>
-                <div class="form-status"></div>
-              </form>
-            </div>
-
-            <div class="agent-card" data-reveal>
-              <img src="assets/img/andreas-putz.jpg" alt="Andreas Putz">
-              <div>
-                <h4>Andreas Putz</h4>
-                <a href="tel:+4366643500662">0664 3500662</a>
-                <a href="mailto:office@putzrealestate.at">office@putzrealestate.at</a>
               </div>
+              <div class="form-row">
+                <div class="field">
+                  <label for="p-email">E-Mail</label>
+                  <input type="email" id="p-email" name="email" required>
+                </div>
+                <div class="field">
+                  <label for="p-telefon">Telefon</label>
+                  <input type="tel" id="p-telefon" name="telefon">
+                </div>
+              </div>
+              <div class="field">
+                <label for="p-objekt">Ihre Anfrage betrifft</label>
+                <input type="text" id="p-objekt" name="objekt" data-field="form-subject" readonly>
+              </div>
+              <div class="field">
+                <label for="p-nachricht">Nachricht</label>
+                <textarea id="p-nachricht" name="nachricht" required>Ich interessiere mich für dieses Objekt und hätte gerne weitere Informationen.</textarea>
+              </div>
+              <button type="submit" class="btn btn-gold btn-block">
+                Anfrage senden
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+              <p class="field-note">Ihre Anfrage geht direkt an office@putzrealestate.at. Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Daten gemäß unserer <a href="datenschutz.html" style="text-decoration:underline;">Datenschutzerklärung</a> zu.</p>
+              <div class="form-status"></div>
+            </form>
+          </div>
+
+          <div class="agent-card" data-reveal>
+            <img src="assets/img/andreas-putz.jpg" alt="Andreas Putz">
+            <div>
+              <h4>Andreas Putz</h4>
+              <a href="tel:+4366643500662">0664 3500662</a>
+              <a href="mailto:office@putzrealestate.at">office@putzrealestate.at</a>
             </div>
-          </aside>
+          </div>
         </div>
       </div>
     </div>
@@ -224,7 +222,7 @@
 </footer>
 
 <script src="js/listings-data.js?v=1"></script>
-<script src="js/listings.js?v=1"></script>
-<script src="js/script.js?v=17"></script>
+<script src="js/listings.js?v=2"></script>
+<script src="js/script.js?v=18"></script>
 </body>
 </html>
