@@ -130,7 +130,6 @@ document.querySelectorAll(".video-slider-track").forEach((track) => {
   if (!wrap) return;
   const prevBtn = wrap.querySelector('[data-dir="-1"]');
   const nextBtn = wrap.querySelector('[data-dir="1"]');
-  const hintBtn = wrap.querySelector(".slider-hint");
   const dots = [...wrap.querySelectorAll(".slider-dot")];
   const gap = 28;
 
@@ -144,7 +143,6 @@ document.querySelectorAll(".video-slider-track").forEach((track) => {
 
   if (prevBtn) prevBtn.addEventListener("click", () => scrollByDir(-1));
   if (nextBtn) nextBtn.addEventListener("click", () => scrollByDir(1));
-  if (hintBtn) hintBtn.addEventListener("click", () => scrollByDir(1));
 
   dots.forEach((dot) => {
     dot.addEventListener("click", () => scrollToIndex(Number(dot.dataset.index)));
@@ -156,7 +154,6 @@ document.querySelectorAll(".video-slider-track").forEach((track) => {
     const atEnd = track.scrollLeft >= maxScroll;
     if (prevBtn) prevBtn.disabled = atStart;
     if (nextBtn) nextBtn.disabled = atEnd;
-    if (hintBtn) hintBtn.classList.toggle("is-hidden", atEnd);
 
     if (dots.length) {
       const activeIndex = Math.round(track.scrollLeft / slideAmount());

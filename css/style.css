@@ -845,24 +845,6 @@ body.nav-open { overflow: hidden; }
 .slider-dot:hover { background: rgba(23, 22, 26, 0.4); }
 .slider-dot.is-active { background: var(--ink); transform: scale(1.2); }
 
-.slider-hint {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ink-soft);
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 6px;
-  transition: opacity 0.3s var(--ease), color 0.3s var(--ease);
-}
-.slider-hint:hover { color: var(--ink); }
-.slider-hint svg { width: 16px; height: 16px; animation: hintNudge 1.6s ease-in-out infinite; }
-.slider-hint.is-hidden { opacity: 0; pointer-events: none; }
-@keyframes hintNudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
-
 .slider-arrows { display: flex; gap: 10px; flex-shrink: 0; }
 .slider-arrow {
   width: 44px;
@@ -878,10 +860,6 @@ body.nav-open { overflow: hidden; }
 .slider-arrow svg { width: 18px; height: 18px; }
 .slider-arrow:hover { background: var(--black); border-color: var(--black); color: var(--gold-light); }
 .slider-arrow:disabled { opacity: 0.3; pointer-events: none; }
-
-@media (max-width: 640px) {
-  .slider-hint span { display: none; }
-}
 
 /* ---------- Testimonials ---------- */
 
