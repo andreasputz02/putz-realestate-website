@@ -25,8 +25,8 @@
 
   function buildGallery(gradient) {
     let html = `<div class="gallery-tile is-main" style="background:${gradient}"><span class="placeholder-icon">${cameraIcon}</span></div>`;
-    for (let i = 0; i < 4; i++) {
-      html += `<div class="gallery-tile" style="background:${gradient}; opacity:${(0.86 - i * 0.09).toFixed(2)}"><span class="placeholder-icon">${cameraIcon}</span></div>`;
+    for (let i = 0; i < 8; i++) {
+      html += `<div class="gallery-tile" style="background:${gradient}; opacity:${(0.9 - i * 0.05).toFixed(2)}"><span class="placeholder-icon">${cameraIcon}</span></div>`;
     }
     return html;
   }
