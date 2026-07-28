@@ -124,17 +124,23 @@ document.querySelectorAll(".counter").forEach((el) => {
   requestAnimationFrame(tick);
 });
 
-// ---------- Video slider ----------
-document.querySelectorAll(".video-slider-track").forEach((track) => {
-  const wrap = track.closest(".video-slider");
+// ---------- Track sliders (video + testimonials) ----------
+function setupTrackSlider(track, gap) {
+  const wrap = track.parentElement;
   if (!wrap) return;
   const prevBtn = wrap.querySelector('[data-dir="-1"]');
   const nextBtn = wrap.querySelector('[data-dir="1"]');
   const dots = [...wrap.querySelectorAll(".slider-dot")];
-  const gap = 28;
+
+  const findSlide = () => {
+    for (const el of track.querySelectorAll("*")) {
+      if (getComputedStyle(el).scrollSnapAlign !== "none") return el;
+    }
+    return track.firstElementChild;
+  };
 
   const slideAmount = () => {
-    const slide = track.querySelector(".video-slide");
+    const slide = findSlide();
     return (slide ? slide.getBoundingClientRect().width : track.clientWidth) + gap;
   };
 
@@ -164,7 +170,9 @@ document.querySelectorAll(".video-slider-track").forEach((track) => {
   window.addEventListener("resize", updateArrows);
   updateArrows();
   if (dots.length) dots[0].classList.add("is-active");
-});
+}
+
+document.querySelectorAll(".video-slider-track, .testimonial-slider-track").forEach((track) => setupTrackSlider(track, 28));
 
 // ---------- Forms (visual-only placeholder until email delivery is connected) ----------
 document.querySelectorAll("form[data-contact-form]").forEach((form) => {

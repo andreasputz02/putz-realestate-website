@@ -848,7 +848,7 @@ body.nav-open { overflow: hidden; }
   scroll-snap-align: start;
 }
 
-.video-slider-controls {
+.slider-controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -891,6 +891,12 @@ body.nav-open { overflow: hidden; }
 .slider-arrow:hover { background: var(--black); border-color: var(--black); color: var(--gold-light); }
 .slider-arrow:disabled { opacity: 0.3; pointer-events: none; }
 
+.section-dark .slider-arrow { border-color: rgba(255, 255, 255, 0.25); color: var(--white); }
+.section-dark .slider-arrow:hover { background: var(--gold); border-color: var(--gold); color: var(--black); }
+.section-dark .slider-dot { background: rgba(255, 255, 255, 0.25); }
+.section-dark .slider-dot:hover { background: rgba(255, 255, 255, 0.45); }
+.section-dark .slider-dot.is-active { background: var(--gold); }
+
 /* ---------- Testimonials ---------- */
 
 .testimonial-track {
@@ -917,6 +923,44 @@ body.nav-open { overflow: hidden; }
 }
 .testimonial-who strong { display: block; font-size: 14.5px; color: var(--white); }
 .testimonial-who span { font-size: 12.5px; color: rgba(255,255,255,0.5); }
+
+.testimonial-slider-track {
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.testimonial-slider-track::-webkit-scrollbar { display: none; }
+
+.testimonial-page {
+  flex: 0 0 100%;
+  min-width: 0;
+  scroll-snap-align: start;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.testimonial-page .testimonial-card { min-width: 0; }
+
+.testimonial-page .testimonial-card { padding: 24px 22px; }
+.testimonial-page .testimonial-card .stars { margin-bottom: 16px; }
+.testimonial-page .testimonial-card .stars svg { width: 13px; height: 13px; }
+.testimonial-page .testimonial-card p { font-size: 13.5px; line-height: 1.6; margin-bottom: 18px; }
+.testimonial-page .testimonial-who .avatar { width: 36px; height: 36px; font-size: 13px; }
+.testimonial-page .testimonial-who strong { font-size: 13px; }
+.testimonial-page .testimonial-who span { font-size: 11px; }
+
+@media (max-width: 640px) {
+  .testimonial-page { display: contents; }
+  .testimonial-slider-track .testimonial-card {
+    flex: 0 0 88%;
+    scroll-snap-align: start;
+  }
+  .testimonial-slider .slider-progress { display: none; }
+}
 
 /* ---------- Location cards ---------- */
 
