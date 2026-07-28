@@ -87,6 +87,7 @@ h1, h2, h3, h4 {
 }
 
 .eyebrow.on-dark { color: var(--gold-light); }
+.eyebrow.no-dot::before { display: none; }
 
 p.lede {
   font-size: 18px;
