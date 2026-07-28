@@ -124,6 +124,33 @@ document.querySelectorAll(".counter").forEach((el) => {
   requestAnimationFrame(tick);
 });
 
+// ---------- Video slider ----------
+document.querySelectorAll(".video-slider-track").forEach((track) => {
+  const wrap = track.closest(".video-slider");
+  if (!wrap) return;
+  const prevBtn = wrap.querySelector('[data-dir="-1"]');
+  const nextBtn = wrap.querySelector('[data-dir="1"]');
+
+  const scrollByDir = (dir) => {
+    const slide = track.querySelector(".video-slide");
+    const gap = 28;
+    const amount = (slide ? slide.getBoundingClientRect().width : track.clientWidth) + gap;
+    track.scrollBy({ left: dir * amount, behavior: "smooth" });
+  };
+
+  if (prevBtn) prevBtn.addEventListener("click", () => scrollByDir(-1));
+  if (nextBtn) nextBtn.addEventListener("click", () => scrollByDir(1));
+
+  const updateArrows = () => {
+    const maxScroll = track.scrollWidth - track.clientWidth - 4;
+    if (prevBtn) prevBtn.disabled = track.scrollLeft <= 4;
+    if (nextBtn) nextBtn.disabled = track.scrollLeft >= maxScroll;
+  };
+  track.addEventListener("scroll", updateArrows, { passive: true });
+  window.addEventListener("resize", updateArrows);
+  updateArrows();
+});
+
 // ---------- Forms (visual-only placeholder until email delivery is connected) ----------
 document.querySelectorAll("form[data-contact-form]").forEach((form) => {
   form.addEventListener("submit", (e) => {
