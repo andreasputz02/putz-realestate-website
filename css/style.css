@@ -530,9 +530,7 @@ body.nav-open { overflow: hidden; }
 .section-dark p.lede { color: rgba(255,255,255,0.68); }
 .section-dark .eyebrow { color: var(--gold-light); }
 
-.section-gold { background: linear-gradient(165deg, var(--gold-light), var(--gold)); }
-.section-gold .eyebrow { color: var(--ink); }
-.section-gold .eyebrow::before { background: var(--ink); }
+.section-white { background: var(--white); }
 
 /* Dark-section overrides for components originally styled for light backgrounds */
 .section-dark .value-card h3 { color: var(--white); }
@@ -596,8 +594,6 @@ body.nav-open { overflow: hidden; }
 .section-dark .back-link:hover { color: var(--gold-light); }
 .section-dark .property-specs-bar span { color: rgba(255, 255, 255, 0.55); }
 .section-dark .property-description p { color: rgba(255, 255, 255, 0.68); }
-
-.section-gold .btn-outline-dark:hover { border-color: var(--black); color: var(--black); }
 
 .section-head {
   display: flex;
