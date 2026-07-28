@@ -23,13 +23,31 @@
       </a>`;
   }
 
-  function buildGallery(gradient) {
-    let html = `<div class="gallery-tile is-main" style="background:${gradient}"><span class="placeholder-icon">${cameraIcon}</span></div>`;
+  function galleryTile(gradient, opacity, extraClass, inner) {
+    const cls = extraClass ? ` ${extraClass}` : "";
+    return `<div class="gallery-tile${cls}" style="background:${gradient}; opacity:${opacity}">${inner}</div>`;
+  }
+
+  function buildGallery(gradient, hasVideo) {
+    const icon = `<span class="placeholder-icon">${cameraIcon}</span>`;
+    const more = `<span class="gallery-more">+</span>`;
+
+    if (hasVideo) {
+      let html = galleryTile(gradient, "1", "is-main", icon);
+      for (let i = 0; i < 4; i++) {
+        const isLast = i === 3;
+        html += galleryTile(gradient, (0.9 - i * 0.08).toFixed(2), isLast ? "is-more" : "", isLast ? more : icon);
+      }
+      return html;
+    }
+
+    let html = galleryTile(gradient, "1", "is-main", icon);
+    for (let i = 0; i < 2; i++) {
+      html += galleryTile(gradient, (0.94 - i * 0.06).toFixed(2), "is-side", icon);
+    }
     for (let i = 0; i < 4; i++) {
       const isLast = i === 3;
-      const opacity = (0.9 - i * 0.08).toFixed(2);
-      const inner = isLast ? `<span class="gallery-more">+</span>` : `<span class="placeholder-icon">${cameraIcon}</span>`;
-      html += `<div class="gallery-tile${isLast ? " is-more" : ""}" style="background:${gradient}; opacity:${opacity}">${inner}</div>`;
+      html += galleryTile(gradient, (0.86 - i * 0.06).toFixed(2), isLast ? "is-more" : "", isLast ? more : icon);
     }
     return html;
   }
@@ -127,18 +145,26 @@
       setText("baths-label", listing.baths === "1" ? "Bad" : "Bäder");
       setText("price", listing.price);
 
+      const hasVideo = !!listing.video;
+
       const galleryEl = detailRoot.querySelector('[data-field="gallery"]');
       if (galleryEl) {
-        galleryEl.innerHTML = buildGallery(listing.gradient);
+        galleryEl.classList.toggle("is-wide-layout", !hasVideo);
+        galleryEl.innerHTML = buildGallery(listing.gradient, hasVideo);
         setupLightbox(galleryEl, listing.gradient);
       }
 
       const descEl = detailRoot.querySelector('[data-field="description"]');
       if (descEl) descEl.innerHTML = listing.description.map((p) => `<p>${p}</p>`).join("");
 
+      const mapEl = detailRoot.querySelector('[data-field="map"]');
+      if (mapEl && listing.mapQuery) {
+        mapEl.src = `https://www.google.com/maps?q=${encodeURIComponent(listing.mapQuery)}&output=embed`;
+      }
+
       const videoWrap = detailRoot.querySelector('[data-field="video-wrap"]');
       const topEl = detailRoot.querySelector(".property-top");
-      if (videoWrap && listing.video) {
+      if (videoWrap && hasVideo) {
         videoWrap.hidden = false;
         const player = videoWrap.querySelector(".video-feature-player");
         const videoEl = videoWrap.querySelector("video");
