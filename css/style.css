@@ -787,7 +787,6 @@ body.nav-open { overflow: hidden; }
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--black);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
 }
 
 .video-feature-player video {
