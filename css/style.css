@@ -29,14 +29,13 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   font-family: var(--font-body);
   color: var(--ink);
   background: var(--black);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 img { max-width: 100%; display: block; }
@@ -1036,14 +1035,16 @@ body.nav-open { overflow: hidden; }
   }
 }
 
-/* ---------- Partner showcase ---------- */
+/* ---------- Partner stack ---------- */
 
-.partner-showcase-grid {
+.partner-stack {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 22px;
 }
-.partner-showcase-card {
+.partner-stack-item { padding: 0; }
+
+.partner-stack-card {
   background: var(--black-soft);
   border: 1px solid var(--line-dark);
   border-radius: var(--radius-md);
@@ -1054,6 +1055,7 @@ body.nav-open { overflow: hidden; }
   text-align: center;
   gap: 4px;
 }
+
 .partner-logo-chip {
   width: 84px;
   height: 84px;
@@ -1063,15 +1065,48 @@ body.nav-open { overflow: hidden; }
   align-items: center;
   justify-content: center;
   padding: 14px;
-  margin-bottom: 14px;
+  flex-shrink: 0;
+  margin-bottom: 10px;
   overflow: hidden;
 }
 .partner-logo-chip img { max-width: 100%; max-height: 100%; object-fit: contain; }
-.partner-showcase-card h3 { font-size: 16.5px; font-weight: 600; color: var(--white); }
-.partner-showcase-card .partner-role { font-size: 12px; color: var(--gold-dim); letter-spacing: 0.03em; margin-top: 4px; }
-.partner-showcase-card .btn { margin-top: 18px; }
+
+.partner-info { flex: 1; min-width: 0; }
+.partner-stack-card h3 { font-size: 16.5px; font-weight: 600; color: var(--white); }
+.partner-stack-card .partner-role { font-size: 12px; color: var(--gold-dim); letter-spacing: 0.03em; margin-top: 4px; }
+.partner-stack-card .btn { margin-top: 14px; }
 
 .btn-sm { padding: 10px 20px; font-size: 12.5px; }
+
+@media (max-width: 700px) {
+  .partner-stack { display: block; padding-top: 55px; }
+
+  .partner-stack-item { padding: 0; }
+  .partner-stack-spacer { height: 42vh; }
+
+  .partner-stack-card {
+    position: sticky;
+    top: 90px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: left;
+    gap: 16px 18px;
+    padding: 24px 22px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  }
+  .partner-stack-card .btn { flex: 1 0 100%; justify-content: center; }
+  .partner-stack-item:nth-child(1) .partner-stack-card { z-index: 1; }
+  .partner-stack-item:nth-child(2) .partner-stack-card { z-index: 2; }
+  .partner-stack-item:nth-child(3) .partner-stack-card { z-index: 3; }
+  .partner-stack-item:nth-child(4) .partner-stack-card { z-index: 4; }
+  .partner-stack-item:nth-child(5) .partner-stack-card { z-index: 5; }
+  .partner-stack-item:nth-child(6) .partner-stack-card { z-index: 6; }
+  .partner-stack-item:nth-child(7) .partner-stack-card { z-index: 7; }
+
+  .partner-logo-chip { margin-bottom: 0; width: 64px; height: 64px; }
+  .partner-stack-card .btn { margin-top: 0; }
+}
 
 /* ---------- Location cards ---------- */
 
