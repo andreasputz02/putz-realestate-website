@@ -172,7 +172,7 @@ function setupTrackSlider(track, gap) {
   if (dots.length) dots[0].classList.add("is-active");
 }
 
-document.querySelectorAll(".video-slider-track, .testimonial-slider-track").forEach((track) => setupTrackSlider(track, 28));
+document.querySelectorAll(".video-slider-track, .testimonial-slider-track, .team-slider-track").forEach((track) => setupTrackSlider(track, 28));
 
 // ---------- Forms (visual-only placeholder until email delivery is connected) ----------
 document.querySelectorAll("form[data-contact-form]").forEach((form) => {
