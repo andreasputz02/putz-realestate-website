@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b0b0c">
-<title>Unsere Immobilien — PUTZ Real Estate</title>
-<meta name="description" content="Aktuelle Immobilienangebote von PUTZ Real Estate in Wien und Wolkersdorf — Kauf und Miete.">
+<title>Werde Tippgeber — PUTZ Real Estate</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b0b0c'/><circle cx='32' cy='32' r='14' fill='%23cfa858'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +20,7 @@
     </a>
     <nav class="main-nav">
       <ul>
-        <li><a href="immobilien.html" class="active">Unsere Immobilien</a></li>
+        <li><a href="immobilien.html">Unsere Immobilien</a></li>
         <li class="has-dropdown">
           <a href="ueber-uns.html">Über Uns
             <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -36,12 +35,12 @@
         <li><a href="verkaufen.html">Verkaufen</a></li>
         <li><a href="referenzen.html">Referenzen</a></li>
         <li class="has-dropdown">
-          <a href="news.html">Aktuelles
+          <a href="news.html" class="active">Aktuelles
             <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </a>
           <div class="dropdown">
             <div class="dropdown-panel">
-              <a href="tippgeber.html">Werde Tippgeber</a>
+              <a href="tippgeber.html" class="active">Werde Tippgeber</a>
               <a href="news.html">News</a>
               <a href="veranstaltungen.html">Veranstaltungen</a>
               <a href="karriere.html">Karriere</a>
@@ -89,46 +88,23 @@
 </header>
 
 <main>
-  <section class="page-hero">
+  <section class="page-hero" style="padding-bottom:60px;">
     <div class="container">
-      <p class="eyebrow on-dark">Unsere Immobilien</p>
-      <h1>Aktuelle Angebote in Wien &amp; Umgebung</h1>
-      <p class="lede">Von der Altbauwohnung bis zum Einfamilienhaus — hier finden Sie eine Auswahl unserer aktuell betreuten Objekte. Nicht das Richtige dabei? Sprechen Sie uns gerne direkt an.</p>
-      <div class="breadcrumb"><a href="index.html">Start</a> / Unsere Immobilien</div>
-    </div>
-  </section>
-
-  <section class="section section-dark">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <div>
-          <p class="eyebrow">Filtern</p>
-          <h2 style="font-size:26px; margin-top:8px;">Nach Angebotsart</h2>
-        </div>
-        <div class="listing-filters">
-          <button class="active" data-filter="all">Alle</button>
-          <button data-filter="kauf">Kauf</button>
-          <button data-filter="miete">Miete</button>
-        </div>
-      </div>
-
-      <div class="listing-grid" data-listings></div>
-
-      <p class="field-note" style="margin-top:40px; max-width:60ch;">Die gezeigten Objekte dienen als Beispiel für die Darstellung — aktuelle, reale Angebote werden hier laufend ergänzt.</p>
+      <p class="eyebrow on-dark">Aktuelles</p>
+      <h1 style="font-size:clamp(32px,4vw,48px);">Werde Tippgeber</h1>
+      <div class="breadcrumb"><a href="index.html">Start</a> / Werde Tippgeber</div>
     </div>
   </section>
 
   <section class="section section-white">
-    <div class="container">
-      <div class="cta-banner" data-reveal>
-        <div>
-          <h2>Ihre Traumimmobilie ist noch nicht dabei?</h2>
-          <p>Ich halte für Sie Ausschau — auch abseits der öffentlichen Inserate. Kontaktieren Sie mich mit Ihren Wünschen.</p>
-        </div>
-        <div class="cta-actions">
-          <a href="kontakt.html" class="btn btn-gold">Kontakt aufnehmen</a>
-        </div>
-      </div>
+    <div class="container" style="max-width:720px; text-align:center;">
+      <p class="eyebrow" style="justify-content:center;">In Vorbereitung</p>
+      <h2 style="margin-top:14px;">Diese Seite entsteht gerade</h2>
+      <p class="lede" style="margin:20px auto 0; max-width:56ch;">Sie kennen jemanden, der eine Immobilie verkaufen möchte? Bald können Sie uns hier ganz einfach einen Tipp geben — und im Erfolgsfall eine Provision erhalten. Diese Seite befindet sich aktuell im Aufbau.</p>
+      <a href="kontakt.html" class="btn btn-gold" style="margin-top:32px;">
+        Kontakt aufnehmen
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
   </section>
 </main>
@@ -181,8 +157,6 @@
   </div>
 </footer>
 
-<script src="js/listings-data.js?v=1"></script>
-<script src="js/listings.js?v=5"></script>
 <script src="js/script.js?v=21"></script>
 </body>
 </html>
