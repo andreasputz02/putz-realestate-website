@@ -128,8 +128,8 @@ document.querySelectorAll(".counter").forEach((el) => {
 function setupTrackSlider(track, gap) {
   const wrap = track.parentElement;
   if (!wrap) return;
-  const prevBtn = wrap.querySelector('[data-dir="-1"]');
-  const nextBtn = wrap.querySelector('[data-dir="1"]');
+  const prevBtns = [...wrap.querySelectorAll('[data-dir="-1"]')];
+  const nextBtns = [...wrap.querySelectorAll('[data-dir="1"]')];
   const dots = [...wrap.querySelectorAll(".slider-dot")];
 
   const findSlide = () => {
@@ -147,8 +147,8 @@ function setupTrackSlider(track, gap) {
   const scrollByDir = (dir) => track.scrollBy({ left: dir * slideAmount(), behavior: "smooth" });
   const scrollToIndex = (index) => track.scrollTo({ left: index * slideAmount(), behavior: "smooth" });
 
-  if (prevBtn) prevBtn.addEventListener("click", () => scrollByDir(-1));
-  if (nextBtn) nextBtn.addEventListener("click", () => scrollByDir(1));
+  prevBtns.forEach((btn) => btn.addEventListener("click", () => scrollByDir(-1)));
+  nextBtns.forEach((btn) => btn.addEventListener("click", () => scrollByDir(1)));
 
   dots.forEach((dot) => {
     dot.addEventListener("click", () => scrollToIndex(Number(dot.dataset.index)));
@@ -158,18 +158,17 @@ function setupTrackSlider(track, gap) {
     const maxScroll = track.scrollWidth - track.clientWidth - 4;
     const atStart = track.scrollLeft <= 4;
     const atEnd = track.scrollLeft >= maxScroll;
-    if (prevBtn) prevBtn.disabled = atStart;
-    if (nextBtn) nextBtn.disabled = atEnd;
+    prevBtns.forEach((btn) => { btn.disabled = atStart; });
+    nextBtns.forEach((btn) => { btn.disabled = atEnd; });
 
     if (dots.length) {
       const activeIndex = Math.round(track.scrollLeft / slideAmount());
-      dots.forEach((dot, i) => dot.classList.toggle("is-active", i === activeIndex));
+      dots.forEach((dot) => dot.classList.toggle("is-active", Number(dot.dataset.index) === activeIndex));
     }
   };
   track.addEventListener("scroll", updateArrows, { passive: true });
   window.addEventListener("resize", updateArrows);
   updateArrows();
-  if (dots.length) dots[0].classList.add("is-active");
 }
 
 document.querySelectorAll(".video-slider-track, .testimonial-slider-track, .team-slider-track").forEach((track) => setupTrackSlider(track, 28));

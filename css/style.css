@@ -874,10 +874,14 @@ body.nav-open { overflow: hidden; }
 .video-cta-card .cta-actions { flex-direction: column; margin-top: 18px; gap: 10px; }
 .video-cta-card .cta-actions .btn { width: 100%; justify-content: center; padding: 13px 20px; font-size: 13.5px; }
 
+.slider-controls.slider-controls-mobile { display: none; }
+
 @media (max-width: 900px) {
   .video-feature-body { flex-direction: column; }
   .video-feature-player { flex: none; width: 100%; }
   .video-cta-card { max-width: 640px; width: 100%; }
+  .slider-controls.slider-controls-mobile { display: flex; margin-top: 20px; }
+  .slider-controls.slider-controls-desktop { display: none; }
 }
 
 .video-feature-player video {
