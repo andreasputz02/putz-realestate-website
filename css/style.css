@@ -876,6 +876,7 @@ body.nav-open { overflow: hidden; }
 
 @media (max-width: 900px) {
   .video-feature-body { flex-direction: column; }
+  .video-feature-player { flex: none; width: 100%; }
   .video-cta-card { max-width: 640px; width: 100%; }
 }
 
