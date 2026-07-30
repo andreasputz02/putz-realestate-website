@@ -729,6 +729,7 @@ body.nav-open { overflow: hidden; }
 .step-row .step-num::before { content: counter(step, decimal-leading-zero); }
 .step-row h3 { color: var(--white); font-size: 22px; margin-bottom: 10px; font-weight: 600; }
 .step-row p { color: rgba(255,255,255,0.62); font-size: 15px; line-height: 1.7; max-width: 60ch; }
+.step-row p + p { margin-top: 12px; }
 
 /* ---------- About / profile ---------- */
 
