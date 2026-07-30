@@ -53,6 +53,7 @@ input, textarea, select { font: inherit; }
 }
 
 section { position: relative; }
+#verkaufen, #referenzen, #kontakt { scroll-margin-top: 100px; }
 
 /* ---------- Typography ---------- */
 
