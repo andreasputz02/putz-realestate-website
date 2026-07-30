@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=60">
+<link rel="stylesheet" href="css/style.css?v=61">
 </head>
 <body class="page-dark">
 
@@ -126,12 +126,83 @@
           <p>Ich halte für Sie Ausschau — auch abseits der öffentlichen Inserate. Kontaktieren Sie mich mit Ihren Wünschen.</p>
         </div>
         <div class="cta-actions">
-          <a href="kontakt.html" class="btn btn-gold">Kontakt aufnehmen</a>
+          <button type="button" class="btn btn-gold" data-modal-open="suchagent">Suchagent anlegen</button>
         </div>
       </div>
     </div>
   </section>
 </main>
+
+<div class="modal-overlay" data-modal="suchagent" hidden>
+  <div class="modal-panel">
+    <button class="modal-close" type="button" data-modal-close aria-label="Schließen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <p class="eyebrow">Suchagent</p>
+    <h3 style="font-size:22px; margin-top:10px; margin-bottom:8px; font-weight:600;">Sagen Sie uns, was Sie suchen</h3>
+    <p class="field-note" style="margin-bottom:24px;">Wir informieren Sie persönlich, sobald eine passende Immobilie verfügbar ist — auch abseits der öffentlichen Inserate.</p>
+    <form data-contact-form>
+      <div class="form-row">
+        <div class="field">
+          <label for="sa-vorname">Vorname</label>
+          <input type="text" id="sa-vorname" name="vorname" required>
+        </div>
+        <div class="field">
+          <label for="sa-nachname">Nachname</label>
+          <input type="text" id="sa-nachname" name="nachname" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="sa-email">E-Mail</label>
+          <input type="email" id="sa-email" name="email" required>
+        </div>
+        <div class="field">
+          <label for="sa-telefon">Telefon</label>
+          <input type="tel" id="sa-telefon" name="telefon">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="sa-art">Kauf oder Miete</label>
+          <select id="sa-art" name="art">
+            <option>Kauf</option>
+            <option>Miete</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="sa-typ">Immobilienart</label>
+          <select id="sa-typ" name="typ">
+            <option>Wohnung</option>
+            <option>Haus</option>
+            <option>Grundstück</option>
+            <option>Sonstiges</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="sa-lage">Gewünschte Lage</label>
+          <input type="text" id="sa-lage" name="lage" placeholder="z.B. Wien, Weinviertel...">
+        </div>
+        <div class="field">
+          <label for="sa-preis">Preis bis</label>
+          <input type="text" id="sa-preis" name="preis" placeholder="z.B. 500.000 €">
+        </div>
+      </div>
+      <div class="field">
+        <label for="sa-details">Weitere Wünsche</label>
+        <textarea id="sa-details" name="details" placeholder="Zimmeranzahl, Fläche, Ausstattung, ..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-gold btn-block">
+        Suchagent anlegen
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <p class="field-note">Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Daten gemäß unserer <a href="datenschutz.html" style="text-decoration:underline;">Datenschutzerklärung</a> zu.</p>
+      <div class="form-status"></div>
+    </form>
+  </div>
+</div>
 
 <footer class="site-footer">
   <div class="container">
@@ -183,6 +254,6 @@
 
 <script src="js/listings-data.js?v=2"></script>
 <script src="js/listings.js?v=6"></script>
-<script src="js/script.js?v=22"></script>
+<script src="js/script.js?v=23"></script>
 </body>
 </html>

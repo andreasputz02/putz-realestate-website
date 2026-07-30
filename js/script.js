@@ -173,6 +173,33 @@ function setupTrackSlider(track, gap) {
 
 document.querySelectorAll(".video-slider-track, .testimonial-slider-track, .team-slider-track").forEach((track) => setupTrackSlider(track, 28));
 
+// ---------- Generic modal ----------
+function openModal(name) {
+  const modal = document.querySelector(`[data-modal="${name}"]`);
+  if (!modal) return;
+  modal.hidden = false;
+  document.body.classList.add("modal-open");
+}
+function closeModal(modal) {
+  modal.hidden = true;
+  document.body.classList.remove("modal-open");
+}
+document.querySelectorAll("[data-modal-open]").forEach((btn) => {
+  btn.addEventListener("click", () => openModal(btn.dataset.modalOpen));
+});
+document.querySelectorAll("[data-modal]").forEach((modal) => {
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal(modal);
+  });
+  modal.querySelectorAll("[data-modal-close]").forEach((btn) => {
+    btn.addEventListener("click", () => closeModal(modal));
+  });
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  document.querySelectorAll("[data-modal]:not([hidden])").forEach(closeModal);
+});
+
 // ---------- Forms (visual-only placeholder until email delivery is connected) ----------
 document.querySelectorAll("form[data-contact-form]").forEach((form) => {
   form.addEventListener("submit", (e) => {

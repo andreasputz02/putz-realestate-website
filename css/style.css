@@ -1302,6 +1302,53 @@ body.nav-open { overflow: hidden; }
 .lightbox[hidden] { display: none; }
 body.lightbox-open { overflow: hidden; }
 
+/* ---------- Generic modal ---------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(11, 11, 12, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.modal-overlay[hidden] { display: none; }
+body.modal-open { overflow: hidden; }
+
+.modal-panel {
+  position: relative;
+  background: var(--white);
+  color: var(--ink);
+  border-radius: var(--radius-lg);
+  padding: 44px;
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-soft);
+  transition: background 0.3s var(--ease), color 0.3s var(--ease);
+}
+.modal-close:hover { background: var(--cream); color: var(--ink); }
+.modal-close svg { width: 18px; height: 18px; }
+
+@media (max-width: 640px) {
+  .modal-panel { padding: 32px 24px; }
+}
+
 .lightbox-stage {
   width: min(78vw, 1000px);
   aspect-ratio: 16/9;
