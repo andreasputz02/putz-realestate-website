@@ -61,7 +61,7 @@ if (empty($lines)) {
 }
 
 $body = implode("\n", $lines) . "\n\n---\nGesendet über das Formular \"" . $formName . "\" auf putz-realestate.at";
-$subject = 'Neue Anfrage – ' . $formName;
+$subject = $formName;
 
 $headers = [];
 $headers[] = 'From: PUTZ Real Estate Website <noreply@putz-realestate.at>';
