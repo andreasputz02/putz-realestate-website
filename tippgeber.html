@@ -94,19 +94,128 @@
     <div class="container">
       <p class="eyebrow on-dark">Aktuelles</p>
       <h1 style="font-size:clamp(32px,4vw,48px);">Werde Tippgeber</h1>
+      <p class="lede">Sie kennen jemanden, der seine Immobilie verkaufen möchte? Geben Sie uns einfach einen Tipp — und sichern Sie sich im Erfolgsfall eine attraktive Provision.</p>
       <div class="breadcrumb"><a href="index.html">Start</a> / Werde Tippgeber</div>
     </div>
   </section>
 
+  <!-- ===== SO FUNKTIONIERT'S ===== -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div>
+          <p class="eyebrow on-dark">So funktioniert's</p>
+          <h2>In vier Schritten zum Tippgeber</h2>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step-row" data-reveal>
+          <div class="step-num"></div>
+          <div>
+            <h3>Jetzt registrieren</h3>
+            <p>Sie melden sich unkompliziert über das Formular auf dieser Seite als Tippgeber bei uns an.</p>
+          </div>
+        </div>
+        <div class="step-row" data-reveal>
+          <div class="step-num"></div>
+          <div>
+            <h3>Ihr persönlicher Link</h3>
+            <p>Nach der Registrierung erhalten Sie von uns einen persönlichen Empfehlungslink, der ausschließlich Ihnen zugeordnet ist.</p>
+          </div>
+        </div>
+        <div class="step-row" data-reveal>
+          <div class="step-num"></div>
+          <div>
+            <h3>Tipp weitergeben</h3>
+            <p>Kennen Sie jemanden, der eine Immobilie verkaufen möchte? Empfehlen Sie uns weiter und senden Sie einfach Ihren persönlichen Link.</p>
+          </div>
+        </div>
+        <div class="step-row" data-reveal>
+          <div class="step-num"></div>
+          <div>
+            <h3>Automatische Zuordnung &amp; Provision</h3>
+            <p>Meldet sich die verkaufende Person über Ihren Link bei uns, wird sie automatisch Ihnen als Tippgeber zugeordnet. Kommt es zum Verkauf, erhalten Sie Ihren Anteil an der Provision.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RECHENBEISPIEL ===== -->
   <section class="section section-white">
-    <div class="container" style="max-width:720px; text-align:center;">
-      <p class="eyebrow" style="justify-content:center;">In Vorbereitung</p>
-      <h2 style="margin-top:14px;">Diese Seite entsteht gerade</h2>
-      <p class="lede" style="margin:20px auto 0; max-width:56ch;">Sie kennen jemanden, der eine Immobilie verkaufen möchte? Bald können Sie uns hier ganz einfach einen Tipp geben — und im Erfolgsfall eine Provision erhalten. Diese Seite befindet sich aktuell im Aufbau.</p>
-      <a href="index.html#kontakt" class="btn btn-gold" style="margin-top:32px;">
-        Kontakt aufnehmen
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div>
+          <p class="eyebrow">Rechenbeispiel</p>
+          <h2>Was ist Ihr Tipp wert?</h2>
+        </div>
+      </div>
+      <p class="lede" style="max-width:70ch;">Kommt durch Ihren Tipp ein Verkauf zustande, erhalten Sie 20&nbsp;% unserer Provision — unabhängig vom Verkaufspreis. Unsere Provision liegt je nach Immobilie zwischen 3&nbsp;% und 6&nbsp;%. Angenommen, die von Ihnen empfohlene Immobilie wird um 500.000&nbsp;€ verkauft:</p>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:24px; margin-top:40px;">
+        <div class="location-card" data-reveal style="padding:36px 32px; text-align:center;">
+          <p class="eyebrow" style="justify-content:center;">Bei 3&nbsp;% Provision</p>
+          <div style="font-family:var(--font-display); font-size:44px; font-weight:600; color:var(--gold-dim); margin-top:16px;">3.000&nbsp;€</div>
+          <p class="field-note" style="margin-top:12px;">Ihr Anteil (20&nbsp;%) von 15.000&nbsp;€ Gesamtprovision</p>
+        </div>
+        <div class="location-card" data-reveal style="padding:36px 32px; text-align:center;">
+          <p class="eyebrow" style="justify-content:center;">Bei 6&nbsp;% Provision</p>
+          <div style="font-family:var(--font-display); font-size:44px; font-weight:600; color:var(--gold-dim); margin-top:16px;">6.000&nbsp;€</div>
+          <p class="field-note" style="margin-top:12px;">Ihr Anteil (20&nbsp;%) von 30.000&nbsp;€ Gesamtprovision</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== REGISTRIERUNG ===== -->
+  <section class="section section-dark">
+    <div class="container" style="max-width:640px;">
+      <div class="section-head" data-reveal>
+        <div>
+          <p class="eyebrow on-dark">Registrierung</p>
+          <h2>Jetzt als Tippgeber anmelden</h2>
+        </div>
+      </div>
+
+      <div class="form-card" data-reveal>
+        <form data-contact-form>
+          <div class="form-row">
+            <div class="field">
+              <label for="tg-vorname">Vorname</label>
+              <input type="text" id="tg-vorname" name="vorname" required>
+            </div>
+            <div class="field">
+              <label for="tg-nachname">Nachname</label>
+              <input type="text" id="tg-nachname" name="nachname" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="tg-firma">Firma</label>
+            <input type="text" id="tg-firma" name="firma">
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="tg-nummer">Telefonnummer</label>
+              <input type="tel" id="tg-nummer" name="nummer" required>
+            </div>
+            <div class="field">
+              <label for="tg-email">E-Mail</label>
+              <input type="email" id="tg-email" name="email" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="tg-iban">IBAN</label>
+            <input type="text" id="tg-iban" name="iban" placeholder="AT00 0000 0000 0000 0000" required>
+          </div>
+          <button type="submit" class="btn btn-gold btn-block">
+            Jetzt als Tippgeber Registrieren
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <p class="field-note">Ihre Daten gehen direkt an office@putzrealestate.at. Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Daten gemäß unserer <a href="datenschutz.html" style="text-decoration:underline;">Datenschutzerklärung</a> zu.</p>
+          <div class="form-status"></div>
+        </form>
+      </div>
     </div>
   </section>
 </main>
