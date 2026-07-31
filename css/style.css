@@ -1154,6 +1154,16 @@ body.nav-open { overflow: hidden; }
   .partner-stack-card .btn { margin-top: 0; }
 }
 
+/* ---------- News articles ---------- */
+
+.news-article { padding: 56px 0; border-top: 1px solid var(--line); }
+.news-article:first-child { padding-top: 0; border-top: none; }
+.news-article h2 { font-size: clamp(24px, 2.6vw, 34px); margin-top: 12px; margin-bottom: 6px; max-width: 24ch; }
+.news-article .news-date { display: block; font-size: 12.5px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 22px; }
+.news-article p { color: var(--ink-soft); font-size: 15.5px; line-height: 1.75; margin-bottom: 16px; max-width: 72ch; }
+.news-article .news-source { font-size: 12.5px; color: var(--ink-soft); margin-top: 20px; }
+.news-article .news-source a { text-decoration: underline; }
+
 /* ---------- Location cards ---------- */
 
 .location-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
