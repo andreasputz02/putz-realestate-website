@@ -200,16 +200,36 @@ document.addEventListener("keydown", (e) => {
   document.querySelectorAll("[data-modal]:not([hidden])").forEach(closeModal);
 });
 
-// ---------- Forms (visual-only placeholder until email delivery is connected) ----------
+// ---------- Forms (send via send-mail.php) ----------
 document.querySelectorAll("form[data-contact-form]").forEach((form) => {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const status = form.querySelector(".form-status");
-    if (status) {
-      status.textContent =
-        "Danke! Das Formular ist bereit — der E-Mail-Versand wird in der nächsten Revision aktiviert.";
-      status.classList.remove("error");
-      status.classList.add("show", "success");
-    }
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    fetch("send-mail.php", { method: "POST", body: new FormData(form) })
+      .then((res) => res.json().catch(() => ({ ok: false })))
+      .then((data) => {
+        if (!status) return;
+        status.classList.remove("error", "success");
+        if (data.ok) {
+          status.textContent = "Danke! Ihre Nachricht wurde erfolgreich gesendet — wir melden uns bei Ihnen.";
+          status.classList.add("show", "success");
+          form.reset();
+        } else {
+          status.textContent = "Es gab ein Problem beim Senden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.";
+          status.classList.add("show", "error");
+        }
+      })
+      .catch(() => {
+        if (!status) return;
+        status.classList.remove("success");
+        status.textContent = "Es gab ein Problem beim Senden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.";
+        status.classList.add("show", "error");
+      })
+      .finally(() => {
+        if (submitBtn) submitBtn.disabled = false;
+      });
   });
 });

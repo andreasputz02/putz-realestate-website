@@ -1215,6 +1215,8 @@ body.nav-open { overflow: hidden; }
 
 .field-note { font-size: 12.5px; color: var(--ink-soft); margin-top: 14px; line-height: 1.6; }
 
+.hp-field { position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
 .form-status { display: none; margin-top: 16px; padding: 14px 16px; border-radius: var(--radius-sm); font-size: 14px; }
 .form-status.show { display: block; }
 .form-status.success { background: rgba(207,168,88,0.15); color: var(--gold-dim); }
