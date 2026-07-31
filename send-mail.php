@@ -130,6 +130,36 @@ if ($sent && $formName === 'Tippgeber-Registrierung') {
     $confirmHeaders[] = 'MIME-Version: 1.0';
     $confirmSubject = '=?UTF-8?B?' . base64_encode('Ihr persönlicher Tippgeber-Link') . '?=';
     mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
+
+    // Persist the registration so it can be viewed in the password-protected admin list.
+    $dataDir = __DIR__ . '/data';
+    if (!is_dir($dataDir)) {
+        mkdir($dataDir, 0755, true);
+    }
+    $dataFile = $dataDir . '/tippgeber.json';
+    $entry = [
+        'timestamp' => date('Y-m-d H:i'),
+        'vorname' => $vorname,
+        'nachname' => $nachname,
+        'firma' => trim($_POST['firma'] ?? ''),
+        'telefon' => trim($_POST['nummer'] ?? ''),
+        'email' => $email,
+        'iban' => trim($_POST['iban'] ?? ''),
+    ];
+    $fp = fopen($dataFile, 'c+');
+    if ($fp) {
+        flock($fp, LOCK_EX);
+        $existing = stream_get_contents($fp);
+        $records = json_decode($existing, true);
+        if (!is_array($records)) $records = [];
+        $records[] = $entry;
+        ftruncate($fp, 0);
+        rewind($fp);
+        fwrite($fp, json_encode($records, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        fflush($fp);
+        flock($fp, LOCK_UN);
+        fclose($fp);
+    }
 }
 
 if ($sent) {

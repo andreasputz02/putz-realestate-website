@@ -1,5 +1,6 @@
 .DS_Store
 .claude/
+data/*.json
 Haus.jpg
 Video Siegenfeld.MOV
 Video Brunn.MOV
