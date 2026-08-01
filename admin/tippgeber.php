@@ -12,6 +12,14 @@ if (file_exists($dataFile)) {
     if (is_array($decoded)) $entries = $decoded;
 }
 $entries = array_reverse($entries);
+
+$suchkundenFile = __DIR__ . '/../data/suchkunden.json';
+$suchkunden = [];
+if (file_exists($suchkundenFile)) {
+    $decoded = json_decode(file_get_contents($suchkundenFile), true);
+    if (is_array($decoded)) $suchkunden = $decoded;
+}
+$suchkunden = array_reverse($suchkunden);
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -19,7 +27,7 @@ $entries = array_reverse($entries);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Tippgeber-Übersicht — PUTZ Real Estate</title>
+<title>Tippgeber &amp; Suchkunden — PUTZ Real Estate</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Inter Tight", Arial, sans-serif; background: #0b0b0c; color: #fff; padding: 40px 24px; }
@@ -35,6 +43,7 @@ $entries = array_reverse($entries);
   tr:last-child td { border-bottom: none; }
   td a { color: #cfa858; }
   .empty { color: rgba(255,255,255,0.5); padding: 60px 20px; text-align: center; }
+  .section-gap { margin-top: 56px; }
 </style>
 </head>
 <body>
@@ -73,6 +82,54 @@ $entries = array_reverse($entries);
             <td><?php echo htmlspecialchars($e['telefon'] ?? ''); ?></td>
             <td><a href="mailto:<?php echo htmlspecialchars($e['email'] ?? ''); ?>"><?php echo htmlspecialchars($e['email'] ?? ''); ?></a></td>
             <td><?php echo htmlspecialchars($e['iban'] ?? ''); ?></td>
+          </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+    <?php endif; ?>
+
+    <div class="top section-gap">
+      <div>
+        <h1>Suchkunden-Übersicht</h1>
+        <p class="count"><?php echo count($suchkunden); ?> Suchprofile</p>
+      </div>
+    </div>
+
+    <?php if (empty($suchkunden)): ?>
+      <div class="scroll"><p class="empty">Noch keine Suchprofile.</p></div>
+    <?php else: ?>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            <th>Telefon</th>
+            <th>E-Mail</th>
+            <th>Gebiet</th>
+            <th>Umkreis</th>
+            <th>Typ</th>
+            <th>Zimmer</th>
+            <th>Größe</th>
+            <th>Sonderwünsche</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($suchkunden as $s): ?>
+          <tr>
+            <td><?php echo htmlspecialchars($s['timestamp'] ?? ''); ?></td>
+            <td><?php echo htmlspecialchars($s['vorname'] ?? ''); ?></td>
+            <td><?php echo htmlspecialchars($s['nachname'] ?? ''); ?></td>
+            <td><?php echo htmlspecialchars($s['telefon'] ?? ''); ?></td>
+            <td><a href="mailto:<?php echo htmlspecialchars($s['email'] ?? ''); ?>"><?php echo htmlspecialchars($s['email'] ?? ''); ?></a></td>
+            <td><?php echo htmlspecialchars($s['gebiet'] ?? ''); ?></td>
+            <td><?php echo ($s['umkreis'] ?? '') !== '' ? htmlspecialchars($s['umkreis']) . ' km' : ''; ?></td>
+            <td><?php echo htmlspecialchars($s['immobilientyp'] ?? ''); ?></td>
+            <td><?php echo htmlspecialchars($s['zimmer'] ?? ''); ?></td>
+            <td><?php echo ($s['groesse'] ?? '') !== '' ? htmlspecialchars($s['groesse']) . ' m²' : ''; ?></td>
+            <td><?php echo htmlspecialchars($s['sonderwuensche'] ?? ''); ?></td>
           </tr>
           <?php endforeach; ?>
         </tbody>
