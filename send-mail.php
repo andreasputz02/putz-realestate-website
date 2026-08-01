@@ -133,6 +133,12 @@ $labels = [
     'lage' => 'Gewünschte Lage',
     'preis' => 'Preis bis',
     'details' => 'Weitere Wünsche',
+    'gebiet' => 'Gewünschtes Gebiet',
+    'umkreis' => 'Umkreis (km)',
+    'immobilientyp' => 'Haus oder Wohnung',
+    'zimmer' => 'Zimmer (ab)',
+    'groesse' => 'Größe in m² (ab)',
+    'sonderwuensche' => 'Weitere Sonderwünsche',
 ];
 
 // Karriere-Initiativbewerbung may include a CV/cover letter upload.
