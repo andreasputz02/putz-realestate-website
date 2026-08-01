@@ -455,6 +455,7 @@ body.nav-open { overflow: hidden; }
 .hero-meta div { display: flex; flex-direction: column; gap: 4px; }
 .hero-meta strong { font-family: var(--font-display); font-size: 34px; color: var(--gold); font-weight: 600; font-variant-numeric: tabular-nums; }
 .hero-meta span { font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+.hero-meta strong span.counter { font-size: inherit; letter-spacing: normal; text-transform: none; color: inherit; }
 
 .scroll-cue {
   position: absolute;
