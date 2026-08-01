@@ -255,6 +255,58 @@ if ($sent && $formName === 'Karriere – Initiativbewerbung') {
     mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
 }
 
+// For Suchkunde-Anfragen, also send a confirmation and store the search profile.
+if ($sent && $formName === 'Suchkunde-Anfrage') {
+    $vorname = trim($_POST['vorname'] ?? '');
+    $nachname = trim($_POST['nachname'] ?? '');
+
+    $confirmBody = "Hallo " . $vorname . ",\n\n"
+        . "danke für dein Suchprofil bei PUTZ Real Estate! Wir haben deine Wünsche gespeichert und melden uns bei dir, "
+        . "sobald eine passende Immobilie — auch aus unserem Off-Market-Bestand — verfügbar ist.\n\n"
+        . "Herzliche Grüße\nDein PUTZ Real Estate Team";
+
+    $confirmHeaders = [];
+    $confirmHeaders[] = 'From: PUTZ Real Estate <office@putzrealestate.at>';
+    $confirmHeaders[] = 'Content-Type: text/plain; charset=UTF-8';
+    $confirmHeaders[] = 'MIME-Version: 1.0';
+    $confirmSubject = '=?UTF-8?B?' . base64_encode('Dein Suchprofil ist bei uns angekommen') . '?=';
+    mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
+
+    // Persist the search profile in its own list (separate from the Tippgeber list).
+    $dataDir = __DIR__ . '/data';
+    if (!is_dir($dataDir)) {
+        mkdir($dataDir, 0755, true);
+    }
+    $dataFile = $dataDir . '/suchkunden.json';
+    $entry = [
+        'timestamp' => date('Y-m-d H:i'),
+        'vorname' => $vorname,
+        'nachname' => $nachname,
+        'email' => $email,
+        'telefon' => trim($_POST['nummer'] ?? ''),
+        'gebiet' => trim($_POST['gebiet'] ?? ''),
+        'umkreis' => trim($_POST['umkreis'] ?? ''),
+        'immobilientyp' => trim($_POST['immobilientyp'] ?? ''),
+        'zimmer' => trim($_POST['zimmer'] ?? ''),
+        'groesse' => trim($_POST['groesse'] ?? ''),
+        'sonderwuensche' => trim($_POST['sonderwuensche'] ?? ''),
+    ];
+    $fp = fopen($dataFile, 'c+');
+    if ($fp) {
+        flock($fp, LOCK_EX);
+        $existing = stream_get_contents($fp);
+        $records = json_decode($existing, true);
+        if (!is_array($records)) $records = [];
+        $records[] = $entry;
+        ftruncate($fp, 0);
+        rewind($fp);
+        fwrite($fp, json_encode($records, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        fflush($fp);
+        flock($fp, LOCK_UN);
+        fclose($fp);
+    }
+}
+
 if ($sent) {
     echo json_encode(['ok' => true]);
 } else {
