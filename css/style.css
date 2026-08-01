@@ -1830,3 +1830,76 @@ body.modal-open { overflow: hidden; }
   .step-row .step-num { font-size: 28px; }
   .partner-feature { grid-template-columns: 1fr; }
 }
+
+/* ---------- Link-Vorschau beim Hover (Partner) ---------- */
+
+.link-peek {
+  position: fixed;
+  z-index: 200;
+  width: 232px;
+  padding: 5px;
+  border-radius: 12px;
+  background: var(--black-soft);
+  border: 1px solid var(--line-dark);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: center center;
+  /* 3D-Flip beim Einblenden */
+  transform: perspective(800px) rotateY(-90deg) translateY(6px);
+  transition: opacity 0.16s var(--ease), transform 0.34s var(--ease);
+}
+.link-peek.is-open {
+  opacity: 1;
+  transform: perspective(800px) rotateY(0deg) translateY(0);
+}
+
+.link-peek-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--black);
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.link-peek-frame img {
+  width: 62%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Lupe: zeigt denselben Bildinhalt vergrößert, per Maske auf einen Kreis begrenzt */
+.link-peek-lens {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--black);
+}
+.link-peek.lens-active .link-peek-lens { opacity: 1; }
+.link-peek-lens img {
+  width: 62%;
+  height: auto;
+  object-fit: contain;
+  transform: scale(1.9);
+}
+
+.link-peek-label {
+  display: block;
+  padding: 8px 4px 3px;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  /* Auf Touch-Geräten gibt es kein Hover — Vorschau würde nur stören. */
+  .link-peek { display: none; }
+}

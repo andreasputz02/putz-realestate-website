@@ -233,3 +233,103 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
       });
   });
 });
+
+// ---------- Link-Vorschau beim Hover (Partner) ----------
+// Zeigt beim Überfahren eines Links eine Vorschaukarte, die der Maus leicht folgt.
+// Beim Überfahren der Karte selbst wirkt eine kreisförmige Lupe.
+(function () {
+  const triggers = document.querySelectorAll("[data-peek-src]");
+  if (!triggers.length) return;
+
+  // Auf Touch-Geräten und bei reduzierter Bewegung: gar nicht erst aufbauen.
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (!finePointer.matches || reducedMotion.matches) return;
+
+  const peek = document.createElement("div");
+  peek.className = "link-peek";
+  peek.innerHTML =
+    '<div class="link-peek-frame">' +
+    '<img alt="" aria-hidden="true">' +
+    '<div class="link-peek-lens"><img alt="" aria-hidden="true"></div>' +
+    "</div>" +
+    '<span class="link-peek-label"></span>';
+  document.body.appendChild(peek);
+
+  const baseImg = peek.querySelector(".link-peek-frame > img");
+  const lens = peek.querySelector(".link-peek-lens");
+  const lensImg = lens.querySelector("img");
+  const label = peek.querySelector(".link-peek-label");
+
+  let hideTimer = null;
+  let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+  let rafId = null;
+
+  // Sanftes Nachziehen der Karte (Feder-Effekt ohne Bibliothek).
+  function animate() {
+    currentX += (targetX - currentX) * 0.16;
+    currentY += (targetY - currentY) * 0.16;
+    peek.style.left = currentX + "px";
+    peek.style.top = currentY + "px";
+    if (Math.abs(targetX - currentX) > 0.4 || Math.abs(targetY - currentY) > 0.4) {
+      rafId = requestAnimationFrame(animate);
+    } else {
+      rafId = null;
+    }
+  }
+
+  function position(e, instant) {
+    const w = peek.offsetWidth || 232;
+    const h = peek.offsetHeight || 175;
+    // Über dem Cursor platzieren, am Viewport-Rand einklemmen.
+    let x = e.clientX - w / 2;
+    let y = e.clientY - h - 18;
+    x = Math.max(10, Math.min(x, window.innerWidth - w - 10));
+    if (y < 10) y = e.clientY + 24;
+    targetX = x;
+    targetY = y;
+    if (instant) {
+      currentX = x;
+      currentY = y;
+      peek.style.left = x + "px";
+      peek.style.top = y + "px";
+    } else if (!rafId) {
+      rafId = requestAnimationFrame(animate);
+    }
+  }
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener("mouseenter", (e) => {
+      clearTimeout(hideTimer);
+      const src = trigger.dataset.peekSrc;
+      const text = trigger.dataset.peekLabel || "";
+      if (baseImg.getAttribute("src") !== src) {
+        baseImg.src = src;
+        lensImg.src = src;
+      }
+      label.textContent = text;
+      position(e, true);
+      // Erst im nächsten Frame öffnen, damit die Startposition nicht mitanimiert wird.
+      requestAnimationFrame(() => peek.classList.add("is-open"));
+    });
+
+    trigger.addEventListener("mousemove", (e) => {
+      position(e, false);
+      // Lupe folgt dem Cursor relativ zum Link.
+      const r = trigger.getBoundingClientRect();
+      const px = ((e.clientX - r.left) / r.width) * 100;
+      const py = ((e.clientY - r.top) / r.height) * 100;
+      const mask =
+        "radial-gradient(circle 46px at " + px + "% " + py + "%, #000 46px, transparent 47px)";
+      lens.style.webkitMaskImage = mask;
+      lens.style.maskImage = mask;
+      lensImg.style.transformOrigin = px + "% " + py + "%";
+      peek.classList.add("lens-active");
+    });
+
+    trigger.addEventListener("mouseleave", () => {
+      peek.classList.remove("lens-active");
+      hideTimer = setTimeout(() => peek.classList.remove("is-open"), 90);
+    });
+  });
+})();
