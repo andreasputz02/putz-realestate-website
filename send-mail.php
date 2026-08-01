@@ -139,6 +139,12 @@ $labels = [
     'zimmer' => 'Zimmer (ab)',
     'groesse' => 'Größe in m² (ab)',
     'sonderwuensche' => 'Weitere Sonderwünsche',
+    'adresse' => 'Adresse',
+    'grundflaeche' => 'Grundfläche (m²)',
+    'wohnflaeche' => 'Wohnfläche (m²)',
+    'nutzflaeche' => 'Nutzfläche (m²)',
+    'baujahr' => 'Baujahr',
+    'zustand' => 'Zustand',
 ];
 
 // Karriere-Initiativbewerbung may include a CV/cover letter upload.
@@ -252,6 +258,23 @@ if ($sent && $formName === 'Karriere – Initiativbewerbung') {
     $confirmHeaders[] = 'Content-Type: text/plain; charset=UTF-8';
     $confirmHeaders[] = 'MIME-Version: 1.0';
     $confirmSubject = '=?UTF-8?B?' . base64_encode('Deine Bewerbung ist bei uns angekommen') . '?=';
+    mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
+}
+
+// For Kostenlose Immobilienbewertung requests, also send a confirmation.
+if ($sent && $formName === 'Kostenlose Immobilienbewertung') {
+    $vorname = trim($_POST['vorname'] ?? '');
+
+    $confirmBody = "Hallo " . $vorname . ",\n\n"
+        . "vielen Dank für Ihre Anfrage zur kostenlosen Immobilienbewertung bei PUTZ Real Estate! Wir haben Ihre Angaben erhalten "
+        . "und melden uns innerhalb von 48 Stunden mit einer ersten, unverbindlichen Werteinschätzung Ihrer Immobilie bei Ihnen.\n\n"
+        . "Herzliche Grüße\nIhr PUTZ Real Estate Team";
+
+    $confirmHeaders = [];
+    $confirmHeaders[] = 'From: PUTZ Real Estate <office@putzrealestate.at>';
+    $confirmHeaders[] = 'Content-Type: text/plain; charset=UTF-8';
+    $confirmHeaders[] = 'MIME-Version: 1.0';
+    $confirmSubject = '=?UTF-8?B?' . base64_encode('Ihre Anfrage zur kostenlosen Immobilienbewertung ist bei uns angekommen') . '?=';
     mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
 }
 
