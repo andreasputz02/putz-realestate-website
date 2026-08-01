@@ -232,6 +232,23 @@ if ($sent && $formName === 'Tippgeber-Registrierung') {
     }
 }
 
+// For Karriere-Initiativbewerbungen, also send the applicant a confirmation.
+if ($sent && $formName === 'Karriere – Initiativbewerbung') {
+    $vorname = trim($_POST['vorname'] ?? '');
+
+    $confirmBody = "Hallo " . $vorname . ",\n\n"
+        . "Danke für dein Interesse, mit uns zusammenzuarbeiten. Wir freuen uns schon, deine Unterlagen zu durchstöbern. "
+        . "Wir melden uns zeitnah bei dir und hoffen, dass auch du bald mit uns gemeinsam Immobilien vom Markt PUTZEN kannst!\n\n"
+        . "Herzliche Grüße\nDein PUTZ Real Estate Team";
+
+    $confirmHeaders = [];
+    $confirmHeaders[] = 'From: PUTZ Real Estate <office@putzrealestate.at>';
+    $confirmHeaders[] = 'Content-Type: text/plain; charset=UTF-8';
+    $confirmHeaders[] = 'MIME-Version: 1.0';
+    $confirmSubject = '=?UTF-8?B?' . base64_encode('Deine Bewerbung ist bei uns angekommen') . '?=';
+    mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
+}
+
 if ($sent) {
     echo json_encode(['ok' => true]);
 } else {
