@@ -207,7 +207,8 @@ if ($sent && $formName === 'Tippgeber-Registrierung') {
         . "Herzliche Grüße\nIhr PUTZ Real Estate Team";
 
     $confirmHeaders = [];
-    $confirmHeaders[] = 'From: PUTZ Real Estate <office@putzrealestate.at>';
+    $confirmHeaders[] = 'From: PUTZ Real Estate <noreply@putz-realestate.at>';
+    $confirmHeaders[] = 'Reply-To: office@putzrealestate.at';
     $confirmHeaders[] = 'Content-Type: text/plain; charset=UTF-8';
     $confirmHeaders[] = 'MIME-Version: 1.0';
     $confirmSubject = '=?UTF-8?B?' . base64_encode('Ihr persönlicher Tippgeber-Link') . '?=';
@@ -254,7 +255,8 @@ if ($sent && $formName === 'Karriere – Initiativbewerbung') {
         . "Herzliche Grüße\nDein PUTZ Real Estate Team";
 
     $confirmHeaders = [];
-    $confirmHeaders[] = 'From: PUTZ Real Estate <office@putzrealestate.at>';
+    $confirmHeaders[] = 'From: PUTZ Real Estate <noreply@putz-realestate.at>';
+    $confirmHeaders[] = 'Reply-To: office@putzrealestate.at';
     $confirmHeaders[] = 'Content-Type: text/plain; charset=UTF-8';
     $confirmHeaders[] = 'MIME-Version: 1.0';
     $confirmSubject = '=?UTF-8?B?' . base64_encode('Deine Bewerbung ist bei uns angekommen') . '?=';
@@ -271,7 +273,8 @@ if ($sent && $formName === 'Kostenlose Immobilienbewertung') {
         . "Herzliche Grüße\nIhr PUTZ Real Estate Team";
 
     $confirmHeaders = [];
-    $confirmHeaders[] = 'From: PUTZ Real Estate <office@putzrealestate.at>';
+    $confirmHeaders[] = 'From: PUTZ Real Estate <noreply@putz-realestate.at>';
+    $confirmHeaders[] = 'Reply-To: office@putzrealestate.at';
     $confirmHeaders[] = 'Content-Type: text/plain; charset=UTF-8';
     $confirmHeaders[] = 'MIME-Version: 1.0';
     $confirmSubject = '=?UTF-8?B?' . base64_encode('Ihre Anfrage zur kostenlosen Immobilienbewertung ist bei uns angekommen') . '?=';
@@ -289,7 +292,8 @@ if ($sent && $formName === 'Suchkunde-Anfrage') {
         . "Herzliche Grüße\nDein PUTZ Real Estate Team";
 
     $confirmHeaders = [];
-    $confirmHeaders[] = 'From: PUTZ Real Estate <office@putzrealestate.at>';
+    $confirmHeaders[] = 'From: PUTZ Real Estate <noreply@putz-realestate.at>';
+    $confirmHeaders[] = 'Reply-To: office@putzrealestate.at';
     $confirmHeaders[] = 'Content-Type: text/plain; charset=UTF-8';
     $confirmHeaders[] = 'MIME-Version: 1.0';
     $confirmSubject = '=?UTF-8?B?' . base64_encode('Dein Suchprofil ist bei uns angekommen') . '?=';
