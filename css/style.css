@@ -44,6 +44,27 @@ ul { list-style: none; }
 button { font: inherit; cursor: pointer; border: none; background: none; }
 input, textarea, select { font: inherit; }
 
+/* Keyboard focus: gold ring that reads on both the dark and cream sections. */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+.section-white :focus-visible,
+.form-card :focus-visible { outline-color: var(--gold-dim); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Show scroll-reveal content outright rather than animating it in. */
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+}
+
 .container {
   width: 100%;
   max-width: var(--container);
