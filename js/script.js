@@ -236,7 +236,6 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
 
 // ---------- Link-Vorschau beim Hover (Partner) ----------
 // Zeigt beim Überfahren eines Links eine Vorschaukarte, die der Maus leicht folgt.
-// Beim Überfahren der Karte selbst wirkt eine kreisförmige Lupe.
 (function () {
   const triggers = document.querySelectorAll("[data-peek-src]");
   if (!triggers.length) return;
@@ -251,14 +250,11 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
   peek.innerHTML =
     '<div class="link-peek-frame">' +
     '<img alt="" aria-hidden="true">' +
-    '<div class="link-peek-lens"><img alt="" aria-hidden="true"></div>' +
     "</div>" +
     '<span class="link-peek-label"></span>';
   document.body.appendChild(peek);
 
   const baseImg = peek.querySelector(".link-peek-frame > img");
-  const lens = peek.querySelector(".link-peek-lens");
-  const lensImg = lens.querySelector("img");
   const label = peek.querySelector(".link-peek-label");
 
   let hideTimer = null;
@@ -305,7 +301,6 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
       const text = trigger.dataset.peekLabel || "";
       if (baseImg.getAttribute("src") !== src) {
         baseImg.src = src;
-        lensImg.src = src;
       }
       label.textContent = text;
       position(e, true);
@@ -315,20 +310,9 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
 
     trigger.addEventListener("mousemove", (e) => {
       position(e, false);
-      // Lupe folgt dem Cursor relativ zum Link.
-      const r = trigger.getBoundingClientRect();
-      const px = ((e.clientX - r.left) / r.width) * 100;
-      const py = ((e.clientY - r.top) / r.height) * 100;
-      const mask =
-        "radial-gradient(circle 46px at " + px + "% " + py + "%, #000 46px, transparent 47px)";
-      lens.style.webkitMaskImage = mask;
-      lens.style.maskImage = mask;
-      lensImg.style.transformOrigin = px + "% " + py + "%";
-      peek.classList.add("lens-active");
     });
 
     trigger.addEventListener("mouseleave", () => {
-      peek.classList.remove("lens-active");
       hideTimer = setTimeout(() => peek.classList.remove("is-open"), 90);
     });
   });

@@ -1870,25 +1870,6 @@ body.modal-open { overflow: hidden; }
   display: block;
 }
 
-/* Lupe: zeigt denselben Bildinhalt vergrößert, per Maske auf einen Kreis begrenzt */
-.link-peek-lens {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.2s var(--ease);
-  background: var(--black);
-  overflow: hidden;
-}
-.link-peek.lens-active .link-peek-lens { opacity: 1; }
-.link-peek-lens img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  transform: scale(2.1);
-}
-
 .link-peek-label {
   display: block;
   padding: 8px 4px 3px;
