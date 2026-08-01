@@ -29,6 +29,69 @@ function decode_ref_token($token) {
     return ['vorname' => $fields[0], 'nachname' => $fields[1], 'email' => $fields[2]];
 }
 
+// Sends a plain-text email, optionally with a single file attachment.
+function send_mail_maybe_with_attachment($to, $subject, $bodyText, $fromHeader, $replyTo, $attachment = null) {
+    $encodedSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+
+    if (!$attachment) {
+        $headers = [];
+        $headers[] = 'From: ' . $fromHeader;
+        $headers[] = 'Reply-To: ' . $replyTo;
+        $headers[] = 'Content-Type: text/plain; charset=UTF-8';
+        $headers[] = 'MIME-Version: 1.0';
+        return mail($to, $encodedSubject, $bodyText, implode("\r\n", $headers));
+    }
+
+    $boundary = md5(uniqid((string) time(), true));
+    $headers = [];
+    $headers[] = 'From: ' . $fromHeader;
+    $headers[] = 'Reply-To: ' . $replyTo;
+    $headers[] = 'MIME-Version: 1.0';
+    $headers[] = 'Content-Type: multipart/mixed; boundary="' . $boundary . '"';
+
+    $message = '--' . $boundary . "\r\n";
+    $message .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $message .= "Content-Transfer-Encoding: 8bit\r\n\r\n";
+    $message .= $bodyText . "\r\n\r\n";
+
+    $fileContent = chunk_split(base64_encode(file_get_contents($attachment['tmp_path'])));
+    $safeName = preg_replace('/[^A-Za-z0-9._\- ]/', '_', $attachment['name']);
+    $message .= '--' . $boundary . "\r\n";
+    $message .= 'Content-Type: ' . $attachment['type'] . '; name="' . $safeName . '"' . "\r\n";
+    $message .= "Content-Transfer-Encoding: base64\r\n";
+    $message .= 'Content-Disposition: attachment; filename="' . $safeName . '"' . "\r\n\r\n";
+    $message .= $fileContent . "\r\n";
+    $message .= '--' . $boundary . '--';
+
+    return mail($to, $encodedSubject, $message, implode("\r\n", $headers));
+}
+
+// Validates an optional uploaded file field. Returns an attachment array, null (no file
+// provided) or triggers a JSON error response and exits if the file is invalid.
+function validate_upload($fieldName, $allowedExt, $maxBytes) {
+    if (empty($_FILES[$fieldName]) || $_FILES[$fieldName]['error'] === UPLOAD_ERR_NO_FILE) {
+        return null;
+    }
+    $file = $_FILES[$fieldName];
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'error' => 'upload_failed']);
+        exit;
+    }
+    if ($file['size'] > $maxBytes) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'error' => 'file_too_large']);
+        exit;
+    }
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($ext, $allowedExt, true)) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'error' => 'invalid_file_type']);
+        exit;
+    }
+    return ['tmp_path' => $file['tmp_name'], 'name' => $file['name'], 'type' => $file['type'] ?: 'application/octet-stream'];
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['ok' => false, 'error' => 'method_not_allowed']);
@@ -72,6 +135,9 @@ $labels = [
     'details' => 'Weitere Wünsche',
 ];
 
+// Karriere-Initiativbewerbung may include a CV/cover letter upload.
+$attachment = validate_upload('lebenslauf', ['pdf', 'doc', 'docx'], 8 * 1024 * 1024);
+
 $skip = ['website', 'form_name', 'ref'];
 $lines = [];
 
@@ -97,17 +163,21 @@ if (empty($lines)) {
     exit;
 }
 
+if ($attachment) {
+    $lines[] = 'Anhang: ' . $attachment['name'];
+}
+
 $body = implode("\n", $lines) . "\n\n---\nGesendet über das Formular \"" . $formName . "\" auf putz-realestate.at";
 $subject = $formName;
 
-$headers = [];
-$headers[] = 'From: PUTZ Real Estate Website <noreply@putz-realestate.at>';
-$headers[] = 'Reply-To: ' . $email;
-$headers[] = 'Content-Type: text/plain; charset=UTF-8';
-$headers[] = 'MIME-Version: 1.0';
-
-$encodedSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
-$sent = mail($to, $encodedSubject, $body, implode("\r\n", $headers));
+$sent = send_mail_maybe_with_attachment(
+    $to,
+    $subject,
+    $body,
+    'PUTZ Real Estate Website <noreply@putz-realestate.at>',
+    $email,
+    $attachment
+);
 
 // For new Tippgeber registrations, also send the tipster their personal referral link.
 if ($sent && $formName === 'Tippgeber-Registrierung') {
