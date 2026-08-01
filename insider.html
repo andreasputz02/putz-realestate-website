@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b0b0c">
-<title>Sie wurden empfohlen — PUTZ Real Estate</title>
-<meta name="robots" content="noindex">
+<title>Insider — PUTZ Real Estate</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b0b0c'/><circle cx='32' cy='32' r='14' fill='%23cfa858'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +36,7 @@
         <li><a href="index.html#verkaufen">Verkaufen</a></li>
         <li><a href="index.html#referenzen">Referenzen</a></li>
         <li class="has-dropdown">
-          <a href="news.html">Aktuelles
+          <a href="news.html" class="active">Aktuelles
             <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </a>
           <div class="dropdown">
@@ -46,7 +45,7 @@
               <a href="news.html">News</a>
               <a href="veranstaltungen.html">Veranstaltungen</a>
               <a href="karriere.html">Karriere</a>
-              <a href="insider.html">Insider</a>
+              <a href="insider.html" class="active">Insider</a>
             </div>
           </div>
         </li>
@@ -95,57 +94,84 @@
 <main>
   <section class="page-hero" style="padding-bottom:60px;">
     <div class="container">
-      <p class="eyebrow on-dark">Empfehlung</p>
-      <h1 style="font-size:clamp(32px,4vw,48px);">Sie wurden empfohlen.</h1>
-      <p class="lede">Jemand aus Ihrem Umfeld glaubt, dass wir Ihnen beim Verkauf Ihrer Immobilie weiterhelfen können. Füllen Sie einfach das Formular aus — wir melden uns umgehend persönlich bei Ihnen.</p>
-      <div class="breadcrumb"><a href="index.html">Start</a> / Empfehlung</div>
+      <p class="eyebrow on-dark">Aktuelles</p>
+      <h1 style="font-size:clamp(32px,4vw,48px);">Insider</h1>
+      <p class="lede">Sei als Erste:r informiert — direkt auf WhatsApp.</p>
+      <div class="breadcrumb"><a href="index.html">Start</a> / Insider</div>
     </div>
   </section>
 
   <section class="section section-white">
-    <div class="container" style="max-width:640px;">
-      <div class="form-card" data-reveal>
-        <p class="eyebrow">Unverbindliche Anfrage</p>
-        <h3 style="font-size:22px; margin-top:10px; margin-bottom:24px; font-weight:600;">Erzählen Sie uns von Ihrer Immobilie</h3>
-        <form data-contact-form>
-          <input type="hidden" name="form_name" value="Empfehlung – Verkäufer-Anfrage">
-          <input type="hidden" name="ref" id="ref-token" value="">
-          <div class="hp-field" aria-hidden="true"><label for="ref-website">Website</label><input type="text" id="ref-website" name="website" tabindex="-1" autocomplete="off"></div>
-          <div class="form-row">
-            <div class="field">
-              <label for="ref-vorname">Vorname</label>
-              <input type="text" id="ref-vorname" name="vorname" required>
-            </div>
-            <div class="field">
-              <label for="ref-nachname">Nachname</label>
-              <input type="text" id="ref-nachname" name="nachname" required>
-            </div>
+    <div class="container" style="max-width:720px; text-align:center;">
+      <p class="eyebrow" style="justify-content:center;">Was ist die Insider-Gruppe?</p>
+      <h2 style="margin-top:14px;">Immer als Erste:r informiert</h2>
+      <p class="lede" style="margin:20px auto 0; max-width:60ch;">In unserer WhatsApp-Insider-Gruppe bist du immer ganz vorne dabei — unkompliziert und direkt aufs Handy.</p>
+
+      <div style="margin-top:40px; display:flex; flex-direction:column; gap:18px; text-align:left;">
+        <div class="location-card" style="padding:22px 26px; display:flex; align-items:center; gap:16px; border-radius:var(--radius-md);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-dim)" stroke-width="1.6" style="width:22px;height:22px;flex-shrink:0;"><path d="M12 2l2.9 6.26L21 9.27l-4.5 4.4L17.8 21 12 17.77 6.2 21l1.3-7.33L3 9.27l6.1-1.01L12 2z"/></svg>
+          <div><strong style="display:block; font-size:15px;">Off-Market-Immobilien</strong><span style="font-size:14.5px; color:var(--ink-soft); line-height:1.6;">Wir stellen Off-Market-Objekte, die nirgendwo sonst inseriert werden, exklusiv in der Insider-Gruppe online.</span></div>
+        </div>
+        <div class="location-card" style="padding:22px 26px; display:flex; align-items:center; gap:16px; border-radius:var(--radius-md);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-dim)" stroke-width="1.6" style="width:22px;height:22px;flex-shrink:0;"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <div><strong style="display:block; font-size:15px;">Neue Immobilien zuerst sehen</strong><span style="font-size:14.5px; color:var(--ink-soft); line-height:1.6;">Neue Objekte bekommst du vor der öffentlichen Veröffentlichung angezeigt.</span></div>
+        </div>
+        <div class="location-card" style="padding:22px 26px; display:flex; align-items:center; gap:16px; border-radius:var(--radius-md);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-dim)" stroke-width="1.6" style="width:22px;height:22px;flex-shrink:0;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <div><strong style="display:block; font-size:15px;">Exklusive News</strong><span style="font-size:14.5px; color:var(--ink-soft); line-height:1.6;">Veranstaltungen, Tipps und viele weitere Themen rund um Immobilien.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div>
+          <p class="eyebrow on-dark">So funktioniert's</p>
+          <h2>In drei Schritten zum Insider</h2>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step-row" data-reveal>
+          <div class="step-num"></div>
+          <div>
+            <h3>Button klicken</h3>
+            <p>Klicke unten auf „WhatsApp-Insider werden".</p>
           </div>
-          <div class="form-row">
-            <div class="field">
-              <label for="ref-email">E-Mail</label>
-              <input type="email" id="ref-email" name="email" required>
-            </div>
-            <div class="field">
-              <label for="ref-telefon">Telefon</label>
-              <input type="tel" id="ref-telefon" name="telefon">
-            </div>
+        </div>
+        <div class="step-row" data-reveal>
+          <div class="step-num"></div>
+          <div>
+            <h3>Gruppe beitreten</h3>
+            <p>WhatsApp öffnet sich automatisch und du trittst unserer Insider-Gruppe bei.</p>
           </div>
-          <div class="field">
-            <label for="ref-lage">Adresse / Lage der Immobilie</label>
-            <input type="text" id="ref-lage" name="lage" placeholder="z.B. Wien, Weinviertel...">
+        </div>
+        <div class="step-row" data-reveal>
+          <div class="step-num"></div>
+          <div>
+            <h3>Fertig</h3>
+            <p>Ab sofort bekommst du alle Neuigkeiten von PUTZ Real Estate direkt aufs Handy.</p>
           </div>
-          <div class="field">
-            <label for="ref-nachricht">Nachricht</label>
-            <textarea id="ref-nachricht" name="nachricht" placeholder="Erzählen Sie uns kurz von Ihrer Immobilie..."></textarea>
-          </div>
-          <button type="submit" class="btn btn-gold btn-block">
-            Anfrage senden
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="cta-banner">
+        <div>
+          <h2>Jetzt WhatsApp-Insider werden</h2>
+          <p>Ein Klick genügt — du wirst direkt zu unserer WhatsApp-Gruppe weitergeleitet.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="https://chat.whatsapp.com/HNGMaIpVCiK7z40ipf6G8I" target="_blank" rel="noopener" class="btn btn-gold">
+            WhatsApp beitreten
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-          <p class="field-note">Ihre Nachricht geht direkt an office@putzrealestate.at. Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Daten gemäß unserer <a href="datenschutz.html" style="text-decoration:underline;">Datenschutzerklärung</a> zu.</p>
-          <div class="form-status"></div>
-        </form>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -200,15 +226,5 @@
 </footer>
 
 <script src="js/script.js?v=24"></script>
-<script>
-  (function () {
-    var params = new URLSearchParams(window.location.search);
-    var ref = params.get('ref');
-    if (ref) {
-      var field = document.getElementById('ref-token');
-      if (field) field.value = ref;
-    }
-  })();
-</script>
 </body>
 </html>
