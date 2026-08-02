@@ -1,0 +1,34 @@
+# ============================================================
+#  WARTUNGSMODUS — die Seite ist oeffentlich nicht erreichbar.
+#
+#  Zum Wiederonlinegehen: diese Datei loeschen (oder den
+#  Rewrite-Block unten auskommentieren) und pushen.
+#
+#  Wirkt NUR auf dem Hostinger-Server. Lokal geoeffnete
+#  Dateien sind davon nicht betroffen.
+# ============================================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Ausnahmen, die weiterhin ausgeliefert werden:
+  #  - die Wartungsseite selbst (sonst Endlosschleife)
+  #  - das Logo, das die Wartungsseite anzeigt
+  #  - der passwortgeschuetzte Admin-Bereich
+  RewriteCond %{REQUEST_URI} !^/wartung\.html$
+  RewriteCond %{REQUEST_URI} !^/assets/img/logo\.png$
+  RewriteCond %{REQUEST_URI} !^/admin/
+  RewriteRule ^ - [R=503,L]
+</IfModule>
+
+# 503 = "voruebergehend nicht verfuegbar". Wichtig fuer Google:
+# die Seite wird dadurch NICHT aus dem Index entfernt.
+ErrorDocument 503 /wartung.html
+
+<IfModule mod_headers.c>
+  # Suchmaschinen: in einer Stunde wieder vorbeischauen.
+  Header always set Retry-After "3600"
+  # Wartungsseite nicht zwischenspeichern, sonst sehen Besucher
+  # sie noch, nachdem die Seite wieder online ist.
+  Header always set Cache-Control "no-store, must-revalidate"
+</IfModule>
