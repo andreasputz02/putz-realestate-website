@@ -609,7 +609,9 @@ body.nav-open { overflow: hidden; }
   z-index: 2;
   width: 100%;
   padding-top: 150px;
-  padding-bottom: 56px;
+  /* .hero ist align-items:flex-end — der Inhalt haengt unten.
+     Nach oben schiebt man ihn deshalb ueber die UNTERE Polsterung. */
+  padding-bottom: 100px;
 }
 
 .hero-content .eyebrow { margin-bottom: 22px; }
@@ -637,6 +639,8 @@ body.nav-open { overflow: hidden; }
   line-height: 1.6;
   margin-bottom: 28px;
 }
+/* greift das Wortspiel der Ueberschrift auf */
+.hero-sub .hl { color: var(--gold); font-weight: 600; }
 
 .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 40px; }
 
@@ -670,7 +674,7 @@ body.nav-open { overflow: hidden; }
 @keyframes pulseLine { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
 
 @media (max-width: 720px) {
-  .hero-content { padding-top: 100px; padding-bottom: 60px; }
+  .hero-content { padding-top: 100px; padding-bottom: 88px; }
   .hero-title { margin-bottom: 12px; }
   .hero-sub { margin-bottom: 18px; }
   .hero-actions { margin-bottom: 20px; }
@@ -679,7 +683,7 @@ body.nav-open { overflow: hidden; }
 }
 
 @media (max-height: 800px) {
-  .hero-content { padding-top: 110px; padding-bottom: 36px; }
+  .hero-content { padding-top: 110px; padding-bottom: 64px; }
   .hero-title { font-size: clamp(36px, 5.2vw, 66px); margin-bottom: 12px; }
   .hero-sub { margin-bottom: 18px; }
   .hero-actions { margin-bottom: 24px; }
