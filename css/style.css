@@ -405,19 +405,37 @@ body.page-dark .site-header:not(.is-scrolled) { background: transparent; }
     color: var(--ink);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
     transition: background 0.45s var(--ease), color 0.35s var(--ease),
-                box-shadow 0.4s var(--ease);
+                box-shadow 0.4s var(--ease), width 0.5s var(--ease),
+                border-radius 0.5s var(--ease), padding 0.5s var(--ease);
   }
-  /* Schriftzug entfaellt — das Symbol allein ist eindeutig.
-     Die Beschriftung fuer Screenreader steckt im aria-label des Buttons. */
-  .nav-toggle .nav-toggle-label { display: none; }
+  /* Geschlossen zeigt nur das Symbol — die Beschriftung fuer Screenreader
+     steckt im aria-label des Buttons. */
+  .nav-toggle .nav-toggle-label {
+    display: block;
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 0;
+    transition: max-width 0.5s var(--ease), opacity 0.3s var(--ease);
+  }
   .nav-toggle .nav-toggle-bars { width: 18px; }
   .nav-toggle .nav-toggle-bars span { background: currentColor; height: 2px; }
 
-  /* Geoeffnet: Symbol sitzt auf dem dunklen Panel, daher hell. */
+  /* Geoeffnet: Symbol und Schriftzug in Gold auf dem dunklen Panel. */
   .nav-toggle.is-active {
+    width: 116px;
+    padding: 0 18px;
+    gap: 12px;
+    justify-content: space-between;
+    border-radius: 100px;
     background: transparent;
     color: var(--gold);
     box-shadow: none;
+  }
+  .nav-toggle.is-active .nav-toggle-label {
+    max-width: 60px;
+    opacity: 1;
+    transition-delay: 0.15s;
   }
 
   .mobile-menu {
