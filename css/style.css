@@ -932,6 +932,77 @@ body.nav-open { overflow: hidden; }
   scroll-snap-align: start;
 }
 
+/* ---------- Reel slider (Instagram-Videos, Hochformat) ---------- */
+
+.reel-track {
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.reel-track::-webkit-scrollbar { display: none; }
+
+/* Desktop: drei nebeneinander (zwei Abstaende à 28px abziehen) */
+.reel-card {
+  flex: 0 0 calc((100% - 56px) / 3);
+  scroll-snap-align: start;
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--black);
+  border: 1px solid var(--line-dark);
+}
+.reel-card video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  background: var(--black);
+}
+
+/* Ton-Schalter je Reel */
+.reel-sound {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(11, 11, 12, 0.6);
+  backdrop-filter: blur(6px);
+  color: var(--white);
+  cursor: pointer;
+  transition: background 0.3s var(--ease);
+}
+.reel-sound:hover { background: rgba(11, 11, 12, 0.85); }
+.reel-sound svg { width: 17px; height: 17px; }
+.reel-sound .icon-on { display: none; }
+.reel-sound.is-on .icon-on { display: block; }
+.reel-sound.is-on .icon-off { display: none; }
+
+.reel-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 26px;
+  font-size: 14.5px;
+  color: var(--gold);
+}
+.reel-link:hover { text-decoration: underline; }
+.reel-link svg { width: 17px; height: 17px; }
+
+@media (max-width: 900px) {
+  /* Handy: eines pro Ansicht */
+  .reel-card { flex: 0 0 100%; }
+}
+
 .slider-controls {
   display: flex;
   align-items: center;

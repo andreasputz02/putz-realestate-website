@@ -171,7 +171,70 @@ function setupTrackSlider(track, gap) {
   updateArrows();
 }
 
-document.querySelectorAll(".video-slider-track, .testimonial-slider-track, .team-slider-track").forEach((track) => setupTrackSlider(track, 28));
+document.querySelectorAll(".video-slider-track, .testimonial-slider-track, .team-slider-track, .reel-track").forEach((track) => setupTrackSlider(track, 28));
+
+// ---------- Reels: automatisch abspielen, sobald die Sektion sichtbar wird ----------
+(function () {
+  const reels = document.querySelectorAll(".reel-card video");
+  if (!reels.length) return;
+
+  // Browser erlauben automatisches Abspielen nur ohne Ton.
+  reels.forEach((v) => {
+    v.muted = true;
+    v.loop = true;
+    v.playsInline = true;
+  });
+
+  // Bei reduzierter Bewegung nichts von selbst starten.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    reels.forEach((v) => v.setAttribute("controls", ""));
+    return;
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    reels.forEach((v) => v.play().catch(() => {}));
+    return;
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const v = entry.target;
+        if (entry.isIntersecting) {
+          v.play().catch(() => {}); // Scheitert z.B. im Energiesparmodus — kein Grund für einen Fehler.
+        } else {
+          v.pause();
+        }
+      });
+    },
+    { threshold: 0.4 }
+  );
+  reels.forEach((v) => io.observe(v));
+
+  // Ton-Schalter: immer nur ein Reel darf hörbar sein.
+  document.querySelectorAll(".reel-sound").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const card = btn.closest(".reel-card");
+      const video = card && card.querySelector("video");
+      if (!video) return;
+      const turnOn = video.muted;
+      reels.forEach((v) => {
+        v.muted = true;
+        const b = v.closest(".reel-card").querySelector(".reel-sound");
+        if (b) {
+          b.classList.remove("is-on");
+          b.setAttribute("aria-label", "Ton einschalten");
+        }
+      });
+      if (turnOn) {
+        video.muted = false;
+        btn.classList.add("is-on");
+        btn.setAttribute("aria-label", "Ton ausschalten");
+        video.play().catch(() => {});
+      }
+    });
+  });
+})();
 
 // ---------- Generic modal ----------
 function openModal(name) {
