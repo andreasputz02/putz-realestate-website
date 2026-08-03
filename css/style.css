@@ -213,7 +213,9 @@ body.page-dark .site-header:not(.is-scrolled) { background: transparent; }
 
 .main-nav { display: flex; align-items: center; }
 
-.main-nav ul { display: flex; align-items: center; gap: 46px; }
+/* Abstand kleiner als frueher (46px), weil die Links jetzt eigene
+   seitliche Polsterung fuer die Hover-Flaeche mitbringen. */
+.main-nav ul { display: flex; align-items: center; gap: 14px; }
 
 .main-nav a {
   display: inline-flex;
@@ -223,13 +225,21 @@ body.page-dark .site-header:not(.is-scrolled) { background: transparent; }
   font-weight: 600;
   color: rgba(255, 255, 255, 0.82);
   position: relative;
-  padding: 6px 0;
-  transition: color 0.3s var(--ease);
+  padding: 9px 16px;
+  border-radius: 100px;
+  white-space: nowrap;
+  /* bewusst gemaechlich, damit die goldene Flaeche sanft aufzieht */
+  transition: color 0.45s var(--ease), background-color 0.45s var(--ease);
 }
 
-.main-nav a:hover { color: var(--white); }
-
 .main-nav a.active { color: var(--gold-light); }
+
+/* Nach .active notiert, damit der Hover auch beim aktiven Punkt greift. */
+.main-nav a:hover,
+.main-nav a:focus-visible {
+  background-color: var(--gold);
+  color: var(--ink);
+}
 
 .main-nav .caret { width: 13px; height: 13px; transition: transform 0.3s var(--ease); }
 .main-nav .has-dropdown:hover .caret,
