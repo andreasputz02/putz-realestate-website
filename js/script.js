@@ -12,26 +12,33 @@ const navToggle = document.querySelector(".nav-toggle");
 const mobileMenu = document.querySelector(".mobile-menu");
 
 if (navToggle && mobileMenu) {
-  navToggle.addEventListener("click", () => {
-    const isOpen = mobileMenu.classList.toggle("is-open");
+  // Die Hoehe regelt das CSS selbst (height:auto + max-height-Uebergang).
+  // Kein Messen per JS noetig — dadurch bleibt unten nie Leerraum stehen,
+  // auch nicht wenn die Web-Schrift nachlaedt oder eine Gruppe aufklappt.
+  const setOpen = (isOpen) => {
+    mobileMenu.classList.toggle("is-open", isOpen);
     document.body.classList.toggle("nav-open", isOpen);
     navToggle.classList.toggle("is-active", isOpen);
+    navToggle.setAttribute("aria-expanded", String(isOpen));
+  };
+
+  navToggle.setAttribute("aria-expanded", "false");
+  navToggle.addEventListener("click", () => {
+    setOpen(!mobileMenu.classList.contains("is-open"));
   });
 
   mobileMenu.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      mobileMenu.classList.remove("is-open");
-      document.body.classList.remove("nav-open");
-      navToggle.classList.remove("is-active");
-    });
+    link.addEventListener("click", () => setOpen(false));
   });
 
   document.addEventListener("click", (e) => {
     if (!mobileMenu.classList.contains("is-open")) return;
     if (mobileMenu.contains(e.target) || navToggle.contains(e.target)) return;
-    mobileMenu.classList.remove("is-open");
-    document.body.classList.remove("nav-open");
-    navToggle.classList.remove("is-active");
+    setOpen(false);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && mobileMenu.classList.contains("is-open")) setOpen(false);
   });
 }
 

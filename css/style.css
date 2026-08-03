@@ -383,6 +383,147 @@ body.page-dark .site-header:not(.is-scrolled) { background: transparent; }
 @media (max-width: 960px) {
   .main-nav ul { display: none; }
   .nav-toggle { display: flex; }
+
+  /* ----- Schwebendes Morph-Menue (nur Mobil) -----
+     Die Pille sitzt unten mittig in Daumenreichweite. Beim Oeffnen
+     waechst das Panel aus ihr heraus nach oben, waehrend ein dunkler
+     Kreis von unten hochsteigt. */
+
+  .nav-toggle {
+    position: fixed;
+    top: 22px;
+    right: 22px;
+    z-index: 200;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    justify-content: center;
+    gap: 0;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--gold-light), var(--gold));
+    color: var(--ink);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    transition: background 0.45s var(--ease), color 0.35s var(--ease),
+                box-shadow 0.4s var(--ease);
+  }
+  /* Schriftzug entfaellt — das Symbol allein ist eindeutig.
+     Die Beschriftung fuer Screenreader steckt im aria-label des Buttons. */
+  .nav-toggle .nav-toggle-label { display: none; }
+  .nav-toggle .nav-toggle-bars { width: 18px; }
+  .nav-toggle .nav-toggle-bars span { background: currentColor; height: 2px; }
+
+  /* Geoeffnet: Symbol sitzt auf dem dunklen Panel, daher hell. */
+  .nav-toggle.is-active {
+    background: transparent;
+    color: var(--gold);
+    box-shadow: none;
+  }
+
+  .mobile-menu {
+    top: 22px;
+    right: 22px;
+    left: auto;
+    bottom: auto;
+    width: 48px;
+    height: auto;              /* Hoehe folgt immer dem Inhalt — kein Leerraum */
+    max-height: 48px;          /* geschlossen auf Pillengroesse geklemmt */
+    overflow: hidden;
+    transform: none;
+    transform-origin: top right;
+    background: var(--black-soft);   /* geschlossen deckungsgleich mit der Pille */
+    border-radius: 50%;
+    padding: 0;
+    opacity: 0;
+    z-index: 190;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+    transition: width 0.55s var(--ease), max-height 0.55s var(--ease),
+                border-radius 0.5s var(--ease), opacity 0.25s var(--ease);
+  }
+
+  /* Dunkler Kreis faellt von oben ein und fuellt das Panel. */
+  .mobile-menu::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -200%;
+    width: 220%;
+    aspect-ratio: 1;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: var(--black-soft);
+    transition: top 0.7s var(--ease);
+    z-index: 0;
+  }
+
+  .mobile-menu.is-open {
+    width: min(320px, calc(100vw - 36px));
+    max-height: calc(100vh - 44px);
+    border-radius: 26px;
+    opacity: 1;
+    background: var(--black-soft);
+  }
+  .mobile-menu.is-open::before { top: -25%; }
+
+  /* Liste beginnt unter der Pille und fuellt das Panel restlos aus. */
+  .mobile-menu ul {
+    position: relative;
+    z-index: 1;
+    max-height: calc(100vh - 92px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 62px 22px 18px;
+    gap: 0;
+    opacity: 0;
+    transition: opacity 0.3s var(--ease);
+  }
+  .mobile-menu.is-open ul { opacity: 1; transition-delay: 0.3s; }
+
+  /* Gleicher Abstand fuer alle Punkte.
+     display:block ist noetig, weil bei Fliesstext-Elementen die senkrechte
+     Polsterung zwar gezeichnet wird, die Zeilenhoehe aber nicht vergroessert —
+     die einfachen Links stuenden sonst enger als die Gruppen-Schaltflaechen. */
+  .mobile-menu ul > li > a,
+  .mobile-menu .mobile-nav-toggle {
+    display: block;
+    padding: 17px 2px;
+    line-height: 1.25;
+  }
+  .mobile-menu .mobile-nav-toggle { display: flex; }
+  .mobile-menu a.mobile-nav-sub { padding: 11px 2px 11px 16px; }
+  .mobile-menu .mobile-nav-panel a.mobile-nav-sub:last-child { padding-bottom: 14px; }
+
+  /* Punkte blenden gestaffelt ein. */
+  .mobile-menu ul > li {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+  }
+  .mobile-menu.is-open ul > li { opacity: 1; transform: none; }
+  .mobile-menu.is-open ul > li:nth-child(1) { transition-delay: 0.34s; }
+  .mobile-menu.is-open ul > li:nth-child(2) { transition-delay: 0.40s; }
+  .mobile-menu.is-open ul > li:nth-child(3) { transition-delay: 0.46s; }
+  .mobile-menu.is-open ul > li:nth-child(4) { transition-delay: 0.52s; }
+  .mobile-menu.is-open ul > li:nth-child(5) { transition-delay: 0.58s; }
+  .mobile-menu.is-open ul > li:nth-child(6) { transition-delay: 0.64s; }
+  .mobile-menu.is-open ul > li:nth-child(7) { transition-delay: 0.70s; }
+
+  /* Heller Text auf dunklem Panel */
+  .mobile-menu a,
+  .mobile-menu .mobile-nav-toggle { color: var(--cream); font-size: 19px; }
+  .mobile-menu .mobile-caret { stroke: rgba(247, 243, 236, 0.5); }
+  .mobile-menu a.mobile-nav-sub { color: rgba(247, 243, 236, 0.62); font-size: 15px; }
+  .mobile-menu a.active,
+  .mobile-menu a:active { color: var(--gold); }
+
+  /* Bei reduzierter Bewegung nur ein- und ausblenden. */
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu,
+    .mobile-menu::before,
+    .mobile-menu ul,
+    .mobile-menu ul > li,
+    .nav-toggle { transition-duration: 0.01ms !important; }
+  }
 }
 
 body.nav-open { overflow: hidden; }
