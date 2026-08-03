@@ -421,21 +421,27 @@ body.page-dark .site-header:not(.is-scrolled) { background: transparent; }
   .nav-toggle .nav-toggle-bars { width: 18px; }
   .nav-toggle .nav-toggle-bars span { background: currentColor; height: 2px; }
 
-  /* Geoeffnet: Symbol und Schriftzug in Gold auf dem dunklen Panel. */
+  /* Geoeffnet: Button spannt die Panelbreite, damit "Menü" auf derselben
+     Fluchtlinie steht wie die Menuepunkte und das X rechts aussen sitzt. */
   .nav-toggle.is-active {
-    width: 116px;
-    padding: 0 18px;
+    width: min(320px, calc(100vw - 36px));
+    padding: 0 15px 0 22px;   /* 22px Listenrand + 2px Linkpolsterung = Fluchtlinie */
     gap: 12px;
     justify-content: space-between;
-    border-radius: 100px;
+    border-radius: 26px 26px 0 0;
     background: transparent;
     color: var(--gold);
     box-shadow: none;
   }
   .nav-toggle.is-active .nav-toggle-label {
-    max-width: 60px;
+    max-width: 90px;
     opacity: 1;
     transition-delay: 0.15s;
+    /* gleiche Schrift wie die Menuepunkte */
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: normal;
   }
 
   .mobile-menu {
