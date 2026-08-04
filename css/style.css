@@ -632,7 +632,7 @@ body.nav-open { overflow: hidden; }
   font-weight: 400;
   letter-spacing: normal;
   margin-top: 20px;
-  max-width: 52ch;   /* lesbare Zeilenlaenge, sonst zoege sie auf Titelbreite */
+  max-width: 64ch;   /* gerade so breit, dass der Satz auf Desktop einzeilig bleibt */
 }
 
 .hero-title em {
