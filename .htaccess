@@ -1,0 +1,31 @@
+# ============================================================
+#  Zwischenspeicher-Regeln
+#
+#  Hostinger legt vor die Seite ein CDN, das Antworten
+#  standardmaessig eine Woche lang festhaelt. Fuer die
+#  Objektdaten aus Justimmo waere das fatal: eine Aenderung in
+#  Justimmo wuerde bis zu sieben Tage brauchen, bis sie auf der
+#  Website ankommt.
+#
+#  (Diese Datei enthielt frueher den Wartungsmodus. Der steht in
+#  der Git-Historie, falls er wieder gebraucht wird.)
+# ============================================================
+
+<IfModule mod_headers.c>
+  # Objektdaten: nie zwischenspeichern, weder im Browser noch im CDN.
+  <FilesMatch "^justimmo\.php$">
+    Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header always set Pragma "no-cache"
+    Header always unset Expires
+    Header always unset ETag
+  </FilesMatch>
+
+  # HTML-Seiten: kurz zwischenspeichern, aber immer beim Server rueckfragen.
+  # Sonst sehen Besucher nach einer Aenderung tagelang die alte Fassung.
+  <FilesMatch "\.html$">
+    Header always set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# CSS, JS, Bilder duerfen lange gespeichert bleiben — die tragen
+# ohnehin eine Versionsnummer (?v=…) im Link.
