@@ -21,6 +21,9 @@
 require_once __DIR__ . '/justimmo-lib.php';
 
 header('Content-Type: application/javascript; charset=utf-8');
+// Objektdaten aendern sich laufend — der Browser darf sie nicht einfrieren.
+// Wie oft wirklich bei Justimmo angefragt wird, steuert der Cache unten.
+header('Cache-Control: no-store, must-revalidate');
 
 // ------------------------------------------------------------
 //  Konfiguration laden — fehlt sie, still aussteigen

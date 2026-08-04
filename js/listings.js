@@ -4,10 +4,16 @@
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg>';
 
   function renderCard(listing) {
+    // Liegt ein echtes Foto vor, steht es auf der Karte. Sonst der Farbverlauf.
+    const fotos = Array.isArray(listing.images) ? listing.images : [];
+    const deckblatt = fotos.length
+      ? `<div class="scene has-photo" style="background-image:url('${fotos[0]}')"></div>`
+      : `<div class="scene" style="background:${listing.gradient}"></div>`;
+
     return `
       <a class="listing-card" data-reveal data-listing-type="${listing.type}" href="immobilie.html?id=${listing.id}">
         <div class="listing-media">
-          <div class="scene" style="background:${listing.gradient}"></div>
+          ${deckblatt}
           <span class="tag">${listing.type === "miete" ? "Miete" : "Kauf"}</span>
           <span class="price-tag">${listing.price}</span>
         </div>

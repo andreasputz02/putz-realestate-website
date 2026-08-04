@@ -939,6 +939,8 @@ body.nav-open { overflow: hidden; }
   background: linear-gradient(135deg, #2a2620, #100f0d);
 }
 .listing-media .scene { position: absolute; inset: 0; }
+/* Deckblatt-Foto des Objekts: fuellt die Kachel formatunabhaengig. */
+.listing-media .scene.has-photo { background-size: cover; background-position: center; background-repeat: no-repeat; }
 .listing-media .tag {
   position: absolute;
   top: 16px;
