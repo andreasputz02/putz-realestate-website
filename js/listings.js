@@ -206,7 +206,10 @@
       }
 
       const descEl = detailRoot.querySelector('[data-field="description"]');
-      if (descEl) descEl.innerHTML = listing.description.map((p) => `<p>${p}</p>`).join("");
+      // Beschreibungen aus Justimmo bringen ihre eigenen Absaetze mit —
+      // nur reiner Text wird hier noch in <p> gefasst.
+      const alsAbsatz = (t) => (/<(p|ul|ol|h[1-6]|div)[\s>]/i.test(t) ? t : `<p>${t}</p>`);
+      if (descEl) descEl.innerHTML = listing.description.map(alsAbsatz).join("");
 
       const mapEl = detailRoot.querySelector('[data-field="map"]');
       if (mapEl && listing.mapQuery) {

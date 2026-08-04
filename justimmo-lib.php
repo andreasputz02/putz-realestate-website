@@ -188,12 +188,22 @@ function ji_umwandeln(string $xmlRoh): array
         ]);
         if (!$texte) $texte = ['Details zu diesem Objekt erhalten Sie gerne auf Anfrage.'];
 
-        // Absaetze innerhalb eines Textes auftrennen
         $absaetze = [];
         foreach ($texte as $t) {
-            foreach (preg_split('/\R{2,}/', $t) as $teil) {
-                $teil = trim($teil);
-                if ($teil !== '') $absaetze[] = $teil;
+            if (str_contains($t, '<')) {
+                // Justimmo liefert die Beschreibung bereits formatiert.
+                // Nur harmlose Tags stehen lassen — und deren Attribute
+                // entfernen, damit nichts Ausfuehrbares durchrutscht.
+                $sauber = strip_tags($t, '<p><br><strong><b><em><i><u><ul><ol><li>');
+                $sauber = preg_replace('/<([a-z0-9]+)\s[^>]*>/i', '<$1>', $sauber);
+                $sauber = trim($sauber);
+                if ($sauber !== '') $absaetze[] = $sauber;
+            } else {
+                // Reiner Text: an Leerzeilen in Absaetze trennen.
+                foreach (preg_split('/\R{2,}/', $t) as $teil) {
+                    $teil = trim($teil);
+                    if ($teil !== '') $absaetze[] = $teil;
+                }
             }
         }
 
