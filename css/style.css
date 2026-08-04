@@ -1481,12 +1481,12 @@ body.nav-open { overflow: hidden; }
 
 .team-photo .corner-logo {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
   z-index: 3;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;   /* klippt die weissen Ecken des quadratischen Bildes weg */
   object-fit: contain;
 }
 
