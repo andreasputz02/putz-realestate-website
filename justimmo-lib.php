@@ -122,6 +122,32 @@ function ji_videoSuche(SimpleXMLElement $o): string
 }
 
 /**
+ * Ist das ein Hochkant-Video (YouTube Short)?
+ *
+ * YouTube verraet das Format nicht ueber die oEmbed-Schnittstelle — dort
+ * steht immer 16:9. Aber: ruft man /shorts/KENNUNG auf, bleibt ein Short
+ * dort stehen (200), waehrend ein Querformat-Video auf /watch umgeleitet
+ * wird (303). Das ist ein verlaesslicher Unterschied.
+ *
+ * Im Zweifel Querformat — das ist der haeufigere Fall.
+ */
+function ji_istShort(string $kennung): bool
+{
+    $ch = curl_init('https://www.youtube.com/shorts/' . $kennung);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_NOBODY         => true,
+        CURLOPT_FOLLOWLOCATION => false,
+        CURLOPT_TIMEOUT        => 5,
+    ]);
+    curl_exec($ch);
+    $status = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    return $status === 200;
+}
+
+/**
  * Macht aus der Video-Adresse das, was die Detailseite braucht.
  *
  * In Justimmo kann man entweder eine Datei hochladen oder einen Link
@@ -138,7 +164,10 @@ function ji_video(string $url, string $deckblatt): ?array
     if (preg_match('#youtube\.com/.*[?&]v=([A-Za-z0-9_-]{6,})#i', $url, $t)
         || preg_match('#youtu\.be/([A-Za-z0-9_-]{6,})#i', $url, $t)
         || preg_match('#youtube\.com/(?:embed|shorts)/([A-Za-z0-9_-]{6,})#i', $url, $t)) {
-        return ['einbettung' => 'https://www.youtube-nocookie.com/embed/' . $t[1]];
+        return [
+            'einbettung' => 'https://www.youtube-nocookie.com/embed/' . $t[1],
+            'hochformat' => ji_istShort($t[1]),
+        ];
     }
 
     if (preg_match('#vimeo\.com/(?:video/)?(\d+)#i', $url, $t)) {
