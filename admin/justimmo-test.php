@@ -142,6 +142,15 @@ function feld($wert, $leerOk = false) {
           <tr><td>Zimmer</td><td><?php echo feld($ob['rooms']); ?></td></tr>
           <tr><td>Bäder</td><td><?php echo feld($ob['baths']); ?></td></tr>
           <tr><td>Bilder</td><td><?php echo feld($ob['images']); ?></td></tr>
+          <tr><td>Video</td><td><?php
+            if (!$ob['video']) {
+                echo '<span class="schlecht">— keines —</span>';
+            } elseif (!empty($ob['video']['einbettung'])) {
+                echo '<span class="ok">Link</span> <span class="hinweis">' . htmlspecialchars($ob['video']['einbettung']) . '</span>';
+            } else {
+                echo '<span class="ok">Datei</span> <span class="hinweis">' . htmlspecialchars($ob['video']['src']) . '</span>';
+            }
+          ?></td></tr>
           <tr><td>Beschreibung</td><td><?php echo feld($ob['description']); ?> Absätze</td></tr>
           <tr><td>Justimmo-Nummer</td><td><?php echo feld($ob['justimmoId']); ?></td></tr>
           <tr><td>Adresse auf der Seite</td><td class="hinweis">immobilie.html?id=<?php echo htmlspecialchars($ob['id']); ?></td></tr>

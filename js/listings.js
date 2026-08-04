@@ -221,12 +221,26 @@
       if (videoWrap && hasVideo) {
         videoWrap.hidden = false;
         const player = videoWrap.querySelector(".video-feature-player");
-        const videoEl = videoWrap.querySelector("video");
-        const sourceEl = videoWrap.querySelector("source");
-        if (listing.video.orientation === "portrait") player.classList.add("is-portrait");
-        videoEl.setAttribute("poster", listing.video.poster);
-        sourceEl.setAttribute("src", listing.video.src);
-        videoEl.load();
+
+        if (listing.video.einbettung) {
+          // Video liegt bei YouTube/Vimeo — als Rahmen einbetten.
+          const rahmen = document.createElement("iframe");
+          rahmen.src = listing.video.einbettung;
+          rahmen.title = "Video-Rundgang";
+          rahmen.loading = "lazy";
+          rahmen.allow = "accelerometer; encrypted-media; picture-in-picture; fullscreen";
+          rahmen.allowFullscreen = true;
+          rahmen.referrerPolicy = "no-referrer";
+          player.replaceChildren(rahmen);
+        } else {
+          // Datei liegt bei uns oder bei Justimmo — direkt abspielen.
+          const videoEl = videoWrap.querySelector("video");
+          const sourceEl = videoWrap.querySelector("source");
+          if (listing.video.orientation === "portrait") player.classList.add("is-portrait");
+          if (listing.video.poster) videoEl.setAttribute("poster", listing.video.poster);
+          sourceEl.setAttribute("src", listing.video.src);
+          videoEl.load();
+        }
       } else if (topEl) {
         topEl.classList.add("no-video");
       }

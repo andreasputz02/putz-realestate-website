@@ -101,6 +101,39 @@ function ji_kennung(string $titel, string $id): string
     return $s !== '' ? $s : 'objekt-' . $id;
 }
 
+/**
+ * Macht aus der Video-Adresse das, was die Detailseite braucht.
+ *
+ * In Justimmo kann man entweder eine Datei hochladen oder einen Link
+ * angeben. Eine hochgeladene Datei wird direkt abgespielt; ein Link zu
+ * YouTube oder Vimeo wird als Rahmen eingebettet.
+ *
+ * Bei YouTube wird bewusst die Adresse ohne Werbe-Cookies verwendet.
+ */
+function ji_video(string $url, string $deckblatt): ?array
+{
+    $url = trim($url);
+    if ($url === '' || !str_starts_with($url, 'http')) return null;
+
+    if (preg_match('#youtube\.com/.*[?&]v=([A-Za-z0-9_-]{6,})#i', $url, $t)
+        || preg_match('#youtu\.be/([A-Za-z0-9_-]{6,})#i', $url, $t)
+        || preg_match('#youtube\.com/(?:embed|shorts)/([A-Za-z0-9_-]{6,})#i', $url, $t)) {
+        return ['einbettung' => 'https://www.youtube-nocookie.com/embed/' . $t[1]];
+    }
+
+    if (preg_match('#vimeo\.com/(?:video/)?(\d+)#i', $url, $t)) {
+        return ['einbettung' => 'https://player.vimeo.com/video/' . $t[1]];
+    }
+
+    $endung = strtolower(pathinfo((string)parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
+    if (in_array($endung, ['mp4', 'mov', 'm4v', 'webm'], true)) {
+        return ['src' => $url, 'poster' => $deckblatt, 'orientation' => 'landscape'];
+    }
+
+    // Unbekannter Anbieter — als Rahmen versuchen, das klappt bei den meisten.
+    return ['einbettung' => $url];
+}
+
 // ------------------------------------------------------------
 //  Objektknoten in der Antwort finden
 //
@@ -207,13 +240,49 @@ function ji_umwandeln(string $xmlRoh): array
             }
         }
 
-        $bilder = ji_alleWerte($o, [
-            'anhaenge/anhang/daten/pfad',
-            'anhang/daten/pfad',
-            'bilder/bild/pfad',
-            'bilder/bild',
-        ]);
-        $bilder = array_values(array_filter($bilder, fn($b) => str_starts_with($b, 'http')));
+        // Anhaenge einmal durchgehen und nach Art trennen. Frueher wanderte
+        // jeder Anhang in die Bilderliste — ein Video waere dort als
+        // kaputtes Foto gelandet.
+        $bilder = [];
+        $videoUrl = '';
+        foreach (@$o->xpath('anhaenge/anhang') ?: [] as $anhang) {
+            $pfad = trim((string)($anhang->daten->pfad ?? ''));
+            if ($pfad === '' || !str_starts_with($pfad, 'http')) continue;
+
+            $gruppe = strtoupper(trim((string)($anhang['gruppe'] ?? '')));
+            $endung = strtolower(pathinfo((string)parse_url($pfad, PHP_URL_PATH), PATHINFO_EXTENSION));
+
+            if ($gruppe === 'FILMLINK'
+                || in_array($endung, ['mp4', 'mov', 'm4v', 'webm'], true)
+                || preg_match('#(youtube\.com|youtu\.be|vimeo\.com)#i', $pfad)) {
+                if ($videoUrl === '') $videoUrl = $pfad;   // das erste Video zaehlt
+                continue;
+            }
+
+            if (in_array($endung, ['jpg', 'jpeg', 'png', 'webp'], true)
+                || in_array($gruppe, ['TITELBILD', 'BILD'], true)) {
+                $bilder[] = $pfad;
+            }
+        }
+
+        // Rueckfall, falls der Anhang-Aufbau abweicht
+        if (!$bilder) {
+            $bilder = array_values(array_filter(
+                ji_alleWerte($o, ['bilder/bild/pfad', 'bilder/bild', 'anhang/daten/pfad']),
+                fn($b) => str_starts_with($b, 'http')
+            ));
+        }
+        if ($videoUrl === '') {
+            $videoUrl = ji_ersterWert($o, [
+                'anhaenge/anhang[@gruppe="FILMLINK"]/daten/pfad',
+                'user_defined_anyfield/ji_videos/video',
+                'user_defined_anyfield/ji_video',
+                'user_defined_simplefield[@feldname="video"]',
+                'video', 'film',
+            ]);
+        }
+
+        $video = ji_video($videoUrl, $bilder[0] ?? '');
 
         $ergebnis[] = [
             'id'          => ji_kennung($titel, $id),
@@ -229,7 +298,7 @@ function ji_umwandeln(string $xmlRoh): array
             'gradient'    => 'linear-gradient(135deg,#2c2822,#0f0e0c)',
             'images'      => $bilder,
             'description' => array_slice($absaetze, 0, 4),
-            'video'       => null,
+            'video'       => $video,
         ];
     }
 

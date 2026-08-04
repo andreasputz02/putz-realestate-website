@@ -1138,6 +1138,14 @@ body.nav-open { overflow: hidden; }
   display: block;
 }
 
+/* Eingebettetes Video (YouTube/Vimeo) fuellt denselben Rahmen. */
+.video-feature-player iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
 /* ---------- Video slider ---------- */
 
 .video-slider-track {
@@ -2086,6 +2094,10 @@ body.modal-open { overflow: hidden; }
 
 @media (max-width: 900px) {
   .property-top { grid-template-columns: 1fr; }
+  /* Am Handy steht das Video ueber der Galerie, damit es nicht
+     hinter alle Fotos rutscht. Am Desktop sitzt es ohnehin
+     gleich oben rechts neben der Galerie. */
+  .property-top .property-video { order: -1; margin-bottom: 8px; }
   .property-inquiry { grid-template-columns: 1fr; }
 }
 
