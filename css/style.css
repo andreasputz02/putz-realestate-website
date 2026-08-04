@@ -624,6 +624,16 @@ body.nav-open { overflow: hidden; }
   max-width: 17ch;
   margin-bottom: 18px;
 }
+/* Die Unterzeile steht innerhalb des h1 (eine Ueberschrift, die Ort und
+   Leistung nennt). Sie muss die Ueberschriften-Typografie zuruecksetzen. */
+.hero-title .hero-sub {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 400;
+  letter-spacing: normal;
+  margin-top: 20px;
+  max-width: 52ch;   /* lesbare Zeilenlaenge, sonst zoege sie auf Titelbreite */
+}
 
 .hero-title em {
   font-family: var(--font-script);
