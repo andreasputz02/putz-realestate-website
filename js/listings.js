@@ -230,7 +230,10 @@
           rahmen.loading = "lazy";
           rahmen.allow = "accelerometer; encrypted-media; picture-in-picture; fullscreen";
           rahmen.allowFullscreen = true;
-          rahmen.referrerPolicy = "no-referrer";
+          // Kein "no-referrer": YouTube prueft die einbettende Domain und
+          // verweigert sonst mit "Fehler 153". Diese Einstellung sendet nur
+          // die Domain, nicht die vollstaendige Adresse der Unterseite.
+          rahmen.referrerPolicy = "strict-origin-when-cross-origin";
           player.replaceChildren(rahmen);
         } else {
           // Datei liegt bei uns oder bei Justimmo — direkt abspielen.
