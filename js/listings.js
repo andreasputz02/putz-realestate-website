@@ -211,17 +211,9 @@
       const alsAbsatz = (t) => (/<(p|ul|ol|h[1-6]|div)[\s>]/i.test(t) ? t : `<p>${t}</p>`);
       if (descEl) descEl.innerHTML = listing.description.map(alsAbsatz).join("");
 
-      // Karte ebenfalls erst nach Einwilligung laden — der leere
-      // Rahmen aus dem HTML wird dafuer ersetzt.
       const mapEl = detailRoot.querySelector('[data-field="map"]');
       if (mapEl && listing.mapQuery) {
-        const sperre = window.einwilligungsRahmen({
-          dienst: "maps",
-          src: `https://www.google.com/maps?q=${encodeURIComponent(listing.mapQuery)}&output=embed`,
-          titel: `Lage: ${listing.location}`,
-        });
-        sperre.classList.add("map-frame");
-        mapEl.replaceWith(sperre);
+        mapEl.src = `https://www.google.com/maps?q=${encodeURIComponent(listing.mapQuery)}&output=embed`;
       }
 
       const videoWrap = detailRoot.querySelector('[data-field="video-wrap"]');
@@ -234,15 +226,16 @@
           // Video liegt bei YouTube/Vimeo. Hochkant-Videos bekommen einen
           // hochkanten Rahmen, sonst blieben links und rechts Balken.
           if (listing.video.hochformat) player.classList.add("is-portrait");
-          // Nicht sofort laden — erst nach Einwilligung des Besuchers.
-          player.replaceChildren(
-            window.einwilligungsRahmen({
-              dienst: "youtube",
-              src: listing.video.einbettung,
-              titel: "Video-Rundgang",
-              vorschauBild: bilder[0] || "",
-            })
-          );
+          const rahmen = document.createElement("iframe");
+          rahmen.src = listing.video.einbettung;
+          rahmen.title = "Video-Rundgang";
+          rahmen.loading = "lazy";
+          rahmen.allow = "accelerometer; encrypted-media; picture-in-picture; fullscreen";
+          rahmen.allowFullscreen = true;
+          // Kein "no-referrer": YouTube prueft die einbettende Domain und
+          // verweigert sonst mit "Fehler 153".
+          rahmen.referrerPolicy = "strict-origin-when-cross-origin";
+          player.replaceChildren(rahmen);
         } else {
           // Datei liegt bei uns oder bei Justimmo — direkt abspielen.
           const videoEl = videoWrap.querySelector("video");
