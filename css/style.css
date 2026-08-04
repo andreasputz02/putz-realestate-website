@@ -2119,7 +2119,7 @@ body.modal-open { overflow: hidden; }
 .agent-kontakt a:hover { color: var(--gold-dim); }
 .agent-kontakt svg,
 .agent-ort svg,
-.agent-insta svg { width: 17px; height: 17px; flex-shrink: 0; color: var(--gold-dim); }
+.agent-social svg { width: 17px; height: 17px; flex-shrink: 0; color: var(--gold-dim); }
 
 .agent-titel {
   font-size: 11px;
@@ -2134,7 +2134,7 @@ body.modal-open { overflow: hidden; }
 .agent-ort { padding: 7px 0; align-items: flex-start; }
 .agent-ort svg { margin-top: 2px; }
 .agent-ort strong,
-.agent-insta strong {
+.agent-social strong {
   display: block;
   color: var(--ink);
   font-weight: 600;
