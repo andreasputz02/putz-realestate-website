@@ -2079,15 +2079,85 @@ body.modal-open { overflow: hidden; }
   color: var(--ink);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  padding: 24px 26px;
+  padding: 26px;
+}
+
+.agent-person { display: flex; align-items: center; gap: 16px; }
+.agent-person img {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  object-fit: cover;
+  /* Das Portrait ist hochkant, der Kopf sitzt im oberen Fuenftel.
+     Ohne diese Zeile zeigt der Kreis die Bildmitte — also den
+     Oberkoerper, und der Kopf waere abgeschnitten. */
+  object-position: 50% 0;
+  flex-shrink: 0;
+}
+.agent-card h4 { font-size: 17px; font-weight: 600; margin-bottom: 2px; }
+.agent-role {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Gemeinsame Zeilenform fuer Telefon, Mail, Standorte, Instagram */
+.agent-kontakt, .agent-abschnitt { margin-top: 22px; }
+.agent-kontakt a,
+.agent-ort,
+.agent-insta {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 11px;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.45;
 }
-.agent-card img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
-.agent-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-.agent-card a { display: block; font-size: 13.5px; color: var(--ink-soft); }
-.agent-card a:hover { color: var(--gold-dim); }
+.agent-kontakt a { padding: 7px 0; }
+.agent-kontakt a:hover { color: var(--gold-dim); }
+.agent-kontakt svg,
+.agent-ort svg,
+.agent-insta svg { width: 17px; height: 17px; flex-shrink: 0; color: var(--gold-dim); }
+
+.agent-titel {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 700;
+  margin-bottom: 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.agent-ort { padding: 7px 0; align-items: flex-start; }
+.agent-ort svg { margin-top: 2px; }
+.agent-ort strong,
+.agent-insta strong {
+  display: block;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 13.5px;
+}
+.agent-ort span { font-size: 12.5px; }
+
+.agent-insta {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.agent-insta:hover { color: var(--gold-dim); }
+.agent-insta:hover strong { color: var(--gold-dim); }
+
+@media (max-width: 900px) {
+  /* Nebeneinander, solange die Karte die volle Breite einnimmt. */
+  .agent-card { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; align-items: start; }
+  .agent-person { grid-column: 1 / -1; }
+  .agent-insta { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .agent-card { display: block; }
+}
 
 .property-not-found { text-align: center; padding: 60px 0; }
 .property-not-found .lede { max-width: 46ch; }
