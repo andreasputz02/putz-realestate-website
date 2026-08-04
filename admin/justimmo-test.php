@@ -5,46 +5,49 @@ if (empty($_SESSION['admin_logged_in'])) {
     exit;
 }
 
+require_once __DIR__ . '/../justimmo-lib.php';
+
 $konfigPfad = __DIR__ . '/../justimmo-config.php';
 $hatKonfig  = is_file($konfigPfad);
 $konfig     = $hatKonfig ? require $konfigPfad : null;
 
-$status = null; $fehler = null; $xmlRoh = null; $anzahlObjekte = null; $beispiel = null; $gemeldet = null;
+$status = null; $fehler = null; $xmlRoh = null;
+$gemeldet = null; $anzahlKnoten = null; $beispielXml = null; $objekte = [];
 
 if ($hatKonfig && isset($_GET['pruefen'])) {
-    $url = 'https://api.justimmo.at/rest/v1/objekt/list?' . http_build_query([
-        'showDetails' => 1, 'limit' => 3, 'culture' => 'de',
-    ]);
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 15,
-        CURLOPT_HTTPAUTH       => CURLAUTH_BASIC,
-        CURLOPT_USERPWD        => $konfig['benutzer'] . ':' . $konfig['passwort'],
-    ]);
-    $xmlRoh = curl_exec($ch);
-    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $fehler = curl_error($ch);
-    curl_close($ch);
+    // Cache umgehen: hier soll immer der aktuelle Stand geprueft werden.
+    $xmlRoh = ji_abrufen('objekt/list', [
+        'showDetails' => 1,
+        'limit'       => 5,
+        'culture'     => 'de',
+        'picturesize' => 'big',
+    ], $konfig, $status, $fehler);
 
     if ($xmlRoh) {
         libxml_use_internal_errors(true);
         $x = simplexml_load_string($xmlRoh);
         if ($x !== false) {
-            $treffer = $x->xpath('//immobilie') ?: $x->xpath('//objekt') ?: [];
-            if (!$treffer) {
-                foreach ($x->xpath('//query-result/*') ?: [] as $kind) {
-                    if ($kind->getName() !== 'count' && $kind->count() > 0) $treffer[] = $kind;
-                }
-            }
-            $anzahlObjekte = count($treffer);
-            if ($treffer) $beispiel = $treffer[0]->asXML();
-
-            // Justimmo meldet die Trefferzahl selbst mit — der verlaesslichste Wert.
             $c = $x->xpath('//query-result/count');
             if ($c) $gemeldet = (int)(string)$c[0];
+
+            $knoten = ji_objektKnoten($x);
+            $anzahlKnoten = count($knoten);
+            if ($knoten) $beispielXml = $knoten[0]->asXML();
+
+            $objekte = ji_umwandeln($xmlRoh);
         }
     }
+
+    // Zwischenspeicher leeren, damit die Website sofort den neuen Stand zieht.
+    if (is_file(JI_CACHE_DATEI)) @unlink(JI_CACHE_DATEI);
+}
+
+function feld($wert, $leerOk = false) {
+    $leer = ($wert === '' || $wert === null || $wert === '–' || $wert === []);
+    $klasse = $leer && !$leerOk ? 'schlecht' : 'ok';
+    if (is_array($wert)) $wert = count($wert) . ' Stück';
+    if ($leer) $wert = '— leer —';
+    return '<span class="' . $klasse . '">' . htmlspecialchars((string)$wert) . '</span>';
 }
 ?>
 <!DOCTYPE html>
@@ -60,28 +63,30 @@ if ($hatKonfig && isset($_GET['pruefen'])) {
   .wrap { max-width: 900px; margin: 0 auto; }
   h1 { font-size: 24px; font-weight: 600; margin-bottom: 6px; }
   h2 { font-size: 16px; margin: 28px 0 10px; color: #fbe48b; }
+  h3 { font-size: 14px; margin: 18px 0 6px; color: rgba(255,255,255,0.85); }
   a { color: #fbe48b; }
   .karte { background: #141416; border: 1px solid rgba(255,255,255,0.09); border-radius: 12px; padding: 20px 22px; margin-top: 18px; }
   .ok { color: #7fd18b; } .schlecht { color: #ef8080; }
-  pre { background: #0d0d0f; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 14px; overflow-x: auto; font-size: 12px; white-space: pre-wrap; word-break: break-word; }
+  .hinweis { font-size: 13.5px; color: rgba(255,255,255,0.55); }
+  pre { background: #0d0d0f; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 14px; overflow-x: auto; font-size: 12px; white-space: pre-wrap; word-break: break-word; max-height: 480px; }
   .btn { display: inline-block; margin-top: 14px; padding: 10px 18px; border-radius: 100px; background: #fbe48b; color: #17161a; font-weight: 700; text-decoration: none; font-size: 14px; }
   table { width: 100%; border-collapse: collapse; margin-top: 8px; }
   td { padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.07); font-size: 14px; vertical-align: top; }
   td:first-child { color: rgba(255,255,255,0.55); width: 210px; }
+  .objekt { border-top: 1px solid rgba(255,255,255,0.12); margin-top: 22px; padding-top: 8px; }
+  .objekt:first-of-type { border-top: 0; margin-top: 0; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Justimmo-Verbindung prüfen</h1>
-  <p style="color:rgba(255,255,255,0.55);font-size:14px;">
-    <a href="tippgeber.php">← zurück zur Übersicht</a> · <a href="logout.php">Abmelden</a>
-  </p>
+  <p class="hinweis"><a href="tippgeber.php">← zurück zur Übersicht</a> · <a href="logout.php">Abmelden</a></p>
 
   <div class="karte">
     <h2 style="margin-top:0;">1. Zugangsdaten</h2>
     <?php if (!$hatKonfig): ?>
       <p class="schlecht">Die Datei <code>justimmo-config.php</code> fehlt noch.</p>
-      <p style="margin-top:10px;font-size:14px;">
+      <p class="hinweis" style="margin-top:10px;">
         Kopieren Sie <code>justimmo-config.example.php</code> zu <code>justimmo-config.php</code>
         und tragen Sie Benutzername und Passwort ein. Beides finden Sie in Justimmo unter
         <strong>Einstellungen → Schnittstellen → API-Export</strong>.
@@ -89,11 +94,12 @@ if ($hatKonfig && isset($_GET['pruefen'])) {
     <?php else: ?>
       <p class="ok">Konfiguration gefunden.</p>
       <table>
-        <tr><td>Benutzername</td><td><?php echo htmlspecialchars(substr($konfig['benutzer'], 0, 3)) . str_repeat('•', 6); ?></td></tr>
+        <tr><td>Benutzername</td><td><?php echo htmlspecialchars(substr((string)$konfig['benutzer'], 0, 3)) . str_repeat('•', 6); ?></td></tr>
         <tr><td>Passwort</td><td><?php echo str_repeat('•', 10); ?></td></tr>
         <tr><td>Zwischenspeicher</td><td><?php echo (int)$konfig['cache_sekunden']; ?> Sekunden</td></tr>
       </table>
       <a class="btn" href="?pruefen=1">Verbindung jetzt testen</a>
+      <p class="hinweis" style="margin-top:10px;">Der Test leert dabei den Zwischenspeicher — die Website zeigt danach sofort den aktuellen Stand.</p>
     <?php endif; ?>
   </div>
 
@@ -113,25 +119,52 @@ if ($hatKonfig && isset($_GET['pruefen'])) {
         <?php if ($gemeldet === 0) echo ' — in Justimmo ist kein Objekt für den API-Export freigegeben'; ?>
       </td></tr>
       <?php endif; ?>
-      <tr><td>Davon eingelesen</td><td class="<?php echo $anzahlObjekte ? 'ok' : 'schlecht'; ?>">
-        <?php echo $anzahlObjekte === null ? '—' : (int)$anzahlObjekte; ?>
-        <?php if ($gemeldet > 0 && $anzahlObjekte === 0) echo ' — Objekte vorhanden, aber der Aufbau ist unbekannt: bitte die Rohantwort unten schicken'; ?>
+      <tr><td>Davon eingelesen</td><td class="<?php echo $anzahlKnoten ? 'ok' : 'schlecht'; ?>">
+        <?php echo $anzahlKnoten === null ? '—' : (int)$anzahlKnoten; ?>
+        <?php if ($gemeldet > 0 && !$anzahlKnoten) echo ' — Aufbau unbekannt, bitte die Rohantwort unten schicken'; ?>
       </td></tr>
     </table>
   </div>
 
-  <?php if ($beispiel): ?>
+  <?php if ($objekte): ?>
   <div class="karte">
-    <h2 style="margin-top:0;">3. Aufbau des ersten Objekts</h2>
-    <p style="font-size:14px;color:rgba(255,255,255,0.6);">
-      Anhand dieser Felder wird die Übersetzung auf die Website feinjustiert.
-    </p>
-    <pre><?php echo htmlspecialchars(substr($beispiel, 0, 6000)); ?></pre>
+    <h2 style="margin-top:0;">3. So erscheint es auf der Website</h2>
+    <p class="hinweis">Rot heißt: das Feld konnte nicht zugeordnet werden.</p>
+    <?php foreach ($objekte as $ob): ?>
+      <div class="objekt">
+        <table>
+          <tr><td>Titel</td><td><?php echo feld($ob['title']); ?></td></tr>
+          <tr><td>Art</td><td><?php echo feld($ob['type']); ?></td></tr>
+          <tr><td>Preis</td><td><?php echo feld($ob['price']); ?></td></tr>
+          <tr><td>Ort (Anzeige)</td><td><?php echo feld($ob['location']); ?></td></tr>
+          <tr><td>Ort (Karte)</td><td><?php echo feld($ob['mapQuery']); ?></td></tr>
+          <tr><td>Fläche</td><td><?php echo feld($ob['area']); ?></td></tr>
+          <tr><td>Zimmer</td><td><?php echo feld($ob['rooms']); ?></td></tr>
+          <tr><td>Bäder</td><td><?php echo feld($ob['baths']); ?></td></tr>
+          <tr><td>Bilder</td><td><?php echo feld($ob['images']); ?></td></tr>
+          <tr><td>Beschreibung</td><td><?php echo feld($ob['description']); ?> Absätze</td></tr>
+          <tr><td>Justimmo-Nummer</td><td><?php echo feld($ob['justimmoId']); ?></td></tr>
+          <tr><td>Adresse auf der Seite</td><td class="hinweis">immobilie.html?id=<?php echo htmlspecialchars($ob['id']); ?></td></tr>
+        </table>
+        <?php if ($ob['images']): ?>
+          <h3>Erstes Bild</h3>
+          <img src="<?php echo htmlspecialchars($ob['images'][0]); ?>" alt="" style="max-width:100%;border-radius:8px;">
+        <?php endif; ?>
+      </div>
+    <?php endforeach; ?>
+  </div>
+  <?php endif; ?>
+
+  <?php if ($beispielXml): ?>
+  <div class="karte">
+    <h2 style="margin-top:0;">4. Rohdaten des ersten Objekts</h2>
+    <p class="hinweis">Nur zur Fehlersuche — falls oben ein Feld rot ist.</p>
+    <pre><?php echo htmlspecialchars(substr($beispielXml, 0, 20000)); ?></pre>
   </div>
   <?php elseif ($xmlRoh): ?>
   <div class="karte">
-    <h2 style="margin-top:0;">3. Rohantwort</h2>
-    <pre><?php echo htmlspecialchars(substr($xmlRoh, 0, 3000)); ?></pre>
+    <h2 style="margin-top:0;">4. Rohantwort</h2>
+    <pre><?php echo htmlspecialchars(substr($xmlRoh, 0, 5000)); ?></pre>
   </div>
   <?php endif; ?>
   <?php endif; ?>
