@@ -102,6 +102,26 @@ function ji_kennung(string $titel, string $id): string
 }
 
 /**
+ * Durchsucht ein Objekt nach einer Videoadresse — egal in welchem Feld.
+ *
+ * Der Freitext wird dabei ausgespart: ein Link, den jemand mitten in die
+ * Objektbeschreibung geschrieben hat, ist meist nicht der Rundgang.
+ * Geprueft werden sowohl Feldinhalte als auch Attribute.
+ */
+function ji_videoSuche(SimpleXMLElement $o): string
+{
+    $muster = '#https?://[^\s"\'<>]*(?:youtube\.com|youtu\.be|vimeo\.com)[^\s"\'<>]*#i';
+
+    foreach (@$o->xpath('.//*[not(ancestor-or-self::freitexte)]') ?: [] as $el) {
+        if (preg_match($muster, (string)$el, $t)) return html_entity_decode($t[0]);
+        foreach ($el->attributes() ?? [] as $wert) {
+            if (preg_match($muster, (string)$wert, $t)) return html_entity_decode($t[0]);
+        }
+    }
+    return '';
+}
+
+/**
  * Macht aus der Video-Adresse das, was die Detailseite braucht.
  *
  * In Justimmo kann man entweder eine Datei hochladen oder einen Link
@@ -281,6 +301,10 @@ function ji_umwandeln(string $xmlRoh): array
                 'video', 'film',
             ]);
         }
+        // Letzter Versuch: Justimmo legt Videolinks je nach Konto an
+        // unterschiedlichen Stellen ab. Eine YouTube- oder Vimeo-Adresse ist
+        // aber unverwechselbar — also das ganze Objekt danach absuchen.
+        if ($videoUrl === '') $videoUrl = ji_videoSuche($o);
 
         $video = ji_video($videoUrl, $bilder[0] ?? '');
 

@@ -12,7 +12,7 @@ $hatKonfig  = is_file($konfigPfad);
 $konfig     = $hatKonfig ? require $konfigPfad : null;
 
 $status = null; $fehler = null; $xmlRoh = null;
-$gemeldet = null; $anzahlKnoten = null; $beispielXml = null; $objekte = [];
+$gemeldet = null; $anzahlKnoten = null; $beispielXml = null; $objekte = []; $videoSpuren = [];
 
 if ($hatKonfig && isset($_GET['pruefen'])) {
     // Cache umgehen: hier soll immer der aktuelle Stand geprueft werden.
@@ -36,6 +36,11 @@ if ($hatKonfig && isset($_GET['pruefen'])) {
 
             $objekte = ji_umwandeln($xmlRoh);
         }
+    }
+
+    // Kommt in der Antwort ueberhaupt irgendwo ein Video vor?
+    if ($xmlRoh && preg_match_all('#.{0,130}(?:youtube|youtu\.be|vimeo|FILMLINK|\.mp4|\.mov).{0,130}#i', $xmlRoh, $mm)) {
+        $videoSpuren = array_slice($mm[0], 0, 12);
     }
 
     // Zwischenspeicher leeren, damit die Website sofort den neuen Stand zieht.
@@ -164,15 +169,29 @@ function feld($wert, $leerOk = false) {
   </div>
   <?php endif; ?>
 
+  <?php if ($xmlRoh): ?>
+  <div class="karte">
+    <h2 style="margin-top:0;">4. Videosuche</h2>
+    <?php if ($videoSpuren): ?>
+      <p class="hinweis">In der Antwort gefunden — so liefert Justimmo das Video aus:</p>
+      <pre><?php echo htmlspecialchars(implode("\n\n", $videoSpuren)); ?></pre>
+    <?php else: ?>
+      <p class="schlecht">In der gesamten Antwort kommt kein Video vor.</p>
+      <p class="hinweis">Justimmo gibt den Videolink also nicht über die Schnittstelle heraus —
+      unabhängig davon, was im Objekt hinterlegt ist.</p>
+    <?php endif; ?>
+  </div>
+  <?php endif; ?>
+
   <?php if ($beispielXml): ?>
   <div class="karte">
-    <h2 style="margin-top:0;">4. Rohdaten des ersten Objekts</h2>
+    <h2 style="margin-top:0;">5. Rohdaten des ersten Objekts</h2>
     <p class="hinweis">Nur zur Fehlersuche — falls oben ein Feld rot ist.</p>
     <pre><?php echo htmlspecialchars(substr($beispielXml, 0, 20000)); ?></pre>
   </div>
   <?php elseif ($xmlRoh): ?>
   <div class="karte">
-    <h2 style="margin-top:0;">4. Rohantwort</h2>
+    <h2 style="margin-top:0;">5. Rohantwort</h2>
     <pre><?php echo htmlspecialchars(substr($xmlRoh, 0, 5000)); ?></pre>
   </div>
   <?php endif; ?>
