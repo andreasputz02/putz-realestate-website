@@ -28,6 +28,29 @@
     return `<div class="gallery-tile${cls}" style="background:${gradient}; opacity:${opacity}">${inner}</div>`;
   }
 
+  // Kachel mit echtem Foto. Die Restanzahl steht auf der letzten Kachel.
+  function photoTile(src, extraClass, rest) {
+    const cls = extraClass ? ` ${extraClass}` : "";
+    const badge = rest > 0 ? `<span class="gallery-more">+${rest}</span>` : "";
+    return `<div class="gallery-tile has-photo${cls}" style="background-image:url('${src}')">${badge}</div>`;
+  }
+
+  function buildPhotoGallery(images, hasVideo) {
+    const plaetze = hasVideo ? 5 : 7;                 // so viele Kacheln zeigt das Raster
+    const sichtbar = images.slice(0, plaetze);
+    const rest = images.length - sichtbar.length;
+    return sichtbar
+      .map((src, i) => {
+        let cls = "";
+        if (i === 0) cls = "is-main";
+        else if (!hasVideo && i <= 2) cls = "is-side";
+        const istLetzte = i === sichtbar.length - 1;
+        if (istLetzte && rest > 0) cls += " is-more";
+        return photoTile(src, cls.trim(), istLetzte ? rest : 0);
+      })
+      .join("");
+  }
+
   function buildGallery(gradient, hasVideo) {
     const icon = `<span class="placeholder-icon">${cameraIcon}</span>`;
     const more = `<span class="gallery-more">+</span>`;
@@ -52,11 +75,15 @@
     return html;
   }
 
-  function setupLightbox(galleryEl, gradient) {
+  function setupLightbox(galleryEl, gradient, images) {
     const lightbox = document.querySelector("[data-lightbox]");
     if (!lightbox) return;
     const tiles = [...galleryEl.querySelectorAll(".gallery-tile")];
-    const slides = tiles.map((t) => ({ background: t.style.background, opacity: t.style.opacity || "1" }));
+    // Mit echten Fotos zeigt die Lightbox alle Bilder, nicht nur die
+    // sichtbaren Kacheln — sonst waeren die uebrigen nicht erreichbar.
+    const slides = images && images.length
+      ? images.map((src) => ({ background: `url("${src}") center/contain no-repeat`, opacity: "1" }))
+      : tiles.map((t) => ({ background: t.style.background, opacity: t.style.opacity || "1" }));
     const stage = lightbox.querySelector("[data-lightbox-stage]");
     const counter = lightbox.querySelector("[data-lightbox-counter]");
     const prevBtn = lightbox.querySelector("[data-lightbox-prev]");
@@ -145,13 +172,31 @@
       setText("baths-label", listing.baths === "1" ? "Bad" : "Bäder");
       setText("price", listing.price);
 
+      // Eckdaten auf dem Deckblatt
+      setText("hero-price", listing.price);
+      setText("hero-area", listing.area);
+      setText("hero-rooms", listing.rooms);
+
+      // Deckblatt: erstes Objektfoto als Hintergrund. Fehlen Fotos,
+      // bleibt der bisherige dunkle Verlauf stehen.
+      const heroPhoto = detailRoot.querySelector('[data-field="hero-photo"]');
+      const bilder = Array.isArray(listing.images) ? listing.images : [];
+      if (heroPhoto && bilder.length) {
+        heroPhoto.style.backgroundImage = `url("${bilder[0]}")`;
+        heroPhoto.hidden = false;
+        const heroSection = heroPhoto.closest(".property-hero");
+        if (heroSection) heroSection.classList.add("has-photo");
+      }
+
       const hasVideo = !!listing.video;
 
       const galleryEl = detailRoot.querySelector('[data-field="gallery"]');
       if (galleryEl) {
         galleryEl.classList.toggle("is-wide-layout", !hasVideo);
-        galleryEl.innerHTML = buildGallery(listing.gradient, hasVideo);
-        setupLightbox(galleryEl, listing.gradient);
+        galleryEl.innerHTML = bilder.length
+          ? buildPhotoGallery(bilder, hasVideo)
+          : buildGallery(listing.gradient, hasVideo);
+        setupLightbox(galleryEl, listing.gradient, bilder);
       }
 
       const descEl = detailRoot.querySelector('[data-field="description"]');

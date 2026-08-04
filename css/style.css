@@ -724,6 +724,60 @@ body.nav-open { overflow: hidden; }
 .page-hero h1 { font-size: clamp(38px, 5vw, 64px); color: var(--white); max-width: 20ch; }
 .page-hero p.lede { color: rgba(255,255,255,0.68); margin-top: 20px; }
 
+/* ---------- Deckblatt einer Immobilie ----------
+   Objektfoto formatfuellend im Hintergrund, Text darueber. */
+
+.property-hero { padding: 200px 0 64px; min-height: 78vh; display: flex; align-items: flex-end; }
+.property-hero .container { width: 100%; }
+
+.property-hero .hero-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+}
+/* Abdunkeln, damit die Schrift auf jedem Foto lesbar bleibt. */
+.property-hero .hero-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(11,11,12,0.92) 8%, rgba(11,11,12,0.55) 48%, rgba(11,11,12,0.35));
+}
+/* Der goldene Schimmer der Standardseiten stoert hier. */
+.property-hero.has-photo::before { display: none; }
+
+.property-hero h1 { max-width: 24ch; }
+
+/* Eckdaten direkt unter dem Titel */
+.property-hero .hero-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 44px;
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(255,255,255,0.18);
+}
+.property-hero .hero-facts div { display: flex; flex-direction: column; gap: 5px; }
+.property-hero .hero-facts strong {
+  font-family: var(--font-display);
+  font-size: 27px;
+  font-weight: 600;
+  color: var(--gold);
+}
+.property-hero .hero-facts span {
+  font-size: 11.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
+
+@media (max-width: 720px) {
+  .property-hero { padding: 150px 0 44px; min-height: 68vh; }
+  .property-hero .hero-facts { gap: 26px; margin-top: 22px; padding-top: 20px; }
+  .property-hero .hero-facts strong { font-size: 21px; }
+}
+
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -1819,6 +1873,21 @@ body.nav-open { overflow: hidden; }
   cursor: pointer;
   transition: filter 0.3s var(--ease);
 }
+/* Kacheln mit echtem Objektfoto */
+.gallery-tile.has-photo {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.gallery-tile.has-photo:hover { filter: brightness(1.08); }
+/* Die "+n"-Marke braucht einen abgedunkelten Grund, sonst geht sie im Foto unter. */
+.gallery-tile.has-photo.is-more::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 11, 12, 0.55);
+}
+.gallery-tile.has-photo .gallery-more { position: relative; z-index: 1; }
 .gallery-tile:hover { filter: brightness(1.08); }
 .gallery-tile.is-main { grid-column: 1 / -1; }
 

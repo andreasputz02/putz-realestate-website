@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=101">
+<link rel="stylesheet" href="css/style.css?v=102">
 </head>
 <body class="page-dark">
 
@@ -60,10 +60,17 @@
 
 <main data-property-detail>
   <section class="page-hero property-hero">
+    <!-- Objektfoto wird per JS gesetzt; ohne Foto bleibt der bisherige dunkle Hintergrund. -->
+    <div class="hero-photo" data-field="hero-photo" hidden></div>
     <div class="container">
       <p class="eyebrow on-dark" data-field="type">Kauf</p>
       <h1 data-field="title">Immobilie</h1>
       <p class="lede" data-field="location">&nbsp;</p>
+      <div class="hero-facts">
+        <div><strong data-field="hero-price">–</strong><span>Kaufpreis</span></div>
+        <div><strong data-field="hero-area">–</strong><span>Wohnfläche</span></div>
+        <div><strong data-field="hero-rooms">–</strong><span>Zimmer</span></div>
+      </div>
       <div class="breadcrumb"><a href="index.html">Start</a> / <a href="immobilien.html">Unsere Immobilien</a> / <span data-field="title-crumb">Immobilie</span></div>
     </div>
   </section>
@@ -353,8 +360,8 @@
     </ul>
   </div>
 
-<script src="js/listings-data.js?v=2"></script>
-<script src="js/listings.js?v=6"></script>
+<script src="js/listings-data.js?v=3"></script>
+<script src="js/listings.js?v=7"></script>
 <script src="js/script.js?v=32"></script>
 
 </body>
