@@ -619,7 +619,9 @@ body.nav-open { overflow: hidden; }
 .hero-title {
   font-size: clamp(44px, 6.6vw, 92px);
   color: var(--white);
-  max-width: 15ch;
+  /* 15ch waeren 15px zu knapp fuer "Wir putzen Immobilien" — die Zeile
+     wuerde umbrechen und aus zwei Zeilen drei machen. */
+  max-width: 17ch;
   margin-bottom: 18px;
 }
 
@@ -639,8 +641,6 @@ body.nav-open { overflow: hidden; }
   line-height: 1.6;
   margin-bottom: 28px;
 }
-/* greift das Wortspiel der Ueberschrift auf */
-.hero-sub .hl { color: var(--gold); font-weight: 600; }
 
 .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 40px; }
 
