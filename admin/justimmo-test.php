@@ -9,7 +9,7 @@ $konfigPfad = __DIR__ . '/../justimmo-config.php';
 $hatKonfig  = is_file($konfigPfad);
 $konfig     = $hatKonfig ? require $konfigPfad : null;
 
-$status = null; $fehler = null; $xmlRoh = null; $anzahlObjekte = null; $beispiel = null;
+$status = null; $fehler = null; $xmlRoh = null; $anzahlObjekte = null; $beispiel = null; $gemeldet = null;
 
 if ($hatKonfig && isset($_GET['pruefen'])) {
     $url = 'https://api.justimmo.at/rest/v1/objekt/list?' . http_build_query([
@@ -32,8 +32,17 @@ if ($hatKonfig && isset($_GET['pruefen'])) {
         $x = simplexml_load_string($xmlRoh);
         if ($x !== false) {
             $treffer = $x->xpath('//immobilie') ?: $x->xpath('//objekt') ?: [];
+            if (!$treffer) {
+                foreach ($x->xpath('//query-result/*') ?: [] as $kind) {
+                    if ($kind->getName() !== 'count' && $kind->count() > 0) $treffer[] = $kind;
+                }
+            }
             $anzahlObjekte = count($treffer);
             if ($treffer) $beispiel = $treffer[0]->asXML();
+
+            // Justimmo meldet die Trefferzahl selbst mit — der verlaesslichste Wert.
+            $c = $x->xpath('//query-result/count');
+            if ($c) $gemeldet = (int)(string)$c[0];
         }
     }
 }
@@ -98,9 +107,15 @@ if ($hatKonfig && isset($_GET['pruefen'])) {
         <?php if ($status === 200) echo ' — Verbindung steht'; ?>
       </td></tr>
       <?php if ($fehler): ?><tr><td>Verbindungsfehler</td><td class="schlecht"><?php echo htmlspecialchars($fehler); ?></td></tr><?php endif; ?>
-      <tr><td>Gefundene Objekte</td><td class="<?php echo $anzahlObjekte ? 'ok' : 'schlecht'; ?>">
+      <?php if ($gemeldet !== null): ?>
+      <tr><td>Von Justimmo gemeldet</td><td class="<?php echo $gemeldet ? 'ok' : 'schlecht'; ?>">
+        <?php echo $gemeldet; ?> Objekt<?php echo $gemeldet === 1 ? '' : 'e'; ?>
+        <?php if ($gemeldet === 0) echo ' — in Justimmo ist kein Objekt für den API-Export freigegeben'; ?>
+      </td></tr>
+      <?php endif; ?>
+      <tr><td>Davon eingelesen</td><td class="<?php echo $anzahlObjekte ? 'ok' : 'schlecht'; ?>">
         <?php echo $anzahlObjekte === null ? '—' : (int)$anzahlObjekte; ?>
-        <?php if ($anzahlObjekte === 0) echo ' — in Justimmo ist kein Objekt für den API-Export freigegeben'; ?>
+        <?php if ($gemeldet > 0 && $anzahlObjekte === 0) echo ' — Objekte vorhanden, aber der Aufbau ist unbekannt: bitte die Rohantwort unten schicken'; ?>
       </td></tr>
     </table>
   </div>

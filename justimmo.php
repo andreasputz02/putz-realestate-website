@@ -128,8 +128,19 @@ function ji_umwandeln(string $xmlRoh): array
     $xml = simplexml_load_string($xmlRoh);
     if ($xml === false) return [];
 
-    // Objektknoten finden — je nach Konto <immobilie> oder <objekt>
+    // Objektknoten finden. Justimmo antwortet als
+    //   <justimmo><query-result><count>N</count> ... </query-result></justimmo>
+    // Wie die Objektknoten darin heissen, ist je nach Konto unterschiedlich,
+    // deshalb: erst die bekannten Namen, sonst schlicht alle Kinder von
+    // <query-result> ausser <count>.
     $knoten = $xml->xpath('//immobilie') ?: $xml->xpath('//objekt') ?: [];
+    if (!$knoten) {
+        foreach ($xml->xpath('//query-result/*') ?: [] as $kind) {
+            if ($kind->getName() !== 'count' && $kind->count() > 0) {
+                $knoten[] = $kind;
+            }
+        }
+    }
     $ergebnis = [];
 
     foreach ($knoten as $o) {
