@@ -2142,6 +2142,18 @@ body.modal-open { overflow: hidden; }
 }
 .agent-ort span { font-size: 12.5px; }
 
+/* Hinweis unter den Standorten — hebt sich leicht ab, damit er
+   nicht mit den Adressen verschwimmt. */
+.agent-hinweis {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(251, 228, 139, 0.16);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
 .agent-social a { padding: 7px 0; }
 .agent-social a:hover,
 .agent-social a:hover strong { color: var(--gold-dim); }
