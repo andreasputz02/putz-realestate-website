@@ -238,6 +238,12 @@
           const sourceEl = videoWrap.querySelector("source");
           if (listing.video.orientation === "portrait") player.classList.add("is-portrait");
           if (listing.video.poster) videoEl.setAttribute("poster", listing.video.poster);
+          // Bei Videos aus Justimmo ist das Format vorab nicht bekannt.
+          // Sobald die Abmessungen da sind, richtet sich der Rahmen danach —
+          // sonst wuerde ein Hochkant-Video beschnitten.
+          videoEl.addEventListener("loadedmetadata", () => {
+            if (videoEl.videoHeight > videoEl.videoWidth) player.classList.add("is-portrait");
+          });
           sourceEl.setAttribute("src", listing.video.src);
           videoEl.load();
         }
