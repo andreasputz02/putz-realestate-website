@@ -1,6 +1,10 @@
 .DS_Store
 .claude/
 data/*.json
+
+# Justimmo-Zugangsdaten — duerfen niemals ins Repository
+justimmo-config.php
+
 Haus.jpg
 Video Siegenfeld.MOV
 Video Brunn.MOV

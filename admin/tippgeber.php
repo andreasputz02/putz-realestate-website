@@ -36,6 +36,7 @@ $suchkunden = array_reverse($suchkunden);
   h1 { font-size: 24px; font-weight: 600; }
   .count { color: rgba(255,255,255,0.5); font-size: 13.5px; margin-top: 4px; }
   a.logout { color: #cfa858; font-size: 13.5px; text-decoration: underline; }
+  a.logout + a.logout { margin-left: 18px; }
   .scroll { overflow-x: auto; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
   table { width: 100%; border-collapse: collapse; background: #131211; }
   th, td { text-align: left; padding: 14px 16px; font-size: 13.5px; border-bottom: 1px solid rgba(255,255,255,0.08); white-space: nowrap; }
@@ -53,7 +54,10 @@ $suchkunden = array_reverse($suchkunden);
         <h1>Tippgeber-Übersicht</h1>
         <p class="count"><?php echo count($entries); ?> registrierte Tippgeber</p>
       </div>
-      <a class="logout" href="logout.php">Abmelden</a>
+      <div>
+        <a class="logout" href="justimmo-test.php">Justimmo prüfen</a>
+        <a class="logout" href="logout.php">Abmelden</a>
+      </div>
     </div>
 
     <?php if (empty($entries)): ?>
