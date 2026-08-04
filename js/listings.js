@@ -3,6 +3,43 @@
   const cameraIcon =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg>';
 
+  // Radius des Umkreises auf der Objektseite, in Metern.
+  const UMKREIS_METER = 500;
+
+  /**
+   * MapLibre kennt keinen Kreis mit Angabe in Metern — anders als Leaflet.
+   * Deshalb wird der Kreis als Vieleck berechnet. 96 Punkte reichen, damit
+   * die Kante auch bei starker Vergroesserung rund aussieht.
+   *
+   * Ein Grad Breite entspricht ueberall rund 111.320 Metern. Bei der Laenge
+   * haengt es vom Breitengrad ab: Richtung Pol ruecken die Laengengrade
+   * zusammen, daher der Kosinus. Ohne ihn waere der Kreis in Wien merklich
+   * zu einem Ei in die Breite gezogen.
+   */
+  function kreisFlaeche(lat, lng, meter, punkte = 96) {
+    const proGradBreite = 111320;
+    const proGradLaenge = 111320 * Math.cos((lat * Math.PI) / 180);
+    const ring = [];
+    for (let i = 0; i <= punkte; i++) {
+      const winkel = (i / punkte) * 2 * Math.PI;
+      ring.push([
+        lng + (meter * Math.cos(winkel)) / proGradLaenge,
+        lat + (meter * Math.sin(winkel)) / proGradBreite,
+      ]);
+    }
+    return { type: "Feature", geometry: { type: "Polygon", coordinates: [ring] } };
+  }
+
+  function kreisGrenzen(flaeche) {
+    const ring = flaeche.geometry.coordinates[0];
+    const x = ring.map((p) => p[0]);
+    const y = ring.map((p) => p[1]);
+    return [
+      [Math.min(...x), Math.min(...y)],
+      [Math.max(...x), Math.max(...y)],
+    ];
+  }
+
   function renderCard(listing) {
     // Liegt ein echtes Foto vor, steht es auf der Karte. Sonst der Farbverlauf.
     const fotos = Array.isArray(listing.images) ? listing.images : [];
@@ -215,37 +252,48 @@
       // 500 Metern um die Adresse. Ohne Koordinaten bleibt es bei der
       // einfachen Google-Karte, die nur nach dem Ort suchen kann.
       const mapEl = detailRoot.querySelector('[data-field="map"]');
-      if (mapEl && listing.lat && listing.lng && window.L) {
+      if (mapEl && listing.lat && listing.lng && window.maplibregl) {
         const ziel = document.createElement("div");
         ziel.className = mapEl.className + " map-umkreis";
         mapEl.replaceWith(ziel);
 
-        const karte = window.L.map(ziel, {
-          scrollWheelZoom: false,   // sonst bleibt man beim Scrollen in der Karte haengen
-          zoomControl: true,
+        const flaeche = kreisFlaeche(listing.lat, listing.lng, UMKREIS_METER);
+
+        const karte = new window.maplibregl.Map({
+          container: ziel,
+          style: "https://tiles.openfreemap.org/styles/dark",
+          center: [listing.lng, listing.lat],
+          zoom: 13.4,
+          scrollZoom: false,   // sonst bleibt man beim Scrollen in der Karte haengen
+          attributionControl: false,
         });
-        // Sofort eine Ansicht setzen: Leaflet misst die Containergroesse beim
-        // Erzeugen, und die steht durch aspect-ratio erst nach dem Layout fest.
-        // Ohne diese Zeile bliebe die Karte leer.
-        karte.setView([listing.lat, listing.lng], 13);
-        window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          maxZoom: 18,
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        }).addTo(karte);
 
-        const umkreis = window.L.circle([listing.lat, listing.lng], {
-          radius: 500,
-          color: "#fbe48b",
-          weight: 2,
-          fillColor: "#fbe48b",
-          fillOpacity: 0.14,
-        }).addTo(karte);
+        // OpenFreeMap verlangt diesen Nachweis; der Stil selbst bringt
+        // keinen mit, deshalb setzen wir ihn hier von Hand.
+        karte.addControl(new window.maplibregl.AttributionControl({
+          compact: true,
+          customAttribution:
+            '<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © ' +
+            '<a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> — Daten von ' +
+            '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>',
+        }));
+        karte.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), "top-left");
 
-        // Erst wenn das Layout steht, kennt Leaflet die echte Groesse —
-        // dann passt der Ausschnitt genau auf den Umkreis.
-        requestAnimationFrame(() => {
-          karte.invalidateSize();
-          karte.fitBounds(umkreis.getBounds(), { padding: [16, 16] });
+        karte.on("load", () => {
+          karte.addSource("umkreis", { type: "geojson", data: flaeche });
+          karte.addLayer({
+            id: "umkreis-flaeche",
+            type: "fill",
+            source: "umkreis",
+            paint: { "fill-color": "#fbe48b", "fill-opacity": 0.13 },
+          });
+          karte.addLayer({
+            id: "umkreis-rand",
+            type: "line",
+            source: "umkreis",
+            paint: { "line-color": "#fbe48b", "line-width": 2 },
+          });
+          karte.fitBounds(kreisGrenzen(flaeche), { padding: 26, duration: 0 });
         });
       } else if (mapEl && listing.mapQuery) {
         mapEl.src = `https://www.google.com/maps?q=${encodeURIComponent(listing.mapQuery)}&output=embed`;

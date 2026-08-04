@@ -2353,23 +2353,35 @@ body.modal-open { overflow: hidden; }
 
 
 /* ============================================================
-   Umkreis-Karte auf der Objektseite (OpenStreetMap + Leaflet)
+   Umkreis-Karte auf der Objektseite
+   (OpenFreeMap, dunkler Stil, Vektorkacheln via MapLibre)
    Zeigt 500 Meter rund um die Adresse, statt nur einen Punkt.
    ============================================================ */
 .property-map .map-frame.map-umkreis {
   aspect-ratio: 16/9;
-  background: #0f0f11;
+  background: #0d0d0f;
   overflow: hidden;
-  /* Der Graufilter darf hier nicht auf dem Container sitzen —
-     sonst waere auch der goldene Kreis entfaerbt. */
+  /* Kein Graufilter mehr: die Karte ist bereits dunkel gehalten,
+     und ein Filter wuerde den goldenen Umkreis mit entfaerben. */
   filter: none;
 }
-.map-umkreis .leaflet-tile-pane { filter: grayscale(0.4) contrast(1.05); }
-.map-umkreis .leaflet-control-attribution {
-  font-size: 10px;
-  background: rgba(255, 255, 255, 0.8);
+.map-umkreis .maplibregl-ctrl-attrib {
+  font-size: 10.5px;
+  background: rgba(11, 11, 12, 0.72);
+  color: rgba(255, 255, 255, 0.6);
 }
-.map-umkreis .leaflet-control-zoom a { color: #17161a; }
+.map-umkreis .maplibregl-ctrl-attrib a { color: rgba(255, 255, 255, 0.8); }
+.map-umkreis .maplibregl-ctrl-attrib-button { background-color: rgba(255, 255, 255, 0.75); }
+
+/* Die Bedienknoepfe an das dunkle Erscheinungsbild angleichen. */
+.map-umkreis .maplibregl-ctrl-group {
+  background: rgba(20, 20, 22, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+.map-umkreis .maplibregl-ctrl-group button + button { border-top-color: rgba(255, 255, 255, 0.12); }
+.map-umkreis .maplibregl-ctrl-group button span { filter: invert(1); opacity: 0.85; }
+.map-umkreis .maplibregl-ctrl-group button:hover { background: rgba(251, 228, 139, 0.16); }
 
 @media (max-width: 640px) {
   .property-map .map-frame.map-umkreis { aspect-ratio: 4/3; }
