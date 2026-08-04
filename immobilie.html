@@ -116,6 +116,9 @@
             <h3 style="font-size:20px; margin-top:10px; margin-bottom:24px; font-weight:600;">Anfrage senden</h3>
             <form data-contact-form>
               <input type="hidden" name="form_name" value="Immobilien-Anfrage">
+              <!-- Interne Justimmo-Objektnummer; wird per JS gesetzt. Nur dann
+                   kann die Anfrage auch in Justimmo eingetragen werden. -->
+              <input type="hidden" name="justimmo_objekt_id" data-field="justimmo-id" value="">
               <div class="hp-field" aria-hidden="true"><label for="p-website">Website</label><input type="text" id="p-website" name="website" tabindex="-1" autocomplete="off"></div>
               <div class="form-row">
                 <div class="field">
@@ -407,7 +410,7 @@
 <script src="js/maplibre/maplibre-gl.js?v=1"></script>
 <script src="js/listings-data.js?v=5"></script>
 <script src="justimmo.php?v=2"></script>
-<script src="js/listings.js?v=19"></script>
+<script src="js/listings.js?v=20"></script>
 <script src="js/script.js?v=32"></script>
 
 </body>

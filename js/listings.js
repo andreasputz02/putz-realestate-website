@@ -334,6 +334,11 @@
 
       const subjectField = detailRoot.querySelector('[data-field="form-subject"]');
       if (subjectField) subjectField.value = listing.title;
+
+      // Nur Objekte aus Justimmo tragen eine Objektnummer. Bei handgepflegten
+      // bleibt das Feld leer — die Anfrage kommt dann nur per E-Mail.
+      const jiFeld = detailRoot.querySelector('[data-field="justimmo-id"]');
+      if (jiFeld) jiFeld.value = listing.objektId || "";
     }
   }
 })();

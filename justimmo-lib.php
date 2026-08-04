@@ -102,6 +102,47 @@ function ji_kennung(string $titel, string $id): string
 }
 
 /**
+ * Meldet eine Objektanfrage an Justimmo.
+ *
+ * Justimmo legt daraus eine Anfrage beim Objekt an und den Interessenten
+ * als Kontakt. Die Bestaetigung per E-Mail laeuft davon unabhaengig —
+ * scheitert dieser Aufruf, geht die Anfrage trotzdem nicht verloren.
+ *
+ * Rueckgabe: [erfolg (bool), hinweis (string)] — der Hinweis landet im
+ * Fehlerprotokoll, nicht beim Besucher.
+ */
+function ji_anfrageSenden(string $objektId, array $daten, array $konfig): array
+{
+    if ($objektId === '' || !ctype_digit($objektId)) {
+        return [false, 'keine gueltige Objektnummer'];
+    }
+
+    $parameter = array_filter([
+        'objekt_id' => $objektId,
+        'vorname'   => $daten['vorname']  ?? '',
+        'nachname'  => $daten['nachname'] ?? '',
+        'email'     => $daten['email']    ?? '',
+        'tel'       => $daten['telefon']  ?? '',
+        'message'   => $daten['nachricht'] ?? '',
+    ], fn($w) => $w !== '');
+
+    $ch = curl_init(JI_BASIS . 'objekt/anfrage?' . http_build_query($parameter));
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 10,
+        CURLOPT_HTTPAUTH       => CURLAUTH_BASIC,
+        CURLOPT_USERPWD        => $konfig['benutzer'] . ':' . $konfig['passwort'],
+    ]);
+    $antwort = curl_exec($ch);
+    $status  = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $fehler  = curl_error($ch);
+    curl_close($ch);
+
+    if ($status === 200) return [true, 'ok'];
+    return [false, 'HTTP ' . $status . ($fehler ? ' — ' . $fehler : '') . ' — ' . substr((string)$antwort, 0, 200)];
+}
+
+/**
  * Durchsucht ein Objekt nach einer Videoadresse — egal in welchem Feld.
  *
  * Der Freitext wird dabei ausgespart: ein Link, den jemand mitten in die
@@ -221,6 +262,22 @@ function ji_umwandeln(string $xmlRoh): array
             'user_defined_simplefield[@feldname="objekt_id"]',
             'id', 'objekt_id',
         ]);
+
+        // Fuer Anfragen ueber die Schnittstelle wird die INTERNE Nummer
+        // gebraucht — eine reine Zahl. Die Nummer oben ("2439/15") ist die
+        // externe Objektnummer und wird von /objekt/anfrage nicht akzeptiert.
+        $objektId = '';
+        foreach ([
+            '@id',
+            'user_defined_simplefield[@feldname="objekt_id"]',
+            'verwaltung_techn/user_defined_simplefield[@feldname="objekt_id"]',
+            'verwaltung_techn/objektnr_intern',
+            'user_defined_simplefield[@feldname="justimmo_id"]',
+            'objekt_id',
+        ] as $pfad) {
+            $wert = ji_ersterWert($o, [$pfad]);
+            if ($wert !== '' && ctype_digit($wert)) { $objektId = $wert; break; }
+        }
 
         $titel = ji_ersterWert($o, ['freitexte/objekttitel', 'objekttitel', 'titel', 'ueberschrift']);
         if ($titel === '') $titel = 'Immobilie';
@@ -355,6 +412,7 @@ function ji_umwandeln(string $xmlRoh): array
         $ergebnis[] = [
             'id'          => ji_kennung($titel, $id),
             'justimmoId'  => $id,
+            'objektId'    => $objektId,
             'title'       => $titel,
             'type'        => $istMiete ? 'miete' : 'kauf',
             'price'       => ji_preisFormat($preisRoh),

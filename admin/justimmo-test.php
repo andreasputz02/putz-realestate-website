@@ -158,6 +158,12 @@ function feld($wert, $leerOk = false) {
           ?></td></tr>
           <tr><td>Beschreibung</td><td><?php echo feld($ob['description']); ?> Absätze</td></tr>
           <tr><td>Justimmo-Nummer</td><td><?php echo feld($ob['justimmoId']); ?></td></tr>
+          <tr><td>Interne Objektnummer</td><td>
+            <?php echo feld($ob['objektId']); ?>
+            <?php if (empty($ob['objektId'])): ?>
+              <span class="hinweis">— ohne diese Nummer landet eine Anfrage nur per E-Mail bei Ihnen, nicht in Justimmo</span>
+            <?php endif; ?>
+          </td></tr>
           <tr><td>Adresse auf der Seite</td><td class="hinweis">immobilie.html?id=<?php echo htmlspecialchars($ob['id']); ?></td></tr>
         </table>
         <?php if ($ob['images']): ?>

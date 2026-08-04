@@ -128,6 +128,7 @@ $labels = [
     'betreff' => 'Betreff',
     'nachricht' => 'Nachricht',
     'objekt' => 'Anfrage betrifft',
+    'justimmo_objekt_id' => 'Justimmo-Objektnummer',
     'art' => 'Kauf oder Miete',
     'typ' => 'Immobilienart',
     'lage' => 'Gewünschte Lage',
@@ -331,6 +332,36 @@ if ($sent && $formName === 'Suchkunde-Anfrage') {
         fflush($fp);
         flock($fp, LOCK_UN);
         fclose($fp);
+    }
+}
+
+// Objektanfragen zusaetzlich in Justimmo eintragen.
+//
+// Das geschieht bewusst NACH dem Mailversand und in einem try/catch:
+// Die E-Mail ist der verlaessliche Weg, ueber den die Anfrage ankommt.
+// Sollte Justimmo nicht erreichbar sein oder die Zugangsdaten fehlen,
+// darf das die Anfrage niemals scheitern lassen — es wird nur protokolliert.
+if ($sent && $formName === 'Immobilien-Anfrage') {
+    $objektId = trim($_POST['justimmo_objekt_id'] ?? '');
+    $konfigPfad = __DIR__ . '/justimmo-config.php';
+
+    if ($objektId !== '' && is_file($konfigPfad)) {
+        try {
+            require_once __DIR__ . '/justimmo-lib.php';
+            [$jiOk, $jiHinweis] = ji_anfrageSenden($objektId, [
+                'vorname'   => trim($_POST['vorname'] ?? ''),
+                'nachname'  => trim($_POST['nachname'] ?? ''),
+                'email'     => $email,
+                'telefon'   => trim($_POST['telefon'] ?? ''),
+                'nachricht' => trim($_POST['nachricht'] ?? ''),
+            ], require $konfigPfad);
+
+            if (!$jiOk) {
+                error_log('Justimmo-Anfrage fehlgeschlagen (Objekt ' . $objektId . '): ' . $jiHinweis);
+            }
+        } catch (Throwable $e) {
+            error_log('Justimmo-Anfrage abgebrochen: ' . $e->getMessage());
+        }
     }
 }
 
