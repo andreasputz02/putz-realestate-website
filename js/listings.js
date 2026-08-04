@@ -268,15 +268,9 @@
           attributionControl: false,
         });
 
-        // OpenFreeMap verlangt diesen Nachweis; der Stil selbst bringt
-        // keinen mit, deshalb setzen wir ihn hier von Hand.
-        karte.addControl(new window.maplibregl.AttributionControl({
-          compact: true,
-          customAttribution:
-            '<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © ' +
-            '<a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> — Daten von ' +
-            '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>',
-        }));
+        // Den von OpenFreeMap geforderten Nachweis liefert die Kachelquelle
+        // selbst mit — nur die kompakte Darstellung wird hier gewaehlt.
+        karte.addControl(new window.maplibregl.AttributionControl({ compact: true }));
         karte.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), "top-left");
 
         karte.on("load", () => {
