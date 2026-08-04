@@ -8,9 +8,12 @@
 //  Dadurch muss am uebrigen Code nichts geaendert werden — die Seite
 //  rendert die Objekte genau wie die bisher handgepflegte Liste.
 //
+//  Die Objekte aus Justimmo werden VOR die handgepflegten gestellt,
+//  nicht an deren Stelle. Beide Quellen erscheinen also gemeinsam.
+//
 //  Einbindung in den HTML-Seiten (Reihenfolge ist wichtig):
-//      <script src="js/listings-data.js"></script>   <- Notfall-Liste
-//      <script src="justimmo.php"></script>          <- ueberschreibt, wenn erreichbar
+//      <script src="js/listings-data.js"></script>   <- handgepflegte Objekte
+//      <script src="justimmo.php"></script>          <- ergaenzt um Justimmo
 //      <script src="js/listings.js"></script>        <- zeigt an
 //
 //  Faellt die API aus, gibt diese Datei absichtlich NICHTS aus.
@@ -24,6 +27,22 @@ header('Content-Type: application/javascript; charset=utf-8');
 // Objektdaten aendern sich laufend — der Browser darf sie nicht einfrieren.
 // Wie oft wirklich bei Justimmo angefragt wird, steuert der Cache unten.
 header('Cache-Control: no-store, must-revalidate');
+
+/**
+ * Baut die Zeile, die im Browser landet.
+ *
+ * Die Justimmo-Objekte kommen nach vorne, die handgepflegten dahinter.
+ * Traegt ein handgepflegtes Objekt dieselbe Kennung wie eines aus
+ * Justimmo, gewinnt Justimmo — sonst stuende es doppelt auf der Seite.
+ */
+function ji_ausgabe(string $json): string
+{
+    return "window.LISTINGS = (function (ausJustimmo, vonHand) {\n"
+         . "  var bekannt = {};\n"
+         . "  ausJustimmo.forEach(function (o) { bekannt[o.id] = true; });\n"
+         . "  return ausJustimmo.concat(vonHand.filter(function (o) { return !bekannt[o.id]; }));\n"
+         . "})(" . $json . ", window.LISTINGS || []);\n";
+}
 
 // ------------------------------------------------------------
 //  Konfiguration laden — fehlt sie, still aussteigen
@@ -43,7 +62,7 @@ $anzahl        = min(100, max(1, (int)($konfig['anzahl'] ?? 100)));
 if (is_file(JI_CACHE_DATEI) && (time() - filemtime(JI_CACHE_DATEI)) < $cacheSekunden) {
     $roh = file_get_contents(JI_CACHE_DATEI);
     if ($roh !== false && $roh !== '') {
-        echo "window.LISTINGS = " . $roh . ";\n";
+        echo ji_ausgabe($roh);
         exit;
     }
 }
@@ -78,4 +97,4 @@ if (!is_dir(dirname(JI_CACHE_DATEI))) {
 }
 @file_put_contents(JI_CACHE_DATEI, $json, LOCK_EX);
 
-echo "window.LISTINGS = " . $json . ";\n";
+echo ji_ausgabe($json);
