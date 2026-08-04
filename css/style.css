@@ -2354,7 +2354,7 @@ body.modal-open { overflow: hidden; }
 
 /* ============================================================
    Umkreis-Karte auf der Objektseite (OpenStreetMap + Leaflet)
-   Zeigt einen Kilometer rund um die Adresse, statt nur einen Punkt.
+   Zeigt 500 Meter rund um die Adresse, statt nur einen Punkt.
    ============================================================ */
 .property-map .map-frame.map-umkreis {
   aspect-ratio: 16/9;

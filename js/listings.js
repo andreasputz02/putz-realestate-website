@@ -211,8 +211,8 @@
       const alsAbsatz = (t) => (/<(p|ul|ol|h[1-6]|div)[\s>]/i.test(t) ? t : `<p>${t}</p>`);
       if (descEl) descEl.innerHTML = listing.description.map(alsAbsatz).join("");
 
-      // Karte: liegen Koordinaten vor, zeichnen wir den Umkreis von einem
-      // Kilometer um die Adresse. Ohne Koordinaten bleibt es bei der
+      // Karte: liegen Koordinaten vor, zeichnen wir den Umkreis von
+      // 500 Metern um die Adresse. Ohne Koordinaten bleibt es bei der
       // einfachen Google-Karte, die nur nach dem Ort suchen kann.
       const mapEl = detailRoot.querySelector('[data-field="map"]');
       if (mapEl && listing.lat && listing.lng && window.L) {
@@ -234,7 +234,7 @@
         }).addTo(karte);
 
         const umkreis = window.L.circle([listing.lat, listing.lng], {
-          radius: 1000,
+          radius: 500,
           color: "#fbe48b",
           weight: 2,
           fillColor: "#fbe48b",
