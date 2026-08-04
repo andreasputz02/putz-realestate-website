@@ -224,6 +224,10 @@
           scrollWheelZoom: false,   // sonst bleibt man beim Scrollen in der Karte haengen
           zoomControl: true,
         });
+        // Sofort eine Ansicht setzen: Leaflet misst die Containergroesse beim
+        // Erzeugen, und die steht durch aspect-ratio erst nach dem Layout fest.
+        // Ohne diese Zeile bliebe die Karte leer.
+        karte.setView([listing.lat, listing.lng], 13);
         window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 18,
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -237,7 +241,12 @@
           fillOpacity: 0.14,
         }).addTo(karte);
 
-        karte.fitBounds(umkreis.getBounds(), { padding: [16, 16] });
+        // Erst wenn das Layout steht, kennt Leaflet die echte Groesse —
+        // dann passt der Ausschnitt genau auf den Umkreis.
+        requestAnimationFrame(() => {
+          karte.invalidateSize();
+          karte.fitBounds(umkreis.getBounds(), { padding: [16, 16] });
+        });
       } else if (mapEl && listing.mapQuery) {
         mapEl.src = `https://www.google.com/maps?q=${encodeURIComponent(listing.mapQuery)}&output=embed`;
       }
