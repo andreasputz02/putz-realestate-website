@@ -2351,3 +2351,26 @@ body.modal-open { overflow: hidden; }
   .link-peek { display: none; }
 }
 
+
+/* ============================================================
+   Umkreis-Karte auf der Objektseite (OpenStreetMap + Leaflet)
+   Zeigt einen Kilometer rund um die Adresse, statt nur einen Punkt.
+   ============================================================ */
+.property-map .map-frame.map-umkreis {
+  aspect-ratio: 16/9;
+  background: #0f0f11;
+  overflow: hidden;
+  /* Der Graufilter darf hier nicht auf dem Container sitzen —
+     sonst waere auch der goldene Kreis entfaerbt. */
+  filter: none;
+}
+.map-umkreis .leaflet-tile-pane { filter: grayscale(0.4) contrast(1.05); }
+.map-umkreis .leaflet-control-attribution {
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.8);
+}
+.map-umkreis .leaflet-control-zoom a { color: #17161a; }
+
+@media (max-width: 640px) {
+  .property-map .map-frame.map-umkreis { aspect-ratio: 4/3; }
+}

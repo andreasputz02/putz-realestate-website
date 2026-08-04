@@ -14,6 +14,10 @@ window.LISTINGS = [
     price: "€ 697.000",
     location: "Wallrissstraße, Wien",
     mapQuery: "Währing, 1180 Wien",
+    // Fuer den Umkreis auf der Detailseite. Bei Objekten aus Justimmo
+    // kommen diese Werte automatisch mit.
+    lat: 48.2330851,
+    lng: 16.3208820,
     area: "95 m²",
     rooms: "3",
     baths: "2",

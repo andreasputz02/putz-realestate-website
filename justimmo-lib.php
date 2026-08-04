@@ -245,6 +245,21 @@ function ji_umwandeln(string $xmlRoh): array
         $karte = trim(trim($strasse . ' ' . $hausnr) . ', ' . trim($plz . ' ' . $ort), ' ,');
         if ($karte === '') $karte = $lage;
 
+        // Koordinaten liefert Justimmo gleich mit — damit laesst sich der
+        // Umkreis auf der Detailseite genau um die Adresse zeichnen.
+        $breite = ji_ersterWert($o, [
+            'geo/geokoordinaten/@breitengrad',
+            'geo/user_defined_simplefield[@feldname="geokoordinaten_breitengrad_exakt"]',
+            'geo/user_defined_simplefield[@feldname="geokoordinaten_breitengrad"]',
+        ]);
+        $laenge = ji_ersterWert($o, [
+            'geo/geokoordinaten/@laengengrad',
+            'geo/user_defined_simplefield[@feldname="geokoordinaten_laengengrad_exakt"]',
+            'geo/user_defined_simplefield[@feldname="geokoordinaten_laengengrad"]',
+        ]);
+        $lat = is_numeric($breite) ? (float)$breite : null;
+        $lng = is_numeric($laenge) ? (float)$laenge : null;
+
         // Kauf oder Miete steht als Merkmal in der Vermarktungsart —
         // verlaesslicher als der Umweg ueber die gesetzten Preisfelder.
         $kaufFlag  = ji_ersterWert($o, ['objektkategorie/vermarktungsart/@KAUF']);
@@ -345,6 +360,8 @@ function ji_umwandeln(string $xmlRoh): array
             'price'       => ji_preisFormat($preisRoh),
             'location'    => $lage,
             'mapQuery'    => $karte,
+            'lat'         => $lat,
+            'lng'         => $lng,
             'area'        => ji_flaecheFormat($flaeche) ?: '–',
             'rooms'       => ji_ganzzahl($zimmer) ?: '–',
             'baths'       => ji_ganzzahl($baeder) ?: '–',

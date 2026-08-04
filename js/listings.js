@@ -211,8 +211,34 @@
       const alsAbsatz = (t) => (/<(p|ul|ol|h[1-6]|div)[\s>]/i.test(t) ? t : `<p>${t}</p>`);
       if (descEl) descEl.innerHTML = listing.description.map(alsAbsatz).join("");
 
+      // Karte: liegen Koordinaten vor, zeichnen wir den Umkreis von einem
+      // Kilometer um die Adresse. Ohne Koordinaten bleibt es bei der
+      // einfachen Google-Karte, die nur nach dem Ort suchen kann.
       const mapEl = detailRoot.querySelector('[data-field="map"]');
-      if (mapEl && listing.mapQuery) {
+      if (mapEl && listing.lat && listing.lng && window.L) {
+        const ziel = document.createElement("div");
+        ziel.className = mapEl.className + " map-umkreis";
+        mapEl.replaceWith(ziel);
+
+        const karte = window.L.map(ziel, {
+          scrollWheelZoom: false,   // sonst bleibt man beim Scrollen in der Karte haengen
+          zoomControl: true,
+        });
+        window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 18,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        }).addTo(karte);
+
+        const umkreis = window.L.circle([listing.lat, listing.lng], {
+          radius: 1000,
+          color: "#fbe48b",
+          weight: 2,
+          fillColor: "#fbe48b",
+          fillOpacity: 0.14,
+        }).addTo(karte);
+
+        karte.fitBounds(umkreis.getBounds(), { padding: [16, 16] });
+      } else if (mapEl && listing.mapQuery) {
         mapEl.src = `https://www.google.com/maps?q=${encodeURIComponent(listing.mapQuery)}&output=embed`;
       }
 
