@@ -1440,35 +1440,47 @@ body.nav-open { overflow: hidden; }
 }
 .team-avatar svg { width: 44px; height: 44px; stroke: var(--gold-light); }
 
-/* ---------- Portraet mit Wechsel beim Hover ---------- */
+/* ---------- Portraet, das sich beim Hover dreht ---------- */
 
-.team-photo {
-  position: relative;
+/* Die Perspektive gehoert auf das Elternelement, sonst wirkt die
+   Drehung flach statt raeumlich. */
+.team-flip {
+  perspective: 1200px;
   width: 100%;
   aspect-ratio: 3 / 4;
+  margin-bottom: 18px;
+}
+.team-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.75s var(--ease);
+}
+.team-card:hover .team-flip-inner,
+.team-card:focus-within .team-flip-inner { transform: rotateY(180deg); }
+
+.flip-face {
+  position: absolute;
+  inset: 0;
   border-radius: var(--radius-sm);
   overflow: hidden;
   background: var(--black);
-  margin-bottom: 18px;
+  backface-visibility: hidden;          /* verbirgt die jeweils abgewandte Seite */
+  -webkit-backface-visibility: hidden;
 }
-.team-photo img.portrait {
-  position: absolute;
-  inset: 0;
+.flip-back { transform: rotateY(180deg); }
+
+.flip-face img.portrait {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  transition: opacity 0.45s var(--ease);
+  display: block;
 }
-/* Das ernste Bild liegt oben und blendet beim Hover weg. */
-.team-photo .is-serious { opacity: 1; z-index: 1; }
-.team-photo .is-smiling { opacity: 0; }
-.team-card:hover .team-photo .is-serious,
-.team-card:focus-within .team-photo .is-serious { opacity: 0; }
-.team-card:hover .team-photo .is-smiling,
-.team-card:focus-within .team-photo .is-smiling { opacity: 1; }
+.flip-back img.portrait { object-position: center center; }
 
-.team-photo .corner-logo {
+.flip-face .corner-logo {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -1479,8 +1491,24 @@ body.nav-open { overflow: hidden; }
   object-fit: contain;
 }
 
+/* Zitat auf der Rueckseite, ueber dem Foto lesbar gemacht */
+.flip-quote {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 40px 16px 16px;
+  background: linear-gradient(to top, rgba(11,11,12,0.94) 42%, transparent);
+  color: var(--cream);
+  font-size: 13.5px;
+  line-height: 1.55;
+  font-style: italic;
+  text-align: left;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .team-photo img.portrait { transition: none; }
+  .team-flip-inner { transition: none; }
 }
 .team-card h3 { font-size: 18px; font-weight: 600; color: var(--white); margin-top: 4px; }
 .team-role { font-size: 12.5px; color: var(--gold-dim); letter-spacing: 0.03em; }
