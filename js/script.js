@@ -398,3 +398,101 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
     });
   });
 })();
+
+/* ============================================================
+   ZAHLEN — Scroll-Übergang zur Über-Uns-Section
+
+   Der Abschnitt ist mehrere Bildschirmhöhen hoch; der Innenbereich
+   klebt oben fest. Diese zusätzliche Höhe ist die Strecke, über die
+   die Animation abläuft — je weiter man scrollt, desto weiter ist
+   der Ablauf fortgeschritten (0 bis 1).
+
+   Der Ablauf in drei Phasen:
+     0,00 – 0,32   Überschrift zoomt heran und blendet aus
+     0,26 – 0,48   "Zahlen lügen nicht!" kommt und geht
+     0,44 – 1,00   Hintergrund ist Gold, die vier Zahlen fliegen
+                   nacheinander aus der Mitte heraus
+
+   Gerechnet wird nur in requestAnimationFrame, damit das Scrollen
+   flüssig bleibt.
+   ============================================================ */
+(function () {
+  const abschnitt = document.querySelector("[data-zahlen]");
+  if (!abschnitt) return;
+
+  // Wer Bewegung reduziert haben möchte, bekommt die ruhige Fassung aus dem CSS.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const klebend = abschnitt.querySelector(".zahlen-sticky");
+  const titel = abschnitt.querySelector(".zahlen-titel");
+  const mitte = abschnitt.querySelector(".zahlen-mitte");
+  const zahlen = [...abschnitt.querySelectorAll(".zahl")];
+
+  // Die Zahlenphase belegt die Strecke von 0,40 bis 1,00.
+  // FENSTER ist, wie lange eine einzelne Zahl unterwegs ist; TAKT der
+  // Abstand zwischen zwei Starts. Beides ergibt sich aus der Anzahl,
+  // damit das Hinzufügen einer Zahl nichts kaputt macht.
+  const FENSTER = 0.22;
+  const TAKT = zahlen.length > 1 ? (0.6 - FENSTER) / (zahlen.length - 1) : 0;
+
+  // Blendet einen Wert innerhalb eines Fensters von 0 auf 1 auf.
+  const anteil = (wert, von, bis) => {
+    if (bis === von) return 0;
+    return Math.min(1, Math.max(0, (wert - von) / (bis - von)));
+  };
+
+  // Weich beginnen und enden — wirkt weniger mechanisch als linear.
+  const weich = (t) => t * t * (3 - 2 * t);
+
+  let angefordert = false;
+
+  function zeichnen() {
+    angefordert = false;
+
+    const oben = abschnitt.offsetTop;
+    const strecke = abschnitt.offsetHeight - window.innerHeight;
+    if (strecke <= 0) return;
+
+    const p = Math.min(1, Math.max(0, (window.scrollY - oben) / strecke));
+
+    // --- Phase 1: Überschrift zoomt heran und blendet aus ---
+    const tp = weich(anteil(p, 0, 0.28));
+    titel.style.setProperty("--titel-zoom", (1 + tp * 2.6).toFixed(3));
+    titel.style.setProperty("--titel-deckkraft", (1 - anteil(p, 0.1, 0.26)).toFixed(3));
+
+    // --- Phase 2: Mitteltext, kommt und geht ---
+    const mAuf = weich(anteil(p, 0.22, 0.3));
+    const mAb = weich(anteil(p, 0.32, 0.38));
+    mitte.style.setProperty("--mitte-zoom", (0.7 + mAuf * 0.3 + mAb * 1.6).toFixed(3));
+    mitte.style.setProperty("--mitte-deckkraft", (mAuf - mAb).toFixed(3));
+
+    // --- Phase 3: Hintergrund kippt auf Gold, Zahlen fliegen heraus ---
+    // Der Wechsel muss VOR der ersten Zahl liegen — die Zahlen sind
+    // schwarz und waeren auf schwarzem Grund unsichtbar.
+    klebend.classList.toggle("ist-gold", p >= 0.38);
+
+    zahlen.forEach((el, i) => {
+      // Jede Zahl startet später als die vorige. Takt und Fensterbreite
+      // sind so gewählt, dass die letzte Zahl genau am Ende der Strecke
+      // ausgeflogen ist — unabhängig davon, wie viele Zahlen es sind.
+      const start = 0.4 + i * TAKT;
+      const q = weich(anteil(p, start, start + FENSTER));
+
+      el.style.setProperty("--weg", q.toFixed(3));
+      el.style.setProperty("--zoom", (0.35 + q * 1.55).toFixed(3));
+      // Auf- und wieder abblenden, damit die Zahlen nicht am Rand kleben.
+      const sichtbar = Math.min(anteil(q, 0, 0.22), 1 - anteil(q, 0.74, 1));
+      el.style.setProperty("--deckkraft", sichtbar.toFixed(3));
+    });
+  }
+
+  function anfordern() {
+    if (angefordert) return;
+    angefordert = true;
+    requestAnimationFrame(zeichnen);
+  }
+
+  window.addEventListener("scroll", anfordern, { passive: true });
+  window.addEventListener("resize", anfordern);
+  zeichnen();
+})();

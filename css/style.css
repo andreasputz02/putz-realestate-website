@@ -2476,3 +2476,134 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 640px) {
   .property-map .map-frame.map-umkreis { aspect-ratio: 4/3; }
 }
+
+/* ============================================================
+   ZAHLEN — Scroll-Übergang von der Fotografie zur Über-Uns-Section
+
+   Aufbau: ein sehr hoher Abschnitt, darin ein klebender Bereich von
+   genau einer Bildschirmhöhe. Die zusätzliche Höhe ist der "Weg",
+   den die Animation zum Ablaufen hat.
+
+   Die eigentlichen Werte setzt js/script.js über CSS-Variablen.
+   Fehlt JavaScript, greifen die Ausgangswerte weiter unten und die
+   Zahlen stehen einfach als ruhige Reihe da.
+   ============================================================ */
+.zahlen-scroll {
+  position: relative;
+  height: 560vh;
+  background: var(--black);
+}
+.zahlen-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  /* Farbwechsel von Schwarz auf Gold; --fortschritt-farbe kommt aus dem JS. */
+  background: var(--black);
+  transition: background-color 120ms linear;
+}
+.zahlen-sticky.ist-gold { background: var(--gold); }
+
+/* --- Überschrift: zoomt heran und blendet aus --- */
+.zahlen-titel {
+  grid-area: 1 / 1;
+  margin: 0;
+  max-width: 18ch;
+  text-align: center;
+  color: var(--white);
+  font-size: clamp(30px, 5.2vw, 66px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  transform: scale(var(--titel-zoom, 1));
+  opacity: var(--titel-deckkraft, 1);
+  will-change: transform, opacity;
+}
+.zahlen-titel em { font-style: normal; color: var(--gold); }
+
+/* --- Mitteltext zwischen den beiden Phasen --- */
+.zahlen-mitte {
+  grid-area: 1 / 1;
+  margin: 0;
+  max-width: 16ch;
+  text-align: center;
+  font-size: clamp(30px, 5.4vw, 72px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--gold);
+  transform: scale(var(--mitte-zoom, 0.7));
+  opacity: var(--mitte-deckkraft, 0);
+  will-change: transform, opacity;
+}
+
+/* --- Die vier Kennzahlen --- */
+.zahlen-feld { grid-area: 1 / 1; width: 100%; height: 100%; position: relative; }
+.zahl {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  text-align: center;
+  white-space: nowrap;
+  /* --x/--y geben Richtung und Weite vor (in vw/vh, siehe HTML);
+     --weg und --zoom steuert das JS. */
+  transform:
+    translate(-50%, -50%)
+    translate(calc(var(--x) * var(--weg, 0)), calc(var(--y) * var(--weg, 0)))
+    scale(var(--zoom, 0.3));
+  opacity: var(--deckkraft, 0);
+  will-change: transform, opacity;
+}
+.zahl strong {
+  display: block;
+  font-size: clamp(40px, 7vw, 92px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--black);
+}
+.zahl span {
+  display: block;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(23, 22, 26, 0.35);
+  font-size: clamp(11px, 1.1vw, 14px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(23, 22, 26, 0.75);
+}
+
+@media (max-width: 720px) {
+  .zahlen-scroll { height: 480vh; }
+  .zahl strong { font-size: clamp(34px, 12vw, 60px); }
+}
+
+/* Wer Bewegung reduziert haben möchte, bekommt die Zahlen ohne
+   Scroll-Strecke — als ruhige Reihe auf einer Bildschirmhöhe. */
+@media (prefers-reduced-motion: reduce) {
+  .zahlen-scroll { height: auto; }
+  .zahlen-sticky {
+    position: static;
+    height: auto;
+    padding: 90px 24px;
+    background: var(--gold);
+    gap: 40px;
+  }
+  .zahlen-titel { color: var(--black); transform: none; opacity: 1; position: static; }
+  .zahlen-titel em { color: var(--black); text-decoration: underline; }
+  .zahlen-mitte { transform: none; opacity: 1; color: var(--black); position: static; }
+  .zahlen-feld {
+    position: static;
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 40px 24px;
+  }
+  .zahlen-sticky { display: grid; place-items: center; }
+  .zahlen-titel, .zahlen-mitte, .zahlen-feld { grid-area: auto; }
+  .zahl { position: static; transform: none; opacity: 1; }
+}
