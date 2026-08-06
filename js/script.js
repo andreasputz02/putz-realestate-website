@@ -112,24 +112,6 @@ filterButtons.forEach((btn) => {
   });
 });
 
-// ---------- Animated counters (smooth premium ease-out) ----------
-document.querySelectorAll(".counter").forEach((el) => {
-  const target = parseInt(el.dataset.target, 10) || 0;
-  const suffix = el.dataset.suffix || "";
-  const duration = 2600;
-  const start = performance.now();
-
-  const easeOutExpo = (t) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
-
-  const tick = (now) => {
-    const progress = Math.min((now - start) / duration, 1);
-    const eased = easeOutExpo(progress);
-    const current = Math.round(target * eased);
-    el.textContent = current.toLocaleString("de-DE") + suffix;
-    if (progress < 1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-});
 
 // ---------- Track sliders (video + testimonials) ----------
 function setupTrackSlider(track, gap) {

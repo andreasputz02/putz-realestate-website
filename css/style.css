@@ -611,8 +611,11 @@ body.nav-open { overflow: hidden; }
   width: 100%;
   padding-top: 150px;
   /* .hero ist align-items:flex-end — der Inhalt haengt unten.
-     Nach oben schiebt man ihn deshalb ueber die UNTERE Polsterung. */
-  padding-bottom: 100px;
+     Nach oben schiebt man ihn deshalb ueber die UNTERE Polsterung.
+     Erhoeht, seit die Kennzahlen unter den Buttons weggefallen sind:
+     ohne sie sass der Block sonst zu tief und der Abstand zur
+     Navigationsleiste wurde zu gross. */
+  padding-bottom: 190px;
 }
 
 .hero-content .eyebrow { margin-bottom: 22px; }
@@ -654,18 +657,7 @@ body.nav-open { overflow: hidden; }
 
 .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 40px; }
 
-.hero-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 44px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line-dark);
-}
 
-.hero-meta div { display: flex; flex-direction: column; gap: 4px; }
-.hero-meta strong { font-family: var(--font-display); font-size: 34px; color: var(--gold); font-weight: 600; font-variant-numeric: tabular-nums; }
-.hero-meta span { font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
-.hero-meta strong span.counter { font-size: inherit; letter-spacing: normal; text-transform: none; color: inherit; }
 
 .scroll-cue {
   position: absolute;
@@ -684,21 +676,19 @@ body.nav-open { overflow: hidden; }
 @keyframes pulseLine { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
 
 @media (max-width: 720px) {
-  .hero-content { padding-top: 100px; padding-bottom: 88px; }
+  .hero-content { padding-top: 100px; padding-bottom: 165px; }
   .hero-title { margin-bottom: 12px; }
   .hero-sub { margin-bottom: 18px; }
   .hero-actions { margin-bottom: 20px; }
-  .hero-meta { gap: 28px; }
-  .scroll-cue { display: none; }
+    .scroll-cue { display: none; }
 }
 
 @media (max-height: 800px) {
-  .hero-content { padding-top: 110px; padding-bottom: 64px; }
+  .hero-content { padding-top: 110px; padding-bottom: 130px; }
   .hero-title { font-size: clamp(36px, 5.2vw, 66px); margin-bottom: 12px; }
   .hero-sub { margin-bottom: 18px; }
   .hero-actions { margin-bottom: 24px; }
-  .hero-meta { padding-top: 18px; }
-  .scroll-cue { display: none; }
+    .scroll-cue { display: none; }
 }
 
 /* ---------- Page Header (inner pages) ---------- */
