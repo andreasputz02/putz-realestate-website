@@ -1,35 +1,10 @@
 # ============================================================
-#  WARTUNGSMODUS — die Seite ist oeffentlich nicht erreichbar.
+#  Die Seite ist oeffentlich erreichbar.
 #
-#  Zum Wiederonlinegehen: den Rewrite-Block unten entfernen
-#  (der Rest der Datei muss bleiben) und pushen.
-#
-#  Wirkt NUR auf dem Hostinger-Server. Lokal geoeffnete
-#  Dateien sind davon nicht betroffen.
+#  Zum Offlinenehmen den Wartungsblock wieder einsetzen — er steht
+#  in der Git-Historie (Commit "Take the site offline again").
+#  Die Regeln unten muessen dabei bestehen bleiben.
 # ============================================================
-
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-
-  # Ausnahmen, die weiterhin ausgeliefert werden:
-  #  - die Wartungsseite selbst (sonst Endlosschleife)
-  #  - das Logo, das die Wartungsseite anzeigt
-  #  - der passwortgeschuetzte Admin-Bereich, damit die
-  #    Justimmo-Pruefung erreichbar bleibt
-  RewriteCond %{REQUEST_URI} !^/wartung\.html$
-  RewriteCond %{REQUEST_URI} !^/assets/img/logo\.png$
-  RewriteCond %{REQUEST_URI} !^/admin/
-  RewriteRule ^ - [R=503,L]
-</IfModule>
-
-# 503 = "voruebergehend nicht verfuegbar". Wichtig fuer Google:
-# die Seite wird dadurch NICHT aus dem Index entfernt.
-ErrorDocument 503 /wartung.html
-
-<IfModule mod_headers.c>
-  # Suchmaschinen: in einer Stunde wieder vorbeischauen.
-  Header always set Retry-After "3600"
-</IfModule>
 
 
 # ============================================================
