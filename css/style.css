@@ -16,9 +16,10 @@
   --line: rgba(23, 22, 26, 0.1);
   --line-dark: rgba(255, 255, 255, 0.12);
 
-  --font-display: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-body: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-script: "Dancing Script", cursive;
+  /* Poppins — dieselbe Schrift wie im Logo-Umfeld: geometrisch,
+     gleichmaessige Strichstaerke, einstoeckiges "a". */
+  --font-display: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   --container: 1240px;
   --radius-lg: 28px;
@@ -635,12 +636,11 @@ body.nav-open { overflow: hidden; }
   max-width: 64ch;   /* gerade so breit, dass der Satz auf Desktop einzeilig bleibt */
 }
 
+/* "putzen" hebt sich allein durch die Farbe hervor — gleiche Schrift,
+   gleiche Groesse wie der Rest der Zeile. */
 .hero-title em {
-  font-family: var(--font-script);
   font-style: normal;
-  font-size: 1.5em;
   color: var(--gold-light);
-  font-weight: 700;
   text-transform: none;
 }
 
@@ -807,9 +807,7 @@ body.nav-open { overflow: hidden; }
 .section-dark .stat-row div span { color: rgba(255, 255, 255, 0.55); }
 
 .section-dark .profile-quote { color: var(--cream); }
-.section-dark .profile-quote em { color: var(--gold-light); }
-.section-dark .profile-signature .sig-line { color: var(--white); }
-.section-dark .profile-signature .sig-meta { color: rgba(255, 255, 255, 0.55); }
+.section-dark .section-dark .section-dark .profile-signature .sig-meta { color: rgba(255, 255, 255, 0.55); }
 
 .section-dark .partner-feature { border-color: var(--line-dark); }
 .section-dark .partner-feature .p-mark { color: var(--white); }
@@ -1034,16 +1032,8 @@ body.nav-open { overflow: hidden; }
   color: var(--ink);
   margin: 28px 0 30px;
 }
-.profile-quote em {
-  font-family: var(--font-script);
-  font-style: normal;
-  font-size: 1.3em;
-  font-weight: 700;
-  color: var(--gold-dim);
-}
 
 .profile-signature { display: flex; align-items: center; gap: 16px; margin-top: 34px; }
-.profile-signature .sig-line { font-family: var(--font-script); font-size: 32px; font-weight: 700; color: var(--ink); }
 .profile-signature .sig-meta { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
 
 .stat-row { display: flex; gap: 48px; margin-top: 40px; }
