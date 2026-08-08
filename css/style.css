@@ -966,15 +966,32 @@ body.nav-open { overflow: hidden; }
 
 /* ---------- Process steps ---------- */
 
+/* ---------- Die sechs Schritte: Stapel beim Scrollen ----------
+   Jede Karte klebt oben fest, die naechste schiebt sich darueber.
+   Die Klebeposition waechst von Karte zu Karte um ein paar Pixel —
+   dadurch bleibt von den darunterliegenden jeweils die Oberkante
+   sichtbar und es entsteht der Eindruck eines Stapels.
+
+   Wichtig: Die Karten brauchen einen deckenden Hintergrund, sonst
+   scheint die darunterliegende durch.                              */
 .steps { counter-reset: step; }
 .step-row {
+  position: sticky;
+  top: 92px;                 /* unterhalb der Kopfleiste */
   display: grid;
   grid-template-columns: 90px 1fr;
   gap: 28px;
-  padding: 38px 0;
-  border-top: 1px solid var(--line-dark);
+  padding: 32px 34px 36px;
+  margin-bottom: 24px;
+  background: #131315;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-lg);
 }
-.steps .step-row:last-child { border-bottom: 1px solid var(--line-dark); }
+.step-row:nth-child(2) { top: 106px; }
+.step-row:nth-child(3) { top: 120px; }
+.step-row:nth-child(4) { top: 134px; }
+.step-row:nth-child(5) { top: 148px; }
+.step-row:nth-child(6) { top: 162px; }
 .step-row .step-num {
   counter-increment: step;
   font-family: var(--font-display);
@@ -2253,8 +2270,16 @@ body.modal-open { overflow: hidden; }
   .location-grid { grid-template-columns: 1fr; }
   .contact-layout { grid-template-columns: 1fr; }
   .section-head { flex-direction: column; align-items: flex-start; }
-  .step-row { grid-template-columns: 56px 1fr; }
+  .step-row { grid-template-columns: 56px 1fr; gap: 18px; padding: 24px 22px 28px; }
   .step-row .step-num { font-size: 28px; }
+  /* Engerer Versatz: auf kleinen Bildschirmen ist wenig Platz, und
+     die Karten sind hoeher — sonst rutscht der Stapel zu weit nach unten. */
+  .step-row { top: 84px; }
+  .step-row:nth-child(2) { top: 92px; }
+  .step-row:nth-child(3) { top: 100px; }
+  .step-row:nth-child(4) { top: 108px; }
+  .step-row:nth-child(5) { top: 116px; }
+  .step-row:nth-child(6) { top: 124px; }
   .partner-feature { grid-template-columns: 1fr; }
 }
 
