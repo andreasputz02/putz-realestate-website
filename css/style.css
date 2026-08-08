@@ -2900,6 +2900,8 @@ body.modal-open { overflow: hidden; }
    sich nicht durch einen Punkt ersetzen. Damit die Marke trotzdem
    sichtbar ist, wird das Zeichen selbst gold. */
 .marke-punkt { color: var(--gold); }
+/* Einzelne Woerter in einer Ueberschrift hervorheben. */
+.in-gold { color: var(--gold); }
 
 /* Fuer Ueberschriften ausserhalb der oben genannten Behaelter, die den
    Punkt trotzdem tragen sollen. */
