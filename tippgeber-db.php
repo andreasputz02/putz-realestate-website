@@ -13,6 +13,7 @@
 
 // Liefert SITE_URL — wird in den Benachrichtigungen gebraucht.
 require_once __DIR__ . '/ref-token.php';
+require_once __DIR__ . '/mail-versand.php';
 
 const TG_DB_DATEI = __DIR__ . '/data/tippgeber.sqlite';
 
@@ -296,14 +297,7 @@ function tg_benachrichtigen(PDO $db, int $empfehlungId, string $anlass): void
               . "Wir melden uns wegen der Auszahlung bei dir.\n\nLiebe Grüße\nPUTZ Real Estate";
     }
 
-    $kopf = [
-        'From: PUTZ Real Estate <noreply@putz-realestate.at>',
-        'Reply-To: office@putzrealestate.at',
-        'Content-Type: text/plain; charset=UTF-8',
-        'MIME-Version: 1.0',
-    ];
-
-    $ok = @mail($e['tg_email'], '=?UTF-8?B?' . base64_encode($betreff) . '?=', $text, implode("\r\n", $kopf));
+    $ok = nachricht_senden($e['tg_email'], $betreff, $text);
     if ($ok) {
         $db->prepare("UPDATE empfehlungen SET $spalte = 1 WHERE id = ?")->execute([$empfehlungId]);
     } else {

@@ -28,7 +28,7 @@ function syntax_pruefen(string $pfad): array {
 }
 
 $dateien = [
-    'send-mail.php', 'justimmo.php', 'justimmo-lib.php',
+    'send-mail.php', 'justimmo.php', 'justimmo-lib.php', 'mail-versand.php',
     'ref-token.php', 'tippgeber-db.php', 'tippgeber-login.php', 'tippgeber-app.php',
     'admin/empfehlungen.php',
 ];
@@ -83,19 +83,16 @@ $testErgebnis = null;
 if (!empty($_POST['testmail'])) {
     $ziel = trim($_POST['testmail']);
     if (filter_var($ziel, FILTER_VALIDATE_EMAIL)) {
-        $kopf = [
-            'From: PUTZ Real Estate <noreply@putz-realestate.at>',
-            'Reply-To: office@putzrealestate.at',
-            'Content-Type: text/plain; charset=UTF-8',
-            'MIME-Version: 1.0',
-        ];
-        $ok = mail(
+        // Bewusst ueber denselben Weg wie alle echten Nachrichten —
+        // sonst prueft der Test nicht das, was spaeter tatsaechlich laeuft.
+        require_once $wurzel . '/mail-versand.php';
+        $ok = nachricht_senden(
             $ziel,
-            '=?UTF-8?B?' . base64_encode('Testnachricht vom Server') . '?=',
+            'Testnachricht vom Server',
             "Diese Nachricht bestätigt, dass der Mailversand vom Server funktioniert.\n\n"
-            . "Sie wurde mit denselben Absenderangaben verschickt wie der Anmeldelink\n"
-            . "für den Tippgeber-Bereich.\n\nPUTZ Real Estate",
-            implode("\r\n", $kopf)
+            . "Sie wurde über denselben Weg verschickt wie der Anmeldelink für den\n"
+            . "Tippgeber-Bereich — mit Umschlag-Absender, Message-ID und Date.\n\n"
+            . "PUTZ Real Estate"
         );
         $testErgebnis = [$ok, $ziel];
     } else {

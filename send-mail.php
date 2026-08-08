@@ -4,6 +4,8 @@ header('Content-Type: application/json; charset=utf-8');
 // Signatur der Empfehlungslinks — liegt in einer eigenen Datei, weil
 // der Tippgeber-Bereich dieselbe Berechnung braucht.
 require_once __DIR__ . '/ref-token.php';
+// Zentraler Mailversand — setzt Umschlag-Absender, Message-ID und Date.
+require_once __DIR__ . '/mail-versand.php';
 
 /**
  * Haengt einen Datensatz an eine JSON-Datei in data/ an.
@@ -213,13 +215,7 @@ if ($sent && $formName === 'Tippgeber-Registrierung') {
         . "Kommt es zu einem erfolgreichen Verkauf, erhalten Sie 20 % unserer Provision.\n\n"
         . "Herzliche Grüße\nIhr PUTZ Real Estate Team";
 
-    $confirmHeaders = [];
-    $confirmHeaders[] = 'From: PUTZ Real Estate <noreply@putz-realestate.at>';
-    $confirmHeaders[] = 'Reply-To: office@putzrealestate.at';
-    $confirmHeaders[] = 'Content-Type: text/plain; charset=UTF-8';
-    $confirmHeaders[] = 'MIME-Version: 1.0';
-    $confirmSubject = '=?UTF-8?B?' . base64_encode('Ihr persönlicher Tippgeber-Link') . '?=';
-    mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
+    nachricht_senden($email, 'Ihr persönlicher Tippgeber-Link', $confirmBody);
 
     // Persist the registration so it can be viewed in the password-protected admin list.
     $tippgeber = [
@@ -250,13 +246,7 @@ if ($sent && $formName === 'Karriere – Initiativbewerbung') {
         . "Wir melden uns zeitnah bei dir und hoffen, dass auch du bald mit uns gemeinsam Immobilien vom Markt PUTZEN kannst!\n\n"
         . "Herzliche Grüße\nDein PUTZ Real Estate Team";
 
-    $confirmHeaders = [];
-    $confirmHeaders[] = 'From: PUTZ Real Estate <noreply@putz-realestate.at>';
-    $confirmHeaders[] = 'Reply-To: office@putzrealestate.at';
-    $confirmHeaders[] = 'Content-Type: text/plain; charset=UTF-8';
-    $confirmHeaders[] = 'MIME-Version: 1.0';
-    $confirmSubject = '=?UTF-8?B?' . base64_encode('Deine Bewerbung ist bei uns angekommen') . '?=';
-    mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
+    nachricht_senden($email, 'Deine Bewerbung ist bei uns angekommen', $confirmBody);
 }
 
 // For Kostenlose Immobilienbewertung requests, also send a confirmation.
@@ -268,13 +258,7 @@ if ($sent && $formName === 'Kostenlose Immobilienbewertung') {
         . "und melden uns innerhalb von 48 Stunden mit einer ersten, unverbindlichen Werteinschätzung Ihrer Immobilie bei Ihnen.\n\n"
         . "Herzliche Grüße\nIhr PUTZ Real Estate Team";
 
-    $confirmHeaders = [];
-    $confirmHeaders[] = 'From: PUTZ Real Estate <noreply@putz-realestate.at>';
-    $confirmHeaders[] = 'Reply-To: office@putzrealestate.at';
-    $confirmHeaders[] = 'Content-Type: text/plain; charset=UTF-8';
-    $confirmHeaders[] = 'MIME-Version: 1.0';
-    $confirmSubject = '=?UTF-8?B?' . base64_encode('Ihre Anfrage zur kostenlosen Immobilienbewertung ist bei uns angekommen') . '?=';
-    mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
+    nachricht_senden($email, 'Ihre Anfrage zur kostenlosen Immobilienbewertung ist bei uns angekommen', $confirmBody);
 }
 
 // For Suchkunde-Anfragen, also send a confirmation and store the search profile.
@@ -287,13 +271,7 @@ if ($sent && $formName === 'Suchkunde-Anfrage') {
         . "sobald eine passende Immobilie — auch aus unserem Off-Market-Bestand — verfügbar ist.\n\n"
         . "Herzliche Grüße\nDein PUTZ Real Estate Team";
 
-    $confirmHeaders = [];
-    $confirmHeaders[] = 'From: PUTZ Real Estate <noreply@putz-realestate.at>';
-    $confirmHeaders[] = 'Reply-To: office@putzrealestate.at';
-    $confirmHeaders[] = 'Content-Type: text/plain; charset=UTF-8';
-    $confirmHeaders[] = 'MIME-Version: 1.0';
-    $confirmSubject = '=?UTF-8?B?' . base64_encode('Dein Suchprofil ist bei uns angekommen') . '?=';
-    mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
+    nachricht_senden($email, 'Dein Suchprofil ist bei uns angekommen', $confirmBody);
 
     // Persist the search profile in its own list (separate from the Tippgeber list).
     datensatz_anhaengen('suchkunden.json', [

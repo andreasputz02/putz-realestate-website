@@ -19,6 +19,7 @@
 // ============================================================
 
 require_once __DIR__ . '/tippgeber-db.php';
+require_once __DIR__ . '/mail-versand.php';
 
 session_start();
 
@@ -124,13 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                           . "ohne den Link passiert nichts.\n\n"
                           . "Liebe Grüße\nPUTZ Real Estate";
 
-                    $kopf = [
-                        'From: PUTZ Real Estate <noreply@putz-realestate.at>',
-                        'Reply-To: office@putzrealestate.at',
-                        'Content-Type: text/plain; charset=UTF-8',
-                        'MIME-Version: 1.0',
-                    ];
-                    mail($email, '=?UTF-8?B?' . base64_encode('Dein Anmeldelink') . '?=', $text, implode("\r\n", $kopf));
+                    nachricht_senden($email, 'Dein Anmeldelink', $text);
                 }
             }
         } catch (Throwable $e) {
