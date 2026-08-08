@@ -2708,12 +2708,39 @@ body.modal-open { overflow: hidden; }
 .tg-leer p:first-child { font-weight: 600; margin-bottom: 8px; }
 
 .tg-liste { display: flex; flex-direction: column; gap: 12px; }
+
+/* Jede Empfehlung ist aufklappbar (<details>). */
 .tg-eintrag {
   background: #141416;
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: var(--radius-md);
-  padding: 18px 20px;
+  overflow: hidden;
 }
+.tg-eintrag > summary {
+  padding: 16px 20px;
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+  padding-right: 46px;
+}
+.tg-eintrag > summary::-webkit-details-marker { display: none; }
+/* Eigener Pfeil, der sich beim Aufklappen dreht. */
+.tg-eintrag > summary::after {
+  content: "";
+  position: absolute;
+  right: 20px;
+  top: 22px;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid rgba(255, 255, 255, 0.45);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.45);
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+.tg-eintrag[open] > summary::after { transform: rotate(-135deg); top: 26px; }
+.tg-eintrag > summary:hover { background: rgba(255, 255, 255, 0.03); }
+.tg-eintrag > summary:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
+
 .tg-eintrag-kopf {
   display: flex;
   align-items: center;
@@ -2722,9 +2749,68 @@ body.modal-open { overflow: hidden; }
   flex-wrap: wrap;
 }
 .tg-eintrag-kopf strong { font-size: 15.5px; font-weight: 600; }
-.tg-eintrag-meta { margin-top: 6px; font-size: 12.5px; color: rgba(255, 255, 255, 0.45); }
-.tg-provision { margin-top: 10px; font-size: 13.5px; color: rgba(255, 255, 255, 0.7); }
-.tg-provision strong { color: var(--gold); }
+.tg-eintrag-meta {
+  display: block;
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.tg-eintrag-inhalt {
+  padding: 4px 20px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  margin-top: 4px;
+}
+.tg-feld-titel {
+  margin-top: 18px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 700;
+}
+.tg-feld-wert { margin-top: 4px; font-size: 15px; }
+.tg-betrag {
+  margin-top: 4px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: -0.02em;
+}
+.tg-rechenweg { margin-top: 6px; font-size: 12.5px; color: rgba(255, 255, 255, 0.5); line-height: 1.6; }
+
+.tg-vermerk {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+}
+.tg-vermerk.ist-gut { color: #8fd89b; }
+.tg-vermerk.ist-vorbehalt {
+  background: rgba(251, 228, 139, 0.11);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  color: rgba(255, 255, 255, 0.75);
+}
+.tg-vermerk.ist-vorbehalt strong { color: var(--gold); }
+
+.tg-objekt {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin-top: 18px;
+}
+.tg-objekt-name { margin-top: 4px; font-size: 15.5px; font-weight: 600; line-height: 1.4; }
+.tg-objekt-knopf { margin-top: 14px; font-size: 13.5px; padding: 11px 20px; }
+.tg-objekt .tg-feld-titel { margin-top: 0; }
+
+.tg-eintrag-fuss {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.38);
+}
 
 .tg-status {
   font-size: 11px;
@@ -2752,3 +2838,25 @@ body.modal-open { overflow: hidden; }
   color: rgba(255, 255, 255, 0.6);
 }
 .tg-einstieg a { color: var(--gold); text-decoration: underline; font-weight: 600; }
+
+/* Formularfelder im Tippgeber-Bereich.
+   Die Grundstile in .field sind für die hellen Formularkarten gemacht:
+   dunkle Beschriftung, cremefarbenes Eingabefeld. Auf der dunklen
+   Anmeldekarte wäre die Beschriftung schwarz auf schwarz. */
+.tg-karte .field label {
+  color: rgba(255, 255, 255, 0.75);
+}
+.tg-karte .field input,
+.tg-karte .field textarea,
+.tg-karte .field select {
+  background: #0f0f11;
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+.tg-karte .field input::placeholder { color: rgba(255, 255, 255, 0.35); }
+.tg-karte .field input:focus,
+.tg-karte .field textarea:focus,
+.tg-karte .field select:focus {
+  background: #141416;
+  border-color: var(--gold);
+}

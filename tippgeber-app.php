@@ -90,7 +90,7 @@ function geld(float $b): string { return '€ ' . number_format($b, 0, ',', '.')
 <link rel="manifest" href="tippgeber-app.webmanifest">
 <link rel="apple-touch-icon" href="assets/img/app-symbol-192.png">
 <link rel="stylesheet" href="css/fonts.css?v=3">
-<link rel="stylesheet" href="css/style.css?v=123">
+<link rel="stylesheet" href="css/style.css?v=125">
 </head>
 <body class="page-dark tg-app-body">
 
@@ -158,27 +158,89 @@ function geld(float $b): string { return '€ ' . number_format($b, 0, ',', '.')
         <p class="tg-lede">Teile deinen Link — sobald jemand darüber ein Formular ausfüllt, erscheint die Empfehlung hier.</p>
       </div>
     <?php else: ?>
+      <p class="tg-lede" style="margin-bottom:14px;">Zum Aufklappen antippen.</p>
       <div class="tg-liste">
         <?php foreach ($empfehlungen as $e): ?>
-          <article class="tg-eintrag">
-            <div class="tg-eintrag-kopf">
-              <strong><?php echo htmlspecialchars($e['name'] ?: 'Ohne Namen'); ?></strong>
-              <span class="tg-status ist-<?php echo htmlspecialchars($e['status']); ?>">
-                <?php echo htmlspecialchars($statusListe[$e['status']] ?? $e['status']); ?>
+          <?php
+            $bezahlt   = (int)$e['provision_bezahlt'] === 1;
+            $verkauft  = $e['status'] === 'verkauft';
+            $betrag    = $e['provision'] !== null ? (float)$e['provision'] : null;
+            $hatObjekt = trim($e['objekt_titel'] ?? '') !== '' || trim($e['objekt_seite'] ?? '') !== '';
+          ?>
+          <!-- <details> statt eigener Klapp-Logik: funktioniert auch ohne
+               JavaScript und ist für Screenreader von Haus aus richtig. -->
+          <details class="tg-eintrag">
+            <summary>
+              <span class="tg-eintrag-kopf">
+                <strong><?php echo htmlspecialchars($e['name'] ?: 'Ohne Namen'); ?></strong>
+                <span class="tg-status ist-<?php echo htmlspecialchars($e['status']); ?>">
+                  <?php echo htmlspecialchars($statusListe[$e['status']] ?? $e['status']); ?>
+                </span>
               </span>
-            </div>
-            <p class="tg-eintrag-meta">
-              <?php echo htmlspecialchars($e['zeitpunkt']); ?>
-              <?php if ($e['formular'] !== ''): ?> · <?php echo htmlspecialchars($e['formular']); ?><?php endif; ?>
-              <?php if ($e['objekt'] !== ''): ?> · <?php echo htmlspecialchars($e['objekt']); ?><?php endif; ?>
-            </p>
-            <?php if ($e['provision'] !== null && (float)$e['provision'] > 0): ?>
-              <p class="tg-provision">
-                Provision <strong><?php echo geld((float)$e['provision']); ?></strong>
-                — <?php echo (int)$e['provision_bezahlt'] === 1 ? 'ausbezahlt' : 'noch offen'; ?>
+              <span class="tg-eintrag-meta">
+                <?php echo htmlspecialchars($e['zeitpunkt']); ?>
+                <?php if ($hatObjekt): ?> · Objekt online<?php endif; ?>
+                <?php if ($betrag !== null && $betrag > 0): ?> · <?php echo geld($betrag); ?><?php endif; ?>
+              </span>
+            </summary>
+
+            <div class="tg-eintrag-inhalt">
+
+              <?php if ($hatObjekt): ?>
+                <div class="tg-objekt">
+                  <p class="tg-feld-titel">Das Objekt dazu</p>
+                  <p class="tg-objekt-name"><?php echo htmlspecialchars($e['objekt_titel'] ?: 'Objekt'); ?></p>
+                  <?php if (trim($e['objekt_seite']) !== ''): ?>
+                    <a class="btn btn-gold tg-objekt-knopf" href="<?php echo htmlspecialchars($e['objekt_seite']); ?>" target="_blank" rel="noopener">
+                      Objekt ansehen
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                  <?php endif; ?>
+                </div>
+              <?php endif; ?>
+
+              <p class="tg-feld-titel">Stand</p>
+              <p class="tg-feld-wert"><?php echo htmlspecialchars($statusListe[$e['status']] ?? $e['status']); ?></p>
+
+              <?php if ($betrag !== null && $betrag > 0): ?>
+                <p class="tg-feld-titel">Ihre Prämie</p>
+                <p class="tg-betrag"><?php echo geld($betrag); ?></p>
+
+                <?php if ($e['verkaufspreis'] && $e['provisionssatz']): ?>
+                  <p class="tg-rechenweg">
+                    Verkaufspreis <?php echo geld((float)$e['verkaufspreis']); ?>
+                    · unsere Provision <?php echo rtrim(rtrim(number_format((float)$e['provisionssatz'], 2, ',', '.'), '0'), ','); ?> %
+                    · Ihr Anteil <?php echo rtrim(rtrim(number_format((float)($e['anteil_prozent'] ?: 20), 2, ',', '.'), '0'), ','); ?> %
+                  </p>
+                <?php endif; ?>
+
+                <?php if ($bezahlt): ?>
+                  <p class="tg-vermerk ist-gut">Bereits ausbezahlt.</p>
+                <?php elseif ($verkauft): ?>
+                  <p class="tg-vermerk">Die Auszahlung steht noch aus — wir melden uns bei Ihnen.</p>
+                <?php else: ?>
+                  <!-- Ausdrücklicher Vorbehalt: solange nicht verkauft ist,
+                       ist der Betrag eine Momentaufnahme, keine Zusage. -->
+                  <p class="tg-vermerk ist-vorbehalt">
+                    <strong>Vorläufiger Wert.</strong> So viel wäre Ihre Prämie beim derzeit
+                    angesetzten Preis. Fällt der tatsächliche Verkaufspreis niedriger aus,
+                    verringert sich der Betrag entsprechend.
+                  </p>
+                <?php endif; ?>
+              <?php else: ?>
+                <p class="tg-feld-titel">Ihre Prämie</p>
+                <p class="tg-vermerk">
+                  Steht noch nicht fest. Sobald ein Verkaufspreis feststeht, erscheint
+                  hier Ihr Anteil samt Rechenweg.
+                </p>
+              <?php endif; ?>
+
+              <p class="tg-eintrag-fuss">
+                Empfohlen am <?php echo htmlspecialchars($e['zeitpunkt']); ?>
+                <?php if ($e['formular'] !== ''): ?> · über <?php echo htmlspecialchars($e['formular']); ?><?php endif; ?>
               </p>
-            <?php endif; ?>
-          </article>
+            </div>
+          </details>
         <?php endforeach; ?>
       </div>
     <?php endif; ?>

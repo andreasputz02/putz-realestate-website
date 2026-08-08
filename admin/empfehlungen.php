@@ -34,18 +34,46 @@ try {
             $status    = (string)($_POST['status'] ?? 'eingegangen');
             if (!isset($statusListe[$status])) $status = 'eingegangen';
 
-            // Betrag tolerant lesen: "1.500,50", "1500.5" und "" sollen alle gehen.
-            $roh = trim((string)($_POST['provision'] ?? ''));
-            $provision = null;
-            if ($roh !== '') {
-                $roh = str_replace(['.', ' ', '€'], '', $roh);
+            // Zahlen tolerant lesen: "1.500,50", "1500.5", "1500 €" und ""
+            // sollen alle funktionieren — so tippt man Betraege tatsaechlich.
+            $zahl = function ($roh): ?float {
+                $roh = trim((string)$roh);
+                if ($roh === '') return null;
+                $roh = str_replace(['.', ' ', '€', '%'], '', $roh);
                 $roh = str_replace(',', '.', $roh);
-                if (is_numeric($roh)) $provision = (float)$roh;
+                return is_numeric($roh) ? (float)$roh : null;
+            };
+
+            $verkaufspreis = $zahl($_POST['verkaufspreis'] ?? '');
+            $satz          = $zahl($_POST['provisionssatz'] ?? '');
+            $anteil        = $zahl($_POST['anteil'] ?? '') ?: TG_ANTEIL_STANDARD;
+            $ueberschrieben = $zahl($_POST['provision'] ?? '');
+
+            // Gerechnet wird aus Preis und Satz; ein eingetragener Betrag
+            // gewinnt aber immer — fuer Sonderfaelle.
+            $provision = $ueberschrieben ?? tg_provision_rechnen($verkaufspreis, $satz, $anteil);
+
+            // Objekt zuordnen. Der Wert kommt aus der Auswahlliste und
+            // traegt Kennung, Titel und Seitenadresse in einem Feld.
+            $objektId = $objektTitel = $objektSeite = '';
+            $wahl = trim((string)($_POST['objekt_wahl'] ?? ''));
+            if ($wahl !== '') {
+                $teile = explode('|', $wahl, 3);
+                $objektId    = $teile[0] ?? '';
+                $objektTitel = $teile[1] ?? '';
+                $objektSeite = $teile[2] ?? '';
             }
+
+            // Vorherigen Stand merken, um zu erkennen, was neu ist.
+            $vor = $db->prepare("SELECT status, objekt_id FROM empfehlungen WHERE id = ?");
+            $vor->execute([$id]);
+            $davor = $vor->fetch() ?: ['status' => '', 'objekt_id' => ''];
 
             $stmt = $db->prepare("
                 UPDATE empfehlungen
-                SET status = ?, provision = ?, provision_bezahlt = ?, notiz = ?
+                SET status = ?, provision = ?, provision_bezahlt = ?, notiz = ?,
+                    verkaufspreis = ?, provisionssatz = ?, anteil_prozent = ?,
+                    objekt_id = ?, objekt_titel = ?, objekt_seite = ?
                 WHERE id = ?
             ");
             $stmt->execute([
@@ -53,9 +81,26 @@ try {
                 $provision,
                 empty($_POST['bezahlt']) ? 0 : 1,
                 trim((string)($_POST['notiz'] ?? '')),
+                $verkaufspreis,
+                $satz,
+                $anteil,
+                $objektId,
+                $objektTitel,
+                $objektSeite,
                 $id,
             ]);
             $meldung = 'Gespeichert.';
+
+            // Benachrichtigungen — nur an den beiden Wendepunkten und
+            // nur, wenn sie durch dieses Speichern erstmals eintreten.
+            if ($objektId !== '' && $davor['objekt_id'] === '') {
+                tg_benachrichtigen($db, $id, 'online');
+                $meldung .= ' Der Tippgeber wurde über das Objekt informiert.';
+            }
+            if ($status === 'verkauft' && $davor['status'] !== 'verkauft') {
+                tg_benachrichtigen($db, $id, 'verkauft');
+                $meldung .= ' Der Tippgeber wurde über den Verkauf informiert.';
+            }
         }
     }
 
@@ -65,6 +110,21 @@ try {
         LEFT JOIN tippgeber t ON t.id = e.tippgeber_id
         ORDER BY e.zeitpunkt DESC, e.id DESC
     ")->fetchAll();
+
+    // Auswahlliste der Objekte aus dem Justimmo-Zwischenspeicher.
+    // Bewusst aus der Datei statt per API-Abruf: die Seite soll schnell
+    // laden und nicht bei jedem Aufruf Justimmo befragen.
+    $objekte = [];
+    $cacheDatei = dirname(__DIR__) . '/data/justimmo-cache.json';
+    if (is_file($cacheDatei)) {
+        foreach (json_decode((string)file_get_contents($cacheDatei), true) ?: [] as $o) {
+            $objekte[] = [
+                'id'    => (string)($o['objektId'] ?? ''),
+                'titel' => (string)($o['title'] ?? ''),
+                'seite' => 'https://putz-realestate.at/immobilie.html?id=' . rawurlencode((string)($o['id'] ?? '')),
+            ];
+        }
+    }
 } catch (Throwable $e) {
     error_log('Admin-Empfehlungen: ' . $e->getMessage());
     exit('Die Datenbank ist gerade nicht erreichbar: ' . htmlspecialchars($e->getMessage()));
@@ -191,16 +251,50 @@ function geldA(float $b): string { return '€ ' . number_format($b, 2, ',', '.'
         </div>
 
         <div>
-          <label for="p<?php echo $e['id']; ?>">Provision €</label>
+          <label for="vp<?php echo $e['id']; ?>">Verkaufspreis €</label>
+          <input type="text" id="vp<?php echo $e['id']; ?>" name="verkaufspreis" inputmode="decimal"
+                 value="<?php echo $e['verkaufspreis'] !== null ? htmlspecialchars(number_format((float)$e['verkaufspreis'], 0, ',', '')) : ''; ?>"
+                 placeholder="500000">
+        </div>
+
+        <div>
+          <label for="ps<?php echo $e['id']; ?>">Unsere Prov. %</label>
+          <input type="text" id="ps<?php echo $e['id']; ?>" name="provisionssatz" inputmode="decimal" style="width:90px;"
+                 value="<?php echo $e['provisionssatz'] !== null ? htmlspecialchars(rtrim(rtrim(number_format((float)$e['provisionssatz'], 2, ',', ''), '0'), ',')) : ''; ?>"
+                 placeholder="3">
+        </div>
+
+        <div>
+          <label for="an<?php echo $e['id']; ?>">Anteil %</label>
+          <input type="text" id="an<?php echo $e['id']; ?>" name="anteil" inputmode="decimal" style="width:80px;"
+                 value="<?php echo htmlspecialchars(rtrim(rtrim(number_format((float)($e['anteil_prozent'] ?: TG_ANTEIL_STANDARD), 2, ',', ''), '0'), ',')); ?>">
+        </div>
+
+        <div>
+          <label for="p<?php echo $e['id']; ?>">Betrag € <span style="text-transform:none;letter-spacing:0;">(überschreibt)</span></label>
           <input type="text" id="p<?php echo $e['id']; ?>" name="provision" inputmode="decimal"
                  value="<?php echo $e['provision'] !== null ? htmlspecialchars(number_format((float)$e['provision'], 2, ',', '')) : ''; ?>"
-                 placeholder="z.B. 1500">
+                 placeholder="wird gerechnet">
         </div>
 
         <label class="bezahlt">
           <input type="checkbox" name="bezahlt" value="1" <?php echo (int)$e['provision_bezahlt'] === 1 ? 'checked' : ''; ?>>
           ausbezahlt
         </label>
+
+        <div class="notiz">
+          <label for="o<?php echo $e['id']; ?>">Objekt zuordnen</label>
+          <select id="o<?php echo $e['id']; ?>" name="objekt_wahl" style="width:260px;">
+            <option value="">— noch keines —</option>
+            <?php foreach ($objekte as $o): ?>
+              <?php $wert = $o['id'] . '|' . $o['titel'] . '|' . $o['seite']; ?>
+              <option value="<?php echo htmlspecialchars($wert); ?>"
+                      <?php echo (string)$e['objekt_id'] === $o['id'] && $o['id'] !== '' ? 'selected' : ''; ?>>
+                <?php echo htmlspecialchars(mb_strimwidth($o['titel'], 0, 46, '…')); ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
 
         <div class="notiz">
           <label for="n<?php echo $e['id']; ?>">Interne Notiz</label>
