@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b0b0c'/><circle cx='32' cy='32' r='14' fill='%23fbe48b'/></svg>">
 <link rel="stylesheet" href="css/fonts.css?v=3">
-<link rel="stylesheet" href="css/style.css?v=122">
+<link rel="stylesheet" href="css/style.css?v=123">
 </head>
 <body class="page-dark">
 
@@ -108,6 +108,15 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
           <p class="field-note">Ihre Nachricht geht direkt an office@putzrealestate.at. Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Daten gemäß unserer <a href="datenschutz.html" style="text-decoration:underline;">Datenschutzerklärung</a> zu.</p>
+          <!-- Pflichthinweis: Wer über einen Empfehlungslink kommt, dessen Name
+               wird dem empfehlenden Partner angezeigt. Das ist die Weitergabe
+               personenbezogener Daten und muss vor dem Absenden dastehen. -->
+          <p class="field-note" data-empfehlungs-hinweis hidden>
+            Sie sind über den Link eines unserer Tippgeber hierher gelangt. Damit wir die
+            Empfehlung zuordnen und die Vermittlungsprämie auszahlen können, sieht dieser
+            Tippgeber <strong>Ihren Namen</strong> sowie den Bearbeitungsstand Ihrer Anfrage.
+            Ihre Kontaktdaten und der Inhalt Ihrer Nachricht bleiben ausschließlich bei uns.
+          </p>
           <div class="form-status"></div>
         </form>
       </div>
@@ -209,10 +218,15 @@
   (function () {
     var params = new URLSearchParams(window.location.search);
     var ref = params.get('ref');
-    if (ref) {
-      var field = document.getElementById('ref-token');
-      if (field) field.value = ref;
-    }
+    if (!ref) return;
+
+    var field = document.getElementById('ref-token');
+    if (field) field.value = ref;
+
+    // Der Hinweis, dass der Tippgeber den Namen erfährt, gilt nur bei
+    // einer echten Empfehlung — ohne Link wäre er verwirrend.
+    var hinweis = document.querySelector('[data-empfehlungs-hinweis]');
+    if (hinweis) hinweis.hidden = false;
   })();
 </script>
 

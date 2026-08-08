@@ -2743,3 +2743,12 @@ body.modal-open { overflow: hidden; }
 .tg-status.ist-in_bearbeitung { background: rgba(251, 228, 139, 0.16); color: var(--gold-light); }
 
 .tg-app .tg-fuss { margin-top: 50px; text-align: center; }
+
+/* Einstiegshinweis auf der Tippgeber-Seite zum geschützten Bereich. */
+.tg-einstieg {
+  margin-top: 18px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.6);
+}
+.tg-einstieg a { color: var(--gold); text-decoration: underline; font-weight: 600; }

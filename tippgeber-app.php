@@ -68,8 +68,13 @@ foreach ($empfehlungen as $e) {
 }
 
 // --- Persoenlicher Empfehlungslink ---
+//
+// Ziel ist empfehlung.html — nur dort traegt das Formular das
+// versteckte ref-Feld. Auf jeder anderen Seite ginge die Zuordnung
+// zum Tippgeber verloren. Dieselbe Adresse steht in der
+// Bestaetigungsmail nach der Registrierung (send-mail.php).
 require_once __DIR__ . '/ref-token.php';
-$empfehlungslink = SITE_URL . '/bewertung.html?ref='
+$empfehlungslink = SITE_URL . '/empfehlung.html?ref='
     . build_ref_token($ich['vorname'], $ich['nachname'], $ich['email']);
 
 function geld(float $b): string { return '€ ' . number_format($b, 0, ',', '.'); }
@@ -82,8 +87,10 @@ function geld(float $b): string { return '€ ' . number_format($b, 0, ',', '.')
 <meta name="theme-color" content="#0b0b0c">
 <meta name="robots" content="noindex, nofollow">
 <title>Mein Tippgeber-Bereich — PUTZ Real Estate</title>
+<link rel="manifest" href="tippgeber-app.webmanifest">
+<link rel="apple-touch-icon" href="assets/img/app-symbol-192.png">
 <link rel="stylesheet" href="css/fonts.css?v=3">
-<link rel="stylesheet" href="css/style.css?v=122">
+<link rel="stylesheet" href="css/style.css?v=123">
 </head>
 <body class="page-dark tg-app-body">
 
@@ -200,6 +207,18 @@ function geld(float $b): string { return '€ ' . number_format($b, 0, ',', '.')
     knopf.textContent = 'Kopiert';
     setTimeout(() => { knopf.textContent = alt; }, 1600);
   });
+
+  // Zum Startbildschirm hinzufügbar machen. Der Service Worker speichert
+  // bewusst nur Gestaltung zwischen, nie die Seiten selbst — sonst
+  // könnten veraltete Zahlen erscheinen.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('tippgeber-sw.js').catch(() => {
+        // Kein Grund für eine Fehlermeldung: ohne Service Worker
+        // funktioniert der Bereich als ganz normale Website weiter.
+      });
+    });
+  }
 </script>
 
 </body>
