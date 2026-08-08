@@ -48,6 +48,21 @@ foreach (['tippgeber.json', 'suchkunden.json', 'empfehlungen.json'] as $l) {
     $p = $datenOrdner . '/' . $l;
     $listen[$l] = is_file($p) ? count(json_decode(file_get_contents($p), true) ?: []) : null;
 }
+
+// Stand der Datenbank, auf der die Tippgeber-App arbeitet.
+$dbStand = null;
+$dbFehler = '';
+try {
+    require_once $wurzel . '/tippgeber-db.php';
+    $db = tg_db();
+    $dbStand = [];
+    foreach (['tippgeber', 'empfehlungen', 'anmeldelinks'] as $tabelle) {
+        $dbStand[$tabelle] = (int)$db->query("SELECT COUNT(*) FROM $tabelle")->fetchColumn();
+    }
+    $dbGroesse = is_file(TG_DB_DATEI) ? filesize(TG_DB_DATEI) : 0;
+} catch (Throwable $e) {
+    $dbFehler = $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -124,6 +139,26 @@ foreach (['tippgeber.json', 'suchkunden.json', 'empfehlungen.json'] as $l) {
       <code>empfehlungen.json</code> entsteht, sobald jemand über einen Tippgeber-Link
       ein Formular abschickt. Vorher ist sie erwartungsgemäß nicht vorhanden.
     </p>
+  </div>
+
+  <div class="karte">
+    <h2>4. Datenbank der Tippgeber-App</h2>
+    <?php if ($dbFehler !== ''): ?>
+      <p class="schlecht">Die Datenbank ist nicht erreichbar: <?php echo htmlspecialchars($dbFehler); ?></p>
+    <?php else: ?>
+      <table>
+        <tr><td>Datei</td><td class="ok"><?php echo number_format($dbGroesse / 1024, 1, ',', '.'); ?> KB · von außen gesperrt</td></tr>
+        <tr><td>Tippgeber</td>
+          <td class="<?php echo $dbStand['tippgeber'] ? 'ok' : 'warn'; ?>">
+            <?php echo $dbStand['tippgeber']; ?>
+            <?php if ($dbStand['tippgeber'] === (int)($listen['tippgeber.json'] ?? -1)): ?>
+              — deckt sich mit der bisherigen Liste, Übernahme hat geklappt
+            <?php endif; ?>
+          </td></tr>
+        <tr><td>Empfehlungen</td><td class="<?php echo $dbStand['empfehlungen'] ? 'ok' : 'hinweis'; ?>"><?php echo $dbStand['empfehlungen']; ?></td></tr>
+        <tr><td>Offene Anmeldelinks</td><td class="hinweis"><?php echo $dbStand['anmeldelinks']; ?> — verfallen nach 30 Minuten</td></tr>
+      </table>
+    <?php endif; ?>
   </div>
 </div>
 </body>
