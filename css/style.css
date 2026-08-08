@@ -860,6 +860,9 @@ body.nav-open { overflow: hidden; }
 }
 
 .section-head h2 { font-size: clamp(30px, 3.6vw, 46px); margin-top: 14px; max-width: 16ch; }
+/* Kurze Ueberschriften, die nicht umbrechen sollen — die 16ch oben
+   sind fuer lange Zeilen gedacht. */
+.section-head h2.h2-breit { max-width: none; }
 .section-head .eyebrow { margin-bottom: 0; }
 
 /* ---------- USP / Feature grid ---------- */
