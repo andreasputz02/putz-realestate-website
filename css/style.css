@@ -623,9 +623,10 @@ body.nav-open { overflow: hidden; }
 .hero-title {
   font-size: clamp(44px, 6.6vw, 92px);
   color: var(--white);
-  /* 15ch waeren 15px zu knapp fuer "Wir putzen Immobilien" — die Zeile
-     wuerde umbrechen und aus zwei Zeilen drei machen. */
-  max-width: 17ch;
+  /* Breit genug fuer "Wir putzen Immobilien" in einer Zeile — der
+     Umbruch vor "vom Markt" steht als <br> im Text. Bei 17ch brach
+     die erste Zeile und der Slogan wurde dreizeilig. */
+  max-width: 24ch;
   margin-bottom: 18px;
 }
 /* Die Unterzeile steht innerhalb des h1 (eine Ueberschrift, die Ort und
