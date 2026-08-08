@@ -1,33 +1,9 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 
-// Server-side only secret used to sign referral tokens. Never exposed to the client.
-define('REF_SECRET', 'putz-real-estate-referral-8f3c1a9d-2026');
-define('SITE_URL', 'https://putz-realestate.at');
-
-function base64url_encode($data) {
-    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
-}
-function base64url_decode($data) {
-    $pad = strlen($data) % 4;
-    if ($pad) $data .= str_repeat('=', 4 - $pad);
-    return base64_decode(strtr($data, '-_', '+/'));
-}
-function build_ref_token($vorname, $nachname, $email) {
-    $payload = base64url_encode($vorname . '|' . $nachname . '|' . $email);
-    $sig = substr(hash_hmac('sha256', $payload, REF_SECRET), 0, 16);
-    return $payload . '.' . $sig;
-}
-function decode_ref_token($token) {
-    $parts = explode('.', $token, 2);
-    if (count($parts) !== 2) return null;
-    [$payload, $sig] = $parts;
-    $expected = substr(hash_hmac('sha256', $payload, REF_SECRET), 0, 16);
-    if (!hash_equals($expected, $sig)) return null;
-    $fields = explode('|', base64url_decode($payload));
-    if (count($fields) !== 3) return null;
-    return ['vorname' => $fields[0], 'nachname' => $fields[1], 'email' => $fields[2]];
-}
+// Signatur der Empfehlungslinks — liegt in einer eigenen Datei, weil
+// der Tippgeber-Bereich dieselbe Berechnung braucht.
+require_once __DIR__ . '/ref-token.php';
 
 /**
  * Haengt einen Datensatz an eine JSON-Datei in data/ an.
@@ -246,7 +222,7 @@ if ($sent && $formName === 'Tippgeber-Registrierung') {
     mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
 
     // Persist the registration so it can be viewed in the password-protected admin list.
-    datensatz_anhaengen('tippgeber.json', [
+    $tippgeber = [
         'timestamp' => date('Y-m-d H:i'),
         'vorname' => $vorname,
         'nachname' => $nachname,
@@ -254,7 +230,15 @@ if ($sent && $formName === 'Tippgeber-Registrierung') {
         'telefon' => trim($_POST['nummer'] ?? ''),
         'email' => $email,
         'iban' => trim($_POST['iban'] ?? ''),
-    ]);
+    ];
+    datensatz_anhaengen('tippgeber.json', $tippgeber);
+
+    try {
+        require_once __DIR__ . '/tippgeber-db.php';
+        tg_tippgeber_sichern(tg_db(), $tippgeber);
+    } catch (Throwable $e) {
+        error_log('Tippgeber nicht in die Datenbank geschrieben: ' . $e->getMessage());
+    }
 }
 
 // For Karriere-Initiativbewerbungen, also send the applicant a confirmation.
@@ -336,7 +320,7 @@ if ($sent && $formName === 'Suchkunde-Anfrage') {
 //  gebracht hat, und das Tippgeber-Dashboard haette nichts anzuzeigen.
 // ------------------------------------------------------------
 if ($sent && $refInfo) {
-    datensatz_anhaengen('empfehlungen.json', [
+    $empfehlung = [
         // Kennung zum spaeteren Aendern des Status im Admin-Bereich.
         'id'        => bin2hex(random_bytes(8)),
         'zeitpunkt' => date('Y-m-d H:i'),
@@ -359,7 +343,19 @@ if ($sent && $refInfo) {
         'provision'         => null,
         'provision_bezahlt' => false,
         'notiz'             => '',
-    ]);
+    ];
+
+    // Zuerst in die JSON-Datei — der bewaehrte Weg, dient als Sicherung.
+    datensatz_anhaengen('empfehlungen.json', $empfehlung);
+
+    // Dann in die Datenbank, auf der die Tippgeber-App arbeitet.
+    // In try/catch, damit ein Datenbankproblem die Anfrage nicht gefaehrdet.
+    try {
+        require_once __DIR__ . '/tippgeber-db.php';
+        tg_empfehlung_anlegen(tg_db(), $empfehlung);
+    } catch (Throwable $e) {
+        error_log('Empfehlung nicht in die Datenbank geschrieben: ' . $e->getMessage());
+    }
 }
 
 // Objektanfragen zusaetzlich in Justimmo eintragen.

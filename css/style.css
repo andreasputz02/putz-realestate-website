@@ -2569,3 +2569,177 @@ body.modal-open { overflow: hidden; }
   .zahlen-titel, .zahlen-feld { grid-area: auto; }
   .zahl { position: static; transform: none; opacity: 1; }
 }
+
+/* ============================================================
+   TIPPGEBER-BEREICH (Anmeldung + App)
+   Eigenständige Seiten ohne die normale Navigation — sie sollen
+   sich wie eine App anfühlen, nicht wie eine Unterseite.
+   ============================================================ */
+
+/* --- Anmeldung --- */
+.tg-anmeldung {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 40px 22px;
+}
+.tg-karte {
+  width: 100%;
+  max-width: 430px;
+  background: #131215;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: 40px 34px;
+  text-align: center;
+}
+.tg-logo { display: inline-block; margin-bottom: 28px; }
+.tg-logo img { height: 38px; width: auto; }
+.tg-karte h1 { font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+.tg-lede { color: rgba(255, 255, 255, 0.6); font-size: 14.5px; line-height: 1.65; }
+.tg-karte .tg-lede { margin-bottom: 26px; }
+.tg-form { text-align: left; }
+.tg-form .field { margin-bottom: 18px; }
+
+.tg-meldung {
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  margin-bottom: 22px;
+  text-align: left;
+}
+.tg-meldung.ist-ok { background: rgba(251, 228, 139, 0.14); color: var(--gold-light); }
+.tg-meldung.ist-fehler { background: rgba(239, 128, 128, 0.14); color: #f4a5a5; }
+
+.tg-fuss {
+  margin-top: 26px;
+  font-size: 13px;
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.45);
+}
+.tg-fuss a { color: var(--gold-dim); text-decoration: underline; }
+
+/* --- App --- */
+.tg-app-body { background: var(--black); }
+.tg-kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  position: sticky;
+  top: 0;
+  background: rgba(11, 11, 12, 0.92);
+  backdrop-filter: blur(12px);
+  z-index: 10;
+}
+.tg-kopf-logo img { height: 30px; width: auto; display: block; }
+.tg-abmelden { font-size: 13px; color: rgba(255, 255, 255, 0.55); }
+.tg-abmelden:hover { color: var(--gold); }
+
+.tg-app { max-width: 680px; margin: 0 auto; padding: 34px 22px 70px; }
+.tg-begruessung { margin-bottom: 28px; }
+.tg-begruessung h1 { font-size: clamp(26px, 5vw, 34px); font-weight: 700; margin-top: 8px; }
+
+.tg-kennzahlen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+.tg-kachel {
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-md);
+  padding: 20px 18px;
+}
+.tg-kachel strong {
+  display: block;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.tg-kachel span {
+  display: block;
+  margin-top: 6px;
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+.tg-kachel.ist-gold { background: rgba(251, 228, 139, 0.12); border-color: rgba(251, 228, 139, 0.3); }
+.tg-kachel.ist-gold strong { color: var(--gold); }
+
+.tg-hinweis {
+  margin-top: 14px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+}
+.tg-hinweis strong { color: var(--gold); }
+
+.tg-abschnitt { margin-top: 44px; }
+.tg-abschnitt h2 { font-size: 19px; font-weight: 600; margin-bottom: 8px; }
+.tg-abschnitt .tg-lede { margin-bottom: 16px; }
+
+.tg-link-box { display: flex; gap: 10px; flex-wrap: wrap; }
+.tg-link-box input {
+  flex: 1 1 220px;
+  min-width: 0;
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 13px 14px;
+  font-size: 13px;
+  font-family: inherit;
+}
+.tg-link-box .btn { flex: none; padding: 13px 22px; font-size: 13.5px; }
+.tg-teilen { margin-top: 12px; font-size: 13px; color: rgba(255, 255, 255, 0.5); }
+.tg-teilen a { color: var(--gold-dim); text-decoration: underline; }
+
+.tg-leer {
+  background: #141416;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-md);
+  padding: 40px 26px;
+  text-align: center;
+}
+.tg-leer p:first-child { font-weight: 600; margin-bottom: 8px; }
+
+.tg-liste { display: flex; flex-direction: column; gap: 12px; }
+.tg-eintrag {
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+}
+.tg-eintrag-kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.tg-eintrag-kopf strong { font-size: 15.5px; font-weight: 600; }
+.tg-eintrag-meta { margin-top: 6px; font-size: 12.5px; color: rgba(255, 255, 255, 0.45); }
+.tg-provision { margin-top: 10px; font-size: 13.5px; color: rgba(255, 255, 255, 0.7); }
+.tg-provision strong { color: var(--gold); }
+
+.tg-status {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 5px 11px;
+  border-radius: 100px;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+.tg-status.ist-verkauft { background: rgba(127, 209, 139, 0.16); color: #8fd89b; }
+.tg-status.ist-abgelehnt { background: rgba(255, 255, 255, 0.07); color: rgba(255, 255, 255, 0.4); }
+.tg-status.ist-termin,
+.tg-status.ist-in_bearbeitung { background: rgba(251, 228, 139, 0.16); color: var(--gold-light); }
+
+.tg-app .tg-fuss { margin-top: 50px; text-align: center; }

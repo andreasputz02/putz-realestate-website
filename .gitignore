@@ -1,6 +1,13 @@
 .DS_Store
 .claude/
+
+# Personenbezogene Daten — Namen, E-Mail-Adressen, IBANs.
+# Duerfen niemals ins Repository. data/.htaccess bleibt versioniert,
+# denn die Datei ist es, die den Ordner nach aussen abschottet.
 data/*.json
+data/*.sqlite
+data/*.sqlite-wal
+data/*.sqlite-shm
 
 # Justimmo-Zugangsdaten — duerfen niemals ins Repository
 justimmo-config.php

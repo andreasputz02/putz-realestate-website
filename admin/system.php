@@ -27,7 +27,10 @@ function syntax_pruefen(string $pfad): array {
     }
 }
 
-$dateien = ['send-mail.php', 'justimmo.php', 'justimmo-lib.php'];
+$dateien = [
+    'send-mail.php', 'justimmo.php', 'justimmo-lib.php',
+    'ref-token.php', 'tippgeber-db.php', 'tippgeber-login.php', 'tippgeber-app.php',
+];
 $pruefungen = [];
 foreach ($dateien as $d) {
     $pruefungen[$d] = syntax_pruefen($wurzel . '/' . $d);
