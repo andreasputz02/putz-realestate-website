@@ -29,6 +29,35 @@ function decode_ref_token($token) {
     return ['vorname' => $fields[0], 'nachname' => $fields[1], 'email' => $fields[2]];
 }
 
+/**
+ * Haengt einen Datensatz an eine JSON-Datei in data/ an.
+ *
+ * Die Datei wird waehrend des Schreibens gesperrt, damit zwei gleichzeitige
+ * Absendungen einander nicht ueberschreiben.
+ *
+ * Rueckgabe: true bei Erfolg. Ein Fehlschlag darf den Mailversand nie
+ * aufhalten — die E-Mail ist der verlaessliche Weg.
+ */
+function datensatz_anhaengen(string $dateiname, array $eintrag): bool {
+    $ordner = __DIR__ . '/data';
+    if (!is_dir($ordner) && !mkdir($ordner, 0755, true)) return false;
+
+    $fp = fopen($ordner . '/' . $dateiname, 'c+');
+    if (!$fp) return false;
+
+    flock($fp, LOCK_EX);
+    $bestand = json_decode(stream_get_contents($fp), true);
+    if (!is_array($bestand)) $bestand = [];
+    $bestand[] = $eintrag;
+    ftruncate($fp, 0);
+    rewind($fp);
+    fwrite($fp, json_encode($bestand, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    fflush($fp);
+    flock($fp, LOCK_UN);
+    fclose($fp);
+    return true;
+}
+
 // Sends a plain-text email, optionally with a single file attachment.
 function send_mail_maybe_with_attachment($to, $subject, $bodyText, $fromHeader, $replyTo, $attachment = null) {
     $encodedSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
@@ -155,6 +184,7 @@ $skip = ['website', 'form_name', 'ref'];
 $lines = [];
 
 // If this submission arrived via a tippgeber's referral link, resolve who referred them.
+$refInfo = null;
 if (!empty($_POST['ref'])) {
     $refInfo = decode_ref_token($_POST['ref']);
     if ($refInfo) {
@@ -216,12 +246,7 @@ if ($sent && $formName === 'Tippgeber-Registrierung') {
     mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
 
     // Persist the registration so it can be viewed in the password-protected admin list.
-    $dataDir = __DIR__ . '/data';
-    if (!is_dir($dataDir)) {
-        mkdir($dataDir, 0755, true);
-    }
-    $dataFile = $dataDir . '/tippgeber.json';
-    $entry = [
+    datensatz_anhaengen('tippgeber.json', [
         'timestamp' => date('Y-m-d H:i'),
         'vorname' => $vorname,
         'nachname' => $nachname,
@@ -229,21 +254,7 @@ if ($sent && $formName === 'Tippgeber-Registrierung') {
         'telefon' => trim($_POST['nummer'] ?? ''),
         'email' => $email,
         'iban' => trim($_POST['iban'] ?? ''),
-    ];
-    $fp = fopen($dataFile, 'c+');
-    if ($fp) {
-        flock($fp, LOCK_EX);
-        $existing = stream_get_contents($fp);
-        $records = json_decode($existing, true);
-        if (!is_array($records)) $records = [];
-        $records[] = $entry;
-        ftruncate($fp, 0);
-        rewind($fp);
-        fwrite($fp, json_encode($records, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        fflush($fp);
-        flock($fp, LOCK_UN);
-        fclose($fp);
-    }
+    ]);
 }
 
 // For Karriere-Initiativbewerbungen, also send the applicant a confirmation.
@@ -301,12 +312,7 @@ if ($sent && $formName === 'Suchkunde-Anfrage') {
     mail($email, $confirmSubject, $confirmBody, implode("\r\n", $confirmHeaders));
 
     // Persist the search profile in its own list (separate from the Tippgeber list).
-    $dataDir = __DIR__ . '/data';
-    if (!is_dir($dataDir)) {
-        mkdir($dataDir, 0755, true);
-    }
-    $dataFile = $dataDir . '/suchkunden.json';
-    $entry = [
+    datensatz_anhaengen('suchkunden.json', [
         'timestamp' => date('Y-m-d H:i'),
         'vorname' => $vorname,
         'nachname' => $nachname,
@@ -318,21 +324,42 @@ if ($sent && $formName === 'Suchkunde-Anfrage') {
         'zimmer' => trim($_POST['zimmer'] ?? ''),
         'groesse' => trim($_POST['groesse'] ?? ''),
         'sonderwuensche' => trim($_POST['sonderwuensche'] ?? ''),
-    ];
-    $fp = fopen($dataFile, 'c+');
-    if ($fp) {
-        flock($fp, LOCK_EX);
-        $existing = stream_get_contents($fp);
-        $records = json_decode($existing, true);
-        if (!is_array($records)) $records = [];
-        $records[] = $entry;
-        ftruncate($fp, 0);
-        rewind($fp);
-        fwrite($fp, json_encode($records, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        fflush($fp);
-        flock($fp, LOCK_UN);
-        fclose($fp);
-    }
+    ]);
+}
+
+// ------------------------------------------------------------
+//  Empfehlung festhalten
+//
+//  Kam die Absendung ueber den Link eines Tippgebers, wird sie hier
+//  gespeichert. Bisher stand der Tippgeber nur im Text der E-Mail —
+//  damit war nicht nachvollziehbar, wer wie viele Empfehlungen
+//  gebracht hat, und das Tippgeber-Dashboard haette nichts anzuzeigen.
+// ------------------------------------------------------------
+if ($sent && $refInfo) {
+    datensatz_anhaengen('empfehlungen.json', [
+        // Kennung zum spaeteren Aendern des Status im Admin-Bereich.
+        'id'        => bin2hex(random_bytes(8)),
+        'zeitpunkt' => date('Y-m-d H:i'),
+        'formular'  => $formName,
+
+        // Wer empfohlen hat
+        'tippgeber_vorname'  => $refInfo['vorname'],
+        'tippgeber_nachname' => $refInfo['nachname'],
+        'tippgeber_email'    => $refInfo['email'],
+
+        // Wen er empfohlen hat. Der Tippgeber sieht spaeter nur den Namen,
+        // die Kontaktdaten bleiben dem Admin-Bereich vorbehalten.
+        'name'    => trim(($_POST['vorname'] ?? '') . ' ' . ($_POST['nachname'] ?? '')),
+        'email'   => $email,
+        'telefon' => trim($_POST['telefon'] ?? $_POST['nummer'] ?? ''),
+        'objekt'  => trim($_POST['objekt'] ?? ''),
+
+        // Vom Admin-Bereich gepflegt
+        'status'            => 'eingegangen',
+        'provision'         => null,
+        'provision_bezahlt' => false,
+        'notiz'             => '',
+    ]);
 }
 
 // Objektanfragen zusaetzlich in Justimmo eintragen.

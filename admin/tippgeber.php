@@ -56,6 +56,7 @@ $suchkunden = array_reverse($suchkunden);
       </div>
       <div>
         <a class="logout" href="justimmo-test.php">Justimmo prüfen</a>
+        <a class="logout" href="system.php">Systemprüfung</a>
         <a class="logout" href="logout.php">Abmelden</a>
       </div>
     </div>
