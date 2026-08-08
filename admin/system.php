@@ -52,6 +52,8 @@ foreach (['tippgeber.json', 'suchkunden.json', 'empfehlungen.json'] as $l) {
 // Stand der Datenbank, auf der die Tippgeber-App arbeitet.
 $dbStand = null;
 $dbFehler = '';
+$adressen = [];
+$linkListe = [];
 try {
     require_once $wurzel . '/tippgeber-db.php';
     $db = tg_db();
@@ -60,8 +62,45 @@ try {
         $dbStand[$tabelle] = (int)$db->query("SELECT COUNT(*) FROM $tabelle")->fetchColumn();
     }
     $dbGroesse = is_file(TG_DB_DATEI) ? filesize(TG_DB_DATEI) : 0;
+
+    // Genau diese Adressen funktionieren bei der Anmeldung — jede andere
+    // Schreibweise fuehrt zur immer gleichen, nichtssagenden Antwort.
+    $adressen = $db->query("SELECT vorname, nachname, email FROM tippgeber ORDER BY id")->fetchAll();
+
+    // Wurde ueberhaupt ein Anmeldelink erzeugt? Wenn ja, lag es nicht an
+    // der Adresse, sondern am Mailversand.
+    $linkListe = $db->query("
+        SELECT l.erstellt, l.gueltig_bis, l.benutzt, t.email
+        FROM anmeldelinks l JOIN tippgeber t ON t.id = l.tippgeber_id
+        ORDER BY l.erstellt DESC LIMIT 5
+    ")->fetchAll();
 } catch (Throwable $e) {
     $dbFehler = $e->getMessage();
+}
+
+// Testnachricht verschicken, um den Mailversand als Ursache auszuschliessen.
+$testErgebnis = null;
+if (!empty($_POST['testmail'])) {
+    $ziel = trim($_POST['testmail']);
+    if (filter_var($ziel, FILTER_VALIDATE_EMAIL)) {
+        $kopf = [
+            'From: PUTZ Real Estate <noreply@putz-realestate.at>',
+            'Reply-To: office@putzrealestate.at',
+            'Content-Type: text/plain; charset=UTF-8',
+            'MIME-Version: 1.0',
+        ];
+        $ok = mail(
+            $ziel,
+            '=?UTF-8?B?' . base64_encode('Testnachricht vom Server') . '?=',
+            "Diese Nachricht bestätigt, dass der Mailversand vom Server funktioniert.\n\n"
+            . "Sie wurde mit denselben Absenderangaben verschickt wie der Anmeldelink\n"
+            . "für den Tippgeber-Bereich.\n\nPUTZ Real Estate",
+            implode("\r\n", $kopf)
+        );
+        $testErgebnis = [$ok, $ziel];
+    } else {
+        $testErgebnis = [null, $ziel];
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -159,6 +198,73 @@ try {
         <tr><td>Offene Anmeldelinks</td><td class="hinweis"><?php echo $dbStand['anmeldelinks']; ?> — verfallen nach 30 Minuten</td></tr>
       </table>
     <?php endif; ?>
+  </div>
+
+  <div class="karte">
+    <h2>5. Anmeldung — Fehlersuche</h2>
+
+    <p class="hinweis" style="margin-bottom:10px;">
+      <strong>Nur diese Adressen funktionieren.</strong> Jede andere Schreibweise führt zur
+      immer gleichen Antwort, ohne dass eine Mail rausgeht — das ist Absicht, damit man nicht
+      ausprobieren kann, wer Tippgeber ist.
+    </p>
+    <table>
+      <?php foreach ($adressen as $a): ?>
+        <tr>
+          <td><?php echo htmlspecialchars(trim($a['vorname'] . ' ' . $a['nachname'])); ?></td>
+          <td><code><?php echo htmlspecialchars($a['email']); ?></code></td>
+        </tr>
+      <?php endforeach; ?>
+      <?php if (!$adressen): ?>
+        <tr><td colspan="2" class="schlecht">Keine Tippgeber in der Datenbank — die Übernahme hat nicht geklappt.</td></tr>
+      <?php endif; ?>
+    </table>
+
+    <h3 style="font-size:14px; margin:22px 0 8px; color:rgba(255,255,255,0.8);">Zuletzt erzeugte Anmeldelinks</h3>
+    <?php if ($linkListe): ?>
+      <p class="hinweis" style="margin-bottom:8px;">
+        Steht hier ein Eintrag, wurde der Link erzeugt — dann lag es nicht an der Adresse,
+        sondern am Mailversand oder am Spam-Ordner.
+      </p>
+      <table>
+        <?php foreach ($linkListe as $l): ?>
+          <tr>
+            <td><?php echo htmlspecialchars($l['erstellt']); ?></td>
+            <td><?php echo htmlspecialchars($l['email']); ?>
+              — <?php echo (int)$l['benutzt'] === 1 ? 'verwendet' : 'noch offen'; ?></td>
+          </tr>
+        <?php endforeach; ?>
+      </table>
+    <?php else: ?>
+      <p class="warn">Es wurde noch nie ein Anmeldelink erzeugt. Die eingegebene Adresse
+      stand also nicht in der Liste oben.</p>
+    <?php endif; ?>
+
+    <h3 style="font-size:14px; margin:22px 0 8px; color:rgba(255,255,255,0.8);">Testnachricht schicken</h3>
+    <p class="hinweis" style="margin-bottom:10px;">
+      Gleiche Absenderangaben wie beim Anmeldelink. Kommt diese Nachricht nicht an,
+      liegt es am Mailversand — nicht an der Tippgeber-App.
+    </p>
+    <?php if ($testErgebnis !== null): ?>
+      <?php [$ok, $ziel] = $testErgebnis; ?>
+      <p class="<?php echo $ok ? 'ok' : 'schlecht'; ?>" style="margin-bottom:10px;">
+        <?php if ($ok === null): ?>
+          „<?php echo htmlspecialchars($ziel); ?>“ ist keine gültige Adresse.
+        <?php elseif ($ok): ?>
+          Der Server hat die Nachricht an <?php echo htmlspecialchars($ziel); ?> übergeben.
+          Kommt sie trotzdem nicht an, prüfen Sie den Spam-Ordner.
+        <?php else: ?>
+          Der Server konnte die Nachricht nicht übergeben — hier liegt die Ursache.
+        <?php endif; ?>
+      </p>
+    <?php endif; ?>
+    <form method="post" style="display:flex; gap:10px; flex-wrap:wrap;">
+      <input type="email" name="testmail" required placeholder="ihre@adresse.at"
+             style="flex:1 1 240px; background:#0f0f11; border:1px solid rgba(255,255,255,0.14); color:#fff; border-radius:8px; padding:10px 12px; font-size:14px; font-family:inherit;">
+      <button type="submit" style="background:#fbe48b; color:#17161a; border:0; border-radius:100px; padding:10px 22px; font-weight:700; font-size:13.5px; cursor:pointer; font-family:inherit;">
+        Testnachricht senden
+      </button>
+    </form>
   </div>
 </div>
 </body>
