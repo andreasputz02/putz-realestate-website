@@ -2860,3 +2860,28 @@ body.modal-open { overflow: hidden; }
   background: #141416;
   border-color: var(--gold);
 }
+
+/* ------------------------------------------------------------
+   Grundfarbe im Tippgeber-Bereich.
+
+   body setzt global eine DUNKLE Schriftfarbe — auf der restlichen
+   Website funktioniert das, weil jeder Abschnitt seine eigene Farbe
+   mitbringt. Die Tippgeber-Seiten haben diese Abschnitte nicht,
+   dadurch stand alles ohne eigene Farbe schwarz auf schwarz.
+
+   Deshalb hier an der Wurzel setzen statt jedes Element einzeln.
+   Die Überschriften brauchen zusätzlich eine eigene Regel: die
+   globale h1–h4-Regel färbt sie direkt ein, da hilft Vererbung nicht.
+   ------------------------------------------------------------ */
+.tg-anmeldung,
+.tg-app-body { color: #fff; }
+
+.tg-anmeldung h1,
+.tg-anmeldung h2,
+.tg-anmeldung h3,
+.tg-app h1,
+.tg-app h2,
+.tg-app h3,
+.tg-eintrag h1,
+.tg-eintrag h2,
+.tg-eintrag h3 { color: #fff; }
