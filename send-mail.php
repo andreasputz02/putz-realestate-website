@@ -153,6 +153,13 @@ $labels = [
     'nutzflaeche' => 'Nutzfläche (m²)',
     'baujahr' => 'Baujahr',
     'zustand' => 'Zustand',
+    'strasse' => 'Straße',
+    'hausnummer' => 'Hausnummer',
+    'plz' => 'PLZ',
+    'ort' => 'Ort',
+    'zimmeranzahl' => 'Zimmer',
+    'stockwerk' => 'Stockwerk',
+    'ausstattung' => 'Ausstattung',
 ];
 
 // Karriere-Initiativbewerbung may include a CV/cover letter upload.
