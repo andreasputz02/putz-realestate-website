@@ -3123,3 +3123,65 @@ body.modal-open { overflow: hidden; }
   .zahlenband { grid-template-columns: repeat(2, 1fr); gap: 34px 20px; padding: 36px 22px; }
   .zahlenband-feld:nth-child(odd) { border-left: 0; }
 }
+
+/* ============================================================
+   VERGLEICH — privat verkaufen oder mit uns
+   ============================================================ */
+.vergleich {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* Der Untergrund scheint durch die Luecken und bildet so die
+     Trennlinien — ein eigener Rahmen pro Zelle wuerde doppelt zeichnen. */
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.vergleich-kopf {
+  padding: 20px 26px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.vergleich-kopf.ist-privat { background: #101012; color: rgba(255, 255, 255, 0.45); }
+.vergleich-kopf.ist-wir    { background: #1c1a12; color: var(--gold); }
+
+.vergleich-zelle {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 22px 26px;
+}
+.vergleich-zelle.ist-privat { background: #0f0f11; }
+.vergleich-zelle.ist-wir    { background: #16150f; }
+
+.vergleich-zeichen { width: 19px; height: 19px; flex-shrink: 0; margin-top: 2px; }
+.ist-privat .vergleich-zeichen { color: rgba(255, 255, 255, 0.3); }
+.ist-wir .vergleich-zeichen    { color: var(--gold); }
+
+.vergleich-zelle strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.vergleich-zelle.ist-privat strong { color: rgba(255, 255, 255, 0.72); }
+.vergleich-zelle.ist-wir strong    { color: var(--white); }
+.vergleich-zelle span {
+  display: block;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+@media (max-width: 720px) {
+  /* Untereinander waeren die Themen doppelt betitelt — deshalb bleiben
+     die zwei Spalten, nur schmaler und mit dem Zeichen ueber dem Text. */
+  .vergleich-zelle { flex-direction: column; gap: 8px; padding: 16px 14px; }
+  .vergleich-kopf { padding: 14px; font-size: 11px; letter-spacing: 0.08em; }
+  .vergleich-zelle strong { font-size: 14px; }
+  .vergleich-zelle span { font-size: 13.5px; }
+}
