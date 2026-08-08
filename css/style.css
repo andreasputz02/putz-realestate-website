@@ -3192,49 +3192,59 @@ body.modal-open { overflow: hidden; }
 }
 
 /* ============================================================
-   SLOGAN — kurzer Lichtimpuls auf dem Wort "putzen"
-   Ein einmaliger Puls: der Schein waechst weich um die Buchstaben,
-   das Wort wird eine Spur heller und minimal groesser, danach steht
-   alles wieder ruhig. Nur dieses eine Wort bewegt sich.
+   SLOGAN — Lichtimpuls, der ueber das Wort "putzen" wandert
+   Jeder Buchstabe bekommt denselben Puls, nur zeitversetzt. So
+   laeuft das Licht von links nach rechts durch das Wort, statt
+   ueberall gleichzeitig anzugehen. Die leichte Vergroesserung
+   liegt auf dem ganzen Wort — pro Buchstabe wuerde sie die
+   Abstaende zappeln lassen.
    ============================================================ */
 .hero-title em.marker { display: inline-block; }
-.hero-title em.marker > span {
-  /* Eigene Box, damit sich das Wort skalieren laesst, ohne den
-     uebrigen Satz zu beruehren — transform aendert kein Layout. */
-  display: inline-block;
-}
+.hero-title em.marker > span { display: inline-block; }
+
+/* Die Buchstaben bleiben inline: so aendert sich am Satzfluss
+   nichts, es wird nur Farbe und Schein animiert. */
+.hero-title em.marker .buchstabe { font-style: normal; }
+
 .hero-title em.marker.ist-markiert > span {
-  animation: slogan-puls 1.15s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: slogan-atem 1.15s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.hero-title em.marker.ist-markiert .buchstabe {
+  animation: slogan-puls 0.75s cubic-bezier(0.4, 0, 0.2, 1) both;
+  /* Der Versatz pro Buchstabe kommt aus dem Skript. */
+  animation-delay: var(--versatz, 0s);
 }
 
-/* Weicher Schein statt hartem Schatten: kein Versatz, nur Streuung.
-   Drei Lagen — ein heller Kern direkt an den Buchstaben, darum zwei
-   immer weitere, die nach aussen ausduennen. Zwischen 40 % und 54 %
-   haelt der Hoehepunkt kurz, damit das Aufleuchten auch ankommt. */
+/* Weicher Schein statt hartem Schatten: kein Versatz, nur Streuung,
+   in drei Lagen, damit das Licht nach aussen ausduennt. */
 @keyframes slogan-puls {
   0% {
     color: var(--gold-light);
     text-shadow: 0 0 0 rgba(252, 228, 140, 0),
                  0 0 0 rgba(252, 228, 140, 0),
                  0 0 0 rgba(252, 228, 140, 0);
-    transform: scale(1);
   }
-  40%, 54% {
+  45%, 58% {
     color: #fffaea;
     text-shadow: 0 0 9px rgba(255, 243, 200, 0.85),
                  0 0 26px rgba(252, 228, 140, 0.7),
                  0 0 58px rgba(252, 228, 140, 0.38);
-    transform: scale(1.03);
   }
   100% {
     color: var(--gold-light);
     text-shadow: 0 0 0 rgba(252, 228, 140, 0),
                  0 0 0 rgba(252, 228, 140, 0),
                  0 0 0 rgba(252, 228, 140, 0);
-    transform: scale(1);
   }
 }
 
+@keyframes slogan-atem {
+  0%          { transform: scale(1); }
+  45%, 58%    { transform: scale(1.03); }
+  100%        { transform: scale(1); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hero-title em.marker.ist-markiert > span { animation: none; }
+  .hero-title em.marker.ist-markiert > span,
+  .hero-title em.marker.ist-markiert .buchstabe { animation: none; }
 }

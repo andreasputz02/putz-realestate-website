@@ -529,13 +529,27 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
   beobachter.observe(band);
 })();
 
-// ---------- Slogan: Lichtimpuls ----------
-// Einmal pro Seitenaufruf, sobald das Wort im Bild ist. Ohne
-// JavaScript steht das Wort einfach normal da — es wird zu keinem
-// Zeitpunkt ausgeblendet.
+// ---------- Slogan: wandernder Lichtimpuls ----------
+// Einmal pro Seitenaufruf, sobald das Wort im Bild ist. Fuer den
+// Verlauf von links nach rechts wird das Wort in Buchstaben zerlegt
+// und jeder bekommt denselben Puls mit ein wenig Versatz.
+// Ohne JavaScript bleibt das Wort unveraendert stehen.
 (function () {
   const wort = document.querySelector(".hero-title em[data-marker]");
   if (!wort) return;
+
+  const span = wort.querySelector("span");
+  const text = span.textContent;
+  const VERSATZ = 0.075;   // Sekunden je Buchstabe
+
+  span.textContent = "";
+  [...text].forEach((zeichen, i) => {
+    const b = document.createElement("i");
+    b.className = "buchstabe";
+    b.textContent = zeichen;
+    b.style.setProperty("--versatz", (i * VERSATZ).toFixed(3) + "s");
+    span.appendChild(b);
+  });
 
   const beobachter = new IntersectionObserver((eintraege) => {
     if (!eintraege.some((e) => e.isIntersecting)) return;
