@@ -162,16 +162,6 @@ function setupTrackSlider(track, gap) {
 
 document.querySelectorAll(".video-slider-track, .testimonial-slider-track, .team-slider-track, .reel-track").forEach((track) => setupTrackSlider(track, 28));
 
-// ---------- Vorher-Nachher-Vergleich ----------
-// Der eigentliche Regler ist ein unsichtbares <input type="range"> ueber dem Bild.
-// Dadurch funktionieren Maus, Touch und Tastatur ohne eigenen Code.
-document.querySelectorAll(".compare").forEach((box) => {
-  const range = box.querySelector(".compare-range");
-  if (!range) return;
-  const apply = () => box.style.setProperty("--pos", range.value + "%");
-  range.addEventListener("input", apply);
-  apply();
-});
 
 // ---------- Reels: automatisch abspielen, sobald die Sektion sichtbar wird ----------
 (function () {

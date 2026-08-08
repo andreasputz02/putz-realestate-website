@@ -8,7 +8,7 @@
 <meta name="description" content="Ihr Immobilienmakler für Wien, den Speckgürtel und das Weinviertel. PUTZ Real Estate begleitet Sie beim Verkauf und Kauf Ihrer Immobilie — mit kostenloser Bewertung und persönlicher Beratung.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b0b0c'/><circle cx='32' cy='32' r='14' fill='%23fbe48b'/></svg>">
 <link rel="stylesheet" href="css/fonts.css?v=3">
-<link rel="stylesheet" href="css/style.css?v=126">
+<link rel="stylesheet" href="css/style.css?v=127">
 </head>
 <body class="page-dark">
 
@@ -95,6 +95,31 @@
       </div>
 
       <div class="listing-grid" data-listings data-limit="3"></div>
+    </div>
+  </section>
+
+  <!-- ================= ZAHLEN — SCROLL-ÜBERGANG =================
+       Hoher Abschnitt mit klebendem Innenbereich: beim Scrollen zoomt
+       erst die Überschrift heran, dann kippt der Hintergrund auf Gold
+       und die vier Kennzahlen fliegen nacheinander aus der Mitte heraus.
+       Gesteuert von js/script.js — ohne JS bleiben die Zahlen als
+       schlichte Reihe stehen. -->
+  <section class="zahlen-scroll" data-zahlen>
+    <div class="zahlen-sticky">
+      <h2 class="zahlen-titel">Warum wir deine Immobilie<br>vom Markt <em>putzen</em>!</h2>
+
+      <div class="zahlen-feld">
+        <!-- --x/--y: Richtung und Weite, in die die Zahl herausfliegt.
+             Bewusst in vw/vh, damit sich der Versatz auf den Bildschirm
+             bezieht und nicht auf die Größe der Zahl selbst.
+
+             Aufeinanderfolgende Zahlen liegen diagonal gegenüber —
+             sonst kreuzen sich ihre Bahnen und sie überlagern einander. -->
+        <div class="zahl" style="--x:-26vw; --y:-24vh"><strong>100+</strong><span>Zufriedene Kunden</span></div>
+        <div class="zahl" style="--x: 27vw; --y: 25vh"><strong>50 Mio €</strong><span>Transaktionsvolumen</span></div>
+        <div class="zahl" style="--x: 26vw; --y:-23vh"><strong>5,0</strong><span>Sterne auf Google</span></div>
+        <div class="zahl" style="--x:-25vw; --y: 24vh"><strong>2</strong><span>Standorte in Wien &amp; NÖ</span></div>
+      </div>
     </div>
   </section>
 
@@ -224,55 +249,6 @@
           Mehr davon auf Instagram
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= VORHER-NACHHER ================= -->
-  <section class="section section-dark" style="padding-top:0;">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <div>
-          <p class="eyebrow on-dark">Fotografie</p>
-          <h2 style="max-width:20ch;">Ich schaffe das auch selber!</h2>
-          <p class="lede" style="margin-top:16px;">Vielleicht schaffen Sie es selber, aber bis auf welches Niveau?</p>
-        </div>
-      </div>
-
-      <div class="compare" data-reveal>
-        <img class="compare-after" src="assets/img/vergleich-danach.jpg" alt="Dieselbe Immobilie, professionell fotografiert">
-        <img class="compare-before" src="assets/img/vergleich-davor.jpg" alt="Immobilie, selbst mit dem Handy fotografiert">
-        <div class="compare-line"></div>
-        <svg class="compare-handle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg>
-        <input type="range" class="compare-range" min="0" max="100" value="50" step="0.1"
-               aria-label="Vergleich zwischen selbst fotografiert und professionell fotografiert verschieben">
-        <span class="compare-label compare-label-l">Selbst fotografiert</span>
-        <span class="compare-label compare-label-r">Von uns</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= ZAHLEN — SCROLL-ÜBERGANG =================
-       Hoher Abschnitt mit klebendem Innenbereich: beim Scrollen zoomt
-       erst die Überschrift heran, dann kippt der Hintergrund auf Gold
-       und die vier Kennzahlen fliegen nacheinander aus der Mitte heraus.
-       Gesteuert von js/script.js — ohne JS bleiben die Zahlen als
-       schlichte Reihe stehen. -->
-  <section class="zahlen-scroll" data-zahlen>
-    <div class="zahlen-sticky">
-      <h2 class="zahlen-titel">Warum wir deine Immobilie<br>vom Markt <em>putzen</em>!</h2>
-
-      <div class="zahlen-feld">
-        <!-- --x/--y: Richtung und Weite, in die die Zahl herausfliegt.
-             Bewusst in vw/vh, damit sich der Versatz auf den Bildschirm
-             bezieht und nicht auf die Größe der Zahl selbst.
-
-             Aufeinanderfolgende Zahlen liegen diagonal gegenüber —
-             sonst kreuzen sich ihre Bahnen und sie überlagern einander. -->
-        <div class="zahl" style="--x:-26vw; --y:-24vh"><strong>100+</strong><span>Zufriedene Kunden</span></div>
-        <div class="zahl" style="--x: 27vw; --y: 25vh"><strong>50 Mio €</strong><span>Transaktionsvolumen</span></div>
-        <div class="zahl" style="--x: 26vw; --y:-23vh"><strong>5,0</strong><span>Sterne auf Google</span></div>
-        <div class="zahl" style="--x:-25vw; --y: 24vh"><strong>2</strong><span>Standorte in Wien &amp; NÖ</span></div>
       </div>
     </div>
   </section>
@@ -847,7 +823,7 @@
 <script src="js/listings-data.js?v=5"></script>
 <script src="justimmo.php?v=2"></script>
 <script src="js/listings.js?v=20"></script>
-<script src="js/script.js?v=36"></script>
+<script src="js/script.js?v=37"></script>
 
 </body>
 </html>
