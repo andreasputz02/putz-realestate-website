@@ -3204,26 +3204,33 @@ body.modal-open { overflow: hidden; }
   display: inline-block;
 }
 .hero-title em.marker.ist-markiert > span {
-  animation: slogan-puls 1s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: slogan-puls 1.15s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
-/* Weicher Schein statt hartem Schatten: kein Versatz, nur Streuung,
-   und in zwei Lagen, damit das Licht nach aussen ausduennt. */
+/* Weicher Schein statt hartem Schatten: kein Versatz, nur Streuung.
+   Drei Lagen — ein heller Kern direkt an den Buchstaben, darum zwei
+   immer weitere, die nach aussen ausduennen. Zwischen 40 % und 54 %
+   haelt der Hoehepunkt kurz, damit das Aufleuchten auch ankommt. */
 @keyframes slogan-puls {
   0% {
     color: var(--gold-light);
-    text-shadow: 0 0 0 rgba(252, 228, 140, 0);
+    text-shadow: 0 0 0 rgba(252, 228, 140, 0),
+                 0 0 0 rgba(252, 228, 140, 0),
+                 0 0 0 rgba(252, 228, 140, 0);
     transform: scale(1);
   }
-  45% {
-    color: #fef0bb;
-    text-shadow: 0 0 16px rgba(252, 228, 140, 0.5),
-                 0 0 34px rgba(252, 228, 140, 0.22);
-    transform: scale(1.025);
+  40%, 54% {
+    color: #fffaea;
+    text-shadow: 0 0 9px rgba(255, 243, 200, 0.85),
+                 0 0 26px rgba(252, 228, 140, 0.7),
+                 0 0 58px rgba(252, 228, 140, 0.38);
+    transform: scale(1.03);
   }
   100% {
     color: var(--gold-light);
-    text-shadow: 0 0 0 rgba(252, 228, 140, 0);
+    text-shadow: 0 0 0 rgba(252, 228, 140, 0),
+                 0 0 0 rgba(252, 228, 140, 0),
+                 0 0 0 rgba(252, 228, 140, 0);
     transform: scale(1);
   }
 }
