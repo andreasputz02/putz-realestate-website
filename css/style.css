@@ -1283,16 +1283,52 @@ body.nav-open { overflow: hidden; }
 
 /* ---------- Testimonials ---------- */
 
+/* ---------- Bewertungen: endlos laufendes Band ----------
+   Die Karten stehen zweimal hintereinander; das Band wandert um genau
+   eine Haelfte und beginnt dann wieder von vorn — dadurch ist der
+   Uebergang unsichtbar.
+
+   Bewusst KEIN gap, sondern margin-right an den Karten: bei gap
+   enthaelt die halbe Breite einen Abstand zu viel, und das Band
+   wuerde bei jedem Durchlauf um diesen Betrag springen.            */
+.testimonial-marquee { overflow: hidden; }
 .testimonial-track {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 26px;
+  display: flex;
+  width: max-content;
+  animation: bewertungen-lauf 46s linear infinite;
 }
+.testimonial-marquee:hover .testimonial-track,
+.testimonial-marquee:focus-within .testimonial-track { animation-play-state: paused; }
+
+@keyframes bewertungen-lauf {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
 .testimonial-card {
+  flex: 0 0 clamp(260px, 30vw, 400px);
+  margin-right: 26px;
   background: var(--black-soft);
   border: 1px solid var(--line-dark);
   border-radius: var(--radius-md);
   padding: 34px 30px;
+}
+
+/* Im Laufband stehen weisse Karten auf schwarzem Grund. Bewusst nur
+   hier und nicht an der Grundregel: .testimonial-card wird auch
+   anderswo verwendet, dort sollen die Karten dunkel bleiben. */
+.testimonial-marquee .testimonial-card {
+  background: var(--white);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+.testimonial-marquee .testimonial-card p { color: var(--ink-soft); }
+.testimonial-marquee .testimonial-who strong { color: var(--ink); }
+.testimonial-marquee .testimonial-who span { color: rgba(23, 22, 26, 0.55); }
+
+/* Wer Bewegung reduziert haben moechte, bekommt die Karten stehend. */
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-track { animation: none; flex-wrap: wrap; width: auto; }
+  .testimonial-kopie { display: none; }
 }
 .testimonial-card .stars { display: flex; gap: 4px; margin-bottom: 22px; }
 .testimonial-card .stars svg { width: 16px; height: 16px; fill: var(--gold); }
@@ -2291,7 +2327,6 @@ body.modal-open { overflow: hidden; }
 
 @media (max-width: 1080px) {
   .grid-3, .grid-4, .listing-grid { grid-template-columns: repeat(2, 1fr); }
-  .testimonial-track { grid-template-columns: 1fr; }
   .partner-grid { grid-template-columns: repeat(2, 1fr); }
 }
 

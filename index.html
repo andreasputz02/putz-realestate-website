@@ -8,7 +8,7 @@
 <meta name="description" content="Ihr Immobilienmakler für Wien, den Speckgürtel und das Weinviertel. PUTZ Real Estate begleitet Sie beim Verkauf und Kauf Ihrer Immobilie — mit kostenloser Bewertung und persönlicher Beratung.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b0b0c'/><circle cx='32' cy='32' r='14' fill='%23fbe48b'/></svg>">
 <link rel="stylesheet" href="css/fonts.css?v=3">
-<link rel="stylesheet" href="css/style.css?v=133">
+<link rel="stylesheet" href="css/style.css?v=136">
 </head>
 <body class="page-dark">
 
@@ -596,15 +596,13 @@
   </section>
 
   <!-- ================= TESTIMONIALS ================= -->
-  <section class="section section-white">
+  <section class="section section-dark">
     <div class="container">
-      <div class="section-head" data-reveal>
-        <div>
-          <h2>Was unsere Kunden sagen</h2>
-        </div>
-      </div>
-      <div class="testimonial-track">
-        <div class="testimonial-card" data-reveal>
+      <!-- Endlos laufendes Band. Die Kopie der Karten legt js/script.js
+           an — im Quelltext steht jede Bewertung nur einmal. -->
+      <div class="testimonial-marquee" data-laufband>
+        <div class="testimonial-track">
+        <div class="testimonial-card">
           <div class="stars">
             <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
             <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
@@ -618,7 +616,7 @@
             <div><strong>Familie M.</strong><span>Hausverkauf, Wolkersdorf</span></div>
           </div>
         </div>
-        <div class="testimonial-card" data-reveal>
+        <div class="testimonial-card">
           <div class="stars">
             <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
             <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
@@ -632,7 +630,7 @@
             <div><strong>Sophie K.</strong><span>Wohnungsverkauf, Wien</span></div>
           </div>
         </div>
-        <div class="testimonial-card" data-reveal>
+        <div class="testimonial-card">
           <div class="stars">
             <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
             <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
@@ -646,6 +644,7 @@
             <div><strong>David R.</strong><span>Immobilienkauf, Donaustadt</span></div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   </section>
@@ -827,7 +826,7 @@
 <script src="js/listings-data.js?v=5"></script>
 <script src="justimmo.php?v=2"></script>
 <script src="js/listings.js?v=20"></script>
-<script src="js/script.js?v=37"></script>
+<script src="js/script.js?v=38"></script>
 
 </body>
 </html>

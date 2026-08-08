@@ -462,3 +462,28 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
   window.addEventListener("resize", anfordern);
   zeichnen();
 })();
+
+// ---------- Bewertungen: endlos laufendes Band ----------
+// Im Quelltext steht jede Bewertung nur einmal. Fuer den nahtlosen
+// Uebergang braucht das Band aber zwei identische Durchgaenge — die
+// Kopie entsteht hier, damit die Seite nicht doppelten Text enthaelt.
+(function () {
+  const band = document.querySelector("[data-laufband]");
+  if (!band) return;
+
+  const spur = band.querySelector(".testimonial-track");
+  const karten = [...spur.children];
+  if (!karten.length) return;
+
+  // Bei reduzierter Bewegung laeuft nichts — dann waere die Kopie
+  // nur doppelter Inhalt ohne Zweck.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  karten.forEach((k) => {
+    const kopie = k.cloneNode(true);
+    // Fuer Screenreader unsichtbar: derselbe Text zweimal waere verwirrend.
+    kopie.setAttribute("aria-hidden", "true");
+    kopie.classList.add("testimonial-kopie");
+    spur.appendChild(kopie);
+  });
+})();
