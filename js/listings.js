@@ -40,6 +40,12 @@
     ];
   }
 
+  // Kleiner Helfer: HTML-Sonderzeichen in Werten, die aus Justimmo kommen.
+  function sicher(text) {
+    return String(text).replace(/[&<>"]/g, (z) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[z]));
+  }
+
   function renderCard(listing) {
     // Liegt ein echtes Foto vor, steht es auf der Karte. Sonst der Farbverlauf.
     const fotos = Array.isArray(listing.images) ? listing.images : [];
@@ -60,7 +66,7 @@
           <div class="listing-specs">
             <div><strong>${listing.area}</strong><span>Wohnfläche</span></div>
             <div><strong>${listing.rooms}</strong><span>Zimmer</span></div>
-            <div><strong>${listing.baths}</strong><span>${listing.baths === "1" ? "Bad" : "Bäder"}</span></div>
+            ${listing.justimmoId ? `<div><strong>${sicher(listing.justimmoId)}</strong><span>Objektnr.</span></div>` : ""}
           </div>
         </div>
       </a>`;
@@ -180,6 +186,103 @@
     const limit = grid.dataset.limit ? Number(grid.dataset.limit) : Infinity;
     grid.innerHTML = window.LISTINGS.slice(0, limit).map(renderCard).join("");
   });
+
+  // ---------- Suchmaske ----------
+  (function () {
+    const formular = document.querySelector("[data-objekt-filter]");
+    const gitter = document.querySelector("[data-listings]");
+    if (!formular || !gitter) return;
+
+    const ergebnisZeile = document.querySelector("[data-filter-ergebnis]");
+    const leerHinweis = document.querySelector("[data-filter-leer]");
+    const zuruecksetzen = formular.querySelector(".filter-zuruecksetzen");
+    const objekte = window.LISTINGS;
+    // Karte und Objekt werden ueber die id verbunden, nicht ueber die
+    // Position: die Reihenfolge im Raster haengt davon ab, wie viele
+    // Objekte gerade aus Justimmo dazukommen.
+    const karten = [...gitter.children].map((karte) => ({
+      el: karte,
+      objekt: objekte.find((o) => karte.getAttribute("href") === `immobilie.html?id=${o.id}`),
+    })).filter((k) => k.objekt);
+
+    // Objektarten aus dem Bestand — keine feste Liste, sonst stünden
+    // dort Arten, zu denen es gerade nichts gibt.
+    const auswahl = formular.querySelector('[name="objektart"]');
+    [...new Set(objekte.map((o) => (o.objektart || "").trim()).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, "de"))
+      .forEach((art) => {
+        const opt = document.createElement("option");
+        opt.value = art.toLowerCase();
+        opt.textContent = art;
+        auswahl.appendChild(opt);
+      });
+    if (auswahl.options.length < 3) auswahl.closest(".filter-feld").hidden = true;
+
+    // "1.500,50", "1500", " 200 m² " — alles soll als Zahl durchgehen.
+    const zahl = (roh) => {
+      const t = String(roh || "").replace(/[^\d,.-]/g, "").replace(/\./g, "").replace(",", ".");
+      return t === "" || isNaN(Number(t)) ? null : Number(t);
+    };
+
+    function anwenden() {
+      const d = new FormData(formular);
+      const art = d.get("art");
+      const objektart = d.get("objektart");
+      const ort = String(d.get("ort") || "").trim().toLowerCase();
+      const preisVon = zahl(d.get("preisVon"));
+      const preisBis = zahl(d.get("preisBis"));
+      const flVon = zahl(d.get("flaecheVon"));
+      const flBis = zahl(d.get("flaecheBis"));
+      const zimmer = zahl(d.get("zimmer"));
+
+      const aktiv = [art, objektart, ort, preisVon, preisBis, flVon, flBis, zimmer]
+        .some((w) => w !== null && w !== "" && w !== undefined);
+
+      let sichtbar = 0;
+      karten.forEach(({ el, objekt: o }) => {
+
+        // Fehlt ein Wert am Objekt, schliesst das Objekt NICHT aus —
+        // sonst verschwaenden unvollstaendig gepflegte Objekte still.
+        const passt =
+          (!art || o.type === art) &&
+          (!objektart || (o.objektart || "").toLowerCase() === objektart) &&
+          (!ort || `${o.location || ""} ${o.plz || ""}`.toLowerCase().includes(ort)) &&
+          (preisVon === null || o.preisWert == null || o.preisWert >= preisVon) &&
+          (preisBis === null || o.preisWert == null || o.preisWert <= preisBis) &&
+          (flVon === null || o.flaecheWert == null || o.flaecheWert >= flVon) &&
+          (flBis === null || o.flaecheWert == null || o.flaecheWert <= flBis) &&
+          (zimmer === null || o.zimmerWert == null || o.zimmerWert >= zimmer);
+
+        el.hidden = !passt;
+        if (passt) sichtbar++;
+      });
+
+      if (ergebnisZeile) {
+        ergebnisZeile.textContent = aktiv
+          ? `${sichtbar} von ${karten.length} Objekten`
+          : "";
+      }
+      if (leerHinweis) leerHinweis.hidden = sichtbar > 0 || !aktiv;
+      if (zuruecksetzen) zuruecksetzen.hidden = !aktiv;
+    }
+
+    formular.addEventListener("submit", (e) => {
+      e.preventDefault();
+      anwenden();
+    });
+    // Auswahlfelder wirken sofort — dort ist ein Klick auf "Suchen"
+    // ein ueberfluessiger Zwischenschritt.
+    formular.querySelectorAll("select").forEach((f) => f.addEventListener("change", anwenden));
+    formular.addEventListener("reset", () => setTimeout(anwenden, 0));
+
+    document.querySelector("[data-filter-loeschen]")?.addEventListener("click", (e) => {
+      e.preventDefault();
+      formular.reset();
+      setTimeout(anwenden, 0);
+    });
+
+    anwenden();
+  })();
 
   const detailRoot = document.querySelector("[data-property-detail]");
   if (detailRoot) {

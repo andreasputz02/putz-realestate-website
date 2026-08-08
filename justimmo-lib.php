@@ -279,6 +279,18 @@ function ji_umwandeln(string $xmlRoh): array
             if ($wert !== '' && ctype_digit($wert)) { $objektId = $wert; break; }
         }
 
+        // Objektart fuer den Filter — "Wohnung", "Haus", "Grundstueck" ...
+        $objektart = ji_ersterWert($o, [
+            'objektkategorie/user_defined_simplefield[@feldname="objektart_name"]',
+            'objektkategorie/objektart/*[1]/name()',
+        ]);
+        if ($objektart === '') {
+            // Rueckfall: der Elementname unter <objektart> ist die Art selbst,
+            // z. B. <wohnung/> oder <haus/>.
+            $arten = @$o->xpath('objektkategorie/objektart/*');
+            if ($arten) $objektart = ucfirst($arten[0]->getName());
+        }
+
         $titel = ji_ersterWert($o, ['freitexte/objekttitel', 'objekttitel', 'titel', 'ueberschrift']);
         if ($titel === '') $titel = 'Immobilie';
 
@@ -416,6 +428,14 @@ function ji_umwandeln(string $xmlRoh): array
             'title'       => $titel,
             'type'        => $istMiete ? 'miete' : 'kauf',
             'price'       => ji_preisFormat($preisRoh),
+            // Zahlenwerte fuer die Filterung. Aus den Anzeigetexten
+            // ("€ 697.000", "95 m²") liesse sich das zwar herausrechnen,
+            // waere aber vom Format der Anzeige abhaengig.
+            'preisWert'   => $preisRoh !== '' ? (float)str_replace(',', '.', $preisRoh) : null,
+            'flaecheWert' => is_numeric(str_replace(',', '.', $flaeche)) ? (float)str_replace(',', '.', $flaeche) : null,
+            'zimmerWert'  => is_numeric(str_replace(',', '.', $zimmer)) ? (float)str_replace(',', '.', $zimmer) : null,
+            'objektart'   => $objektart,
+            'plz'         => $plz,
             'location'    => $lage,
             'mapQuery'    => $karte,
             'lat'         => $lat,

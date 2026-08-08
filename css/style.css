@@ -2904,3 +2904,119 @@ body.modal-open { overflow: hidden; }
 /* Fuer Ueberschriften ausserhalb der oben genannten Behaelter, die den
    Punkt trotzdem tragen sollen. */
 .mit-marke::after { content: "."; color: var(--gold); }
+
+/* ============================================================
+   SUCHMASKE auf der Immobilienseite
+   ============================================================ */
+.objekt-filter {
+  background: #131315;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-lg);
+  padding: 28px 30px 26px;
+  margin-bottom: 40px;
+}
+
+.filter-gitter {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px 26px;
+}
+/* Drei feste Spalten: so stehen Art/Objektart/Ort in der ersten und
+   Preis/Flaeche/Zimmer in der zweiten Zeile — sonst bliebe unten eine
+   halbe Zeile leer. */
+@media (min-width: 900px) {
+  .filter-gitter { grid-template-columns: repeat(3, 1fr); }
+}
+
+.filter-feld label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 700;
+  margin-bottom: 9px;
+}
+
+.objekt-filter input[type="text"],
+.objekt-filter select {
+  width: 100%;
+  background: #0f0f11;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  padding: 13px 15px;
+  font-size: 14.5px;
+  font-family: inherit;
+  transition: border-color 0.25s var(--ease);
+}
+.objekt-filter input::placeholder { color: rgba(255, 255, 255, 0.32); }
+.objekt-filter input:focus,
+.objekt-filter select:focus { outline: none; border-color: var(--gold); }
+
+/* Eigener Pfeil: das Standardzeichen der Browser ist auf dunklem
+   Grund kaum zu sehen. */
+.objekt-filter select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fbe48b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.filter-paar { display: flex; gap: 10px; }
+.filter-paar input { min-width: 0; }
+
+.filter-fuss {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.filter-fuss .btn { padding: 13px 26px; font-size: 13.5px; }
+
+.filter-zuruecksetzen {
+  background: none;
+  border: 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13.5px;
+  font-family: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+.filter-zuruecksetzen:hover { color: var(--gold); }
+
+.filter-ergebnis {
+  margin: 0 0 0 auto;
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.filter-leer {
+  margin-top: 30px;
+  padding: 34px 30px;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.6);
+}
+.filter-leer a { color: var(--gold); text-decoration: underline; }
+
+/* Ausgeblendete Karten müssen wirklich verschwinden — das Raster
+   würde sonst eine Lücke lassen. */
+.listing-grid .listing-card[hidden] { display: none; }
+
+@media (max-width: 560px) {
+  .objekt-filter { padding: 22px 20px; }
+  .filter-fuss .btn { width: 100%; justify-content: center; }
+  .filter-ergebnis { margin-left: 0; }
+}

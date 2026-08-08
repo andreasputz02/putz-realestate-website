@@ -8,7 +8,7 @@
 <meta name="description" content="Aktuelle Immobilienangebote von PUTZ Real Estate in Wien und Wolkersdorf — Kauf und Miete.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b0b0c'/><circle cx='32' cy='32' r='14' fill='%23fbe48b'/></svg>">
 <link rel="stylesheet" href="css/fonts.css?v=3">
-<link rel="stylesheet" href="css/style.css?v=138">
+<link rel="stylesheet" href="css/style.css?v=139">
 </head>
 <body class="page-dark">
 
@@ -67,18 +67,70 @@
 
   <section class="section section-dark">
     <div class="container">
-      <div class="section-head" data-reveal>
-        <div>
-          <h2 style="font-size:26px; margin-top:8px;">Nach Angebotsart</h2>
+      <!-- Suchmaske. Die Auswahl der Objektarten füllt js/listings.js
+           aus den tatsächlich vorhandenen Objekten — eine feste Liste
+           würde Arten anbieten, zu denen es nichts gibt. -->
+      <form class="objekt-filter" data-objekt-filter>
+        <div class="filter-gitter">
+          <div class="filter-feld">
+            <label for="f-art">Kaufen oder mieten</label>
+            <select id="f-art" name="art">
+              <option value="">Alle</option>
+              <option value="kauf">Kaufen</option>
+              <option value="miete">Mieten</option>
+            </select>
+          </div>
+
+          <div class="filter-feld">
+            <label for="f-objektart">Objektart</label>
+            <select id="f-objektart" name="objektart">
+              <option value="">Alle</option>
+            </select>
+          </div>
+
+          <div class="filter-feld">
+            <label for="f-ort">Ort oder PLZ</label>
+            <input type="text" id="f-ort" name="ort" placeholder="z. B. 1180 oder Wien">
+          </div>
+
+          <div class="filter-feld">
+            <label>Kaufpreis / Miete</label>
+            <div class="filter-paar">
+              <input type="text" inputmode="numeric" name="preisVon" placeholder="von €" aria-label="Preis von">
+              <input type="text" inputmode="numeric" name="preisBis" placeholder="bis €" aria-label="Preis bis">
+            </div>
+          </div>
+
+          <div class="filter-feld">
+            <label>Fläche</label>
+            <div class="filter-paar">
+              <input type="text" inputmode="numeric" name="flaecheVon" placeholder="von m²" aria-label="Fläche von">
+              <input type="text" inputmode="numeric" name="flaecheBis" placeholder="bis m²" aria-label="Fläche bis">
+            </div>
+          </div>
+
+          <div class="filter-feld">
+            <label for="f-zimmer">Zimmer ab</label>
+            <input type="text" inputmode="numeric" id="f-zimmer" name="zimmer" placeholder="z. B. 3">
+          </div>
         </div>
-        <div class="listing-filters">
-          <button class="active" data-filter="all">Alle</button>
-          <button data-filter="kauf">Kauf</button>
-          <button data-filter="miete">Miete</button>
+
+        <div class="filter-fuss">
+          <button type="submit" class="btn btn-gold">
+            Objekte suchen
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <button type="reset" class="filter-zuruecksetzen" hidden>Filter zurücksetzen</button>
+          <p class="filter-ergebnis" data-filter-ergebnis aria-live="polite"></p>
         </div>
-      </div>
+      </form>
 
       <div class="listing-grid" data-listings></div>
+      <p class="filter-leer" data-filter-leer hidden>
+        Zu dieser Suche haben wir gerade nichts im Angebot.
+        <a href="#" data-filter-loeschen>Filter zurücksetzen</a>
+        — oder sagen Sie uns, was Sie suchen, dann halten wir Ausschau.
+      </p>
 
     </div>
   </section>
@@ -259,7 +311,7 @@
     </ul>
   </div>
 
-<script src="js/listings-data.js?v=5"></script>
+<script src="js/listings-data.js?v=6"></script>
 <script src="justimmo.php?v=2"></script>
 <script src="js/listings.js?v=20"></script>
 <script src="js/script.js?v=38"></script>

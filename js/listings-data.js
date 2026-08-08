@@ -21,6 +21,13 @@ window.LISTINGS = [
     area: "95 m²",
     rooms: "3",
     baths: "2",
+    // Zahlenwerte für den Filter — bei Justimmo-Objekten kommen sie
+    // automatisch mit.
+    preisWert: 697000,
+    flaecheWert: 95,
+    zimmerWert: 3,
+    objektart: "Wohnung",
+    plz: "1180",
     gradient: "linear-gradient(135deg,#2f2a22,#100f0d)",
     // Erstes Bild dient zugleich als Deckblatt-Hintergrund.
     images: [
