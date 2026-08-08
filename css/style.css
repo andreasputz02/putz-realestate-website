@@ -3192,52 +3192,42 @@ body.modal-open { overflow: hidden; }
 }
 
 /* ============================================================
-   SLOGAN — Linie zeichnen, dann das Wort heraufholen
-   Zuerst faehrt eine feine Linie unter dem Wort von links nach
-   rechts auf. Kurz bevor sie fertig ist, gleitet das Wort aus
-   dem Unscharfen von unten herein. Die Linie bleibt stehen.
+   SLOGAN — kurzer Lichtimpuls auf dem Wort "putzen"
+   Ein einmaliger Puls: der Schein waechst weich um die Buchstaben,
+   das Wort wird eine Spur heller und minimal groesser, danach steht
+   alles wieder ruhig. Nur dieses eine Wort bewegt sich.
    ============================================================ */
-.hero-title em.marker {
-  position: relative;
-  display: inline-block;
-}
+.hero-title em.marker { display: inline-block; }
 .hero-title em.marker > span {
-  /* Fuer transform und filter braucht die Box ein eigenes Kaestchen. */
+  /* Eigene Box, damit sich das Wort skalieren laesst, ohne den
+     uebrigen Satz zu beruehren — transform aendert kein Layout. */
   display: inline-block;
-  will-change: transform, opacity, filter;
 }
-
-/* Die Linie sitzt wie eine Unterstreichung knapp unter der Grundlinie.
-   Tiefer ginge nicht: zwischen der Spitze des "p" und der zweiten
-   Zeile bleiben nur 1,5 px. */
-.hero-title em.marker::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.11em;
-  height: 0.05em;
-  background: #fce48c;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.hero-title em.marker.ist-markiert::after { transform: scaleX(1); }
-
-/* Vor dem Start unsichtbar — diese Klasse setzt erst das Skript,
-   damit das Wort ohne JavaScript ganz normal dasteht. */
-.hero-title em.marker.ist-bereit > span { opacity: 0; }
-
 .hero-title em.marker.ist-markiert > span {
-  animation: slogan-wort 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both;
+  animation: slogan-puls 1s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
-@keyframes slogan-wort {
-  from { opacity: 0; transform: translateY(11px); filter: blur(5px); }
-  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+/* Weicher Schein statt hartem Schatten: kein Versatz, nur Streuung,
+   und in zwei Lagen, damit das Licht nach aussen ausduennt. */
+@keyframes slogan-puls {
+  0% {
+    color: var(--gold-light);
+    text-shadow: 0 0 0 rgba(252, 228, 140, 0);
+    transform: scale(1);
+  }
+  45% {
+    color: #fef0bb;
+    text-shadow: 0 0 16px rgba(252, 228, 140, 0.5),
+                 0 0 34px rgba(252, 228, 140, 0.22);
+    transform: scale(1.025);
+  }
+  100% {
+    color: var(--gold-light);
+    text-shadow: 0 0 0 rgba(252, 228, 140, 0);
+    transform: scale(1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-title em.marker::after { transition: none; }
   .hero-title em.marker.ist-markiert > span { animation: none; }
 }

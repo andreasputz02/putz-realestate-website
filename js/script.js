@@ -529,16 +529,13 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
   beobachter.observe(band);
 })();
 
-// ---------- Slogan: Linie und Wort ----------
-// Laeuft einmal pro Seitenaufruf, sobald das Wort im Bild ist.
-// Ohne JavaScript bleibt das Wort sichtbar — die Klasse, die es
-// zunaechst ausblendet, wird erst hier gesetzt.
+// ---------- Slogan: Lichtimpuls ----------
+// Einmal pro Seitenaufruf, sobald das Wort im Bild ist. Ohne
+// JavaScript steht das Wort einfach normal da — es wird zu keinem
+// Zeitpunkt ausgeblendet.
 (function () {
   const wort = document.querySelector(".hero-title em[data-marker]");
   if (!wort) return;
-
-  const ruhig = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!ruhig) wort.classList.add("ist-bereit");
 
   const beobachter = new IntersectionObserver((eintraege) => {
     if (!eintraege.some((e) => e.isIntersecting)) return;
