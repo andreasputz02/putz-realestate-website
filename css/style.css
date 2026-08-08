@@ -1476,24 +1476,65 @@ body.nav-open { overflow: hidden; }
 
 /* ---------- Partner stack ---------- */
 
-.partner-stack {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 22px;
-}
-.partner-stack-item { padding: 0; }
+/* ---------- Partner: derselbe Stapel wie die sechs Schritte ----------
+   Jede Karte klebt oben fest, die naechste schiebt sich darueber.
+
+   Anders als bei den Schritten sind diese Karten flach — ohne den
+   Abstandhalter waere der ganze Stapel in einem Wimpernschlag
+   durchgelaufen. Er erzeugt die noetige Scroll-Strecke.            */
+.partner-stack { display: block; }
+
+/* display:contents loest den Zwischenbehaelter auf.
+   Ohne das koennte die Karte nur innerhalb ihres eigenen Elternteils
+   kleben — und da der genauso hoch ist wie die Karte selbst, gaebe es
+   gar keinen Stapel. Bei den sechs Schritten stellt sich die Frage
+   nicht: dort ist die klebende Karte direktes Kind des Behaelters. */
+.partner-stack-item { display: contents; }
 
 .partner-stack-card {
-  background: var(--black-soft);
-  border: 1px solid var(--line-dark);
-  border-radius: var(--radius-md);
-  padding: 32px 24px;
+  position: sticky;
+  top: 92px;
+  margin-bottom: 18px;
+  background: #131315;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-lg);
+  padding: 26px 28px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  text-align: center;
-  gap: 4px;
+  text-align: left;
+  gap: 22px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
 }
+.partner-stack-card .partner-info { flex: 1 1 auto; }
+.partner-stack-card .btn { margin-top: 0; flex: none; }
+
+/* Der Abschnittstitel bleibt waehrend des Stapelns stehen, damit man
+   die ganze Zeit sieht, worum es geht. Er braucht einen deckenden
+   Hintergrund, sonst schieben sich die Karten sichtbar dahinter. */
+#partner {
+  /* Hoehe des Titels samt Abstand — einzige Stelle, an der die
+     Klebepositionen der Karten haengen. Aendert sich der Titel in
+     der Zeilenzahl, ist hier nachzujustieren. */
+  --titel-hoehe: 186px;
+}
+#partner .section-head {
+  position: sticky;
+  top: 92px;
+  z-index: 20;
+  background: var(--black);
+  padding-bottom: 22px;
+}
+
+/* Klebeposition waechst je Karte, damit die Kanten darunter sichtbar
+   bleiben. z-index sorgt dafuer, dass spaetere Karten oben liegen. */
+.partner-stack-item:nth-child(1) .partner-stack-card { top: calc(92px + var(--titel-hoehe));        z-index: 1; }
+.partner-stack-item:nth-child(2) .partner-stack-card { top: calc(92px + var(--titel-hoehe) + 12px); z-index: 2; }
+.partner-stack-item:nth-child(3) .partner-stack-card { top: calc(92px + var(--titel-hoehe) + 24px); z-index: 3; }
+.partner-stack-item:nth-child(4) .partner-stack-card { top: calc(92px + var(--titel-hoehe) + 36px); z-index: 4; }
+.partner-stack-item:nth-child(5) .partner-stack-card { top: calc(92px + var(--titel-hoehe) + 48px); z-index: 5; }
+.partner-stack-item:nth-child(6) .partner-stack-card { top: calc(92px + var(--titel-hoehe) + 60px); z-index: 6; }
+.partner-stack-item:nth-child(7) .partner-stack-card { top: calc(92px + var(--titel-hoehe) + 72px); z-index: 7; }
 
 .partner-logo-chip {
   width: 84px;
@@ -1518,33 +1559,24 @@ body.nav-open { overflow: hidden; }
 .btn-sm { padding: 10px 20px; font-size: 12.5px; }
 
 @media (max-width: 700px) {
-  .partner-stack { display: block; padding-top: 55px; }
-
-  .partner-stack-item { padding: 0; }
-  .partner-stack-spacer { height: 42vh; }
-
-  .partner-stack-card {
-    position: sticky;
-    top: 90px;
-    flex-direction: row;
-    flex-wrap: wrap;
-    text-align: left;
-    gap: 16px 18px;
-    padding: 24px 22px;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
-  }
+  /* Enger und einspaltig: Auf dem Handy passt der Knopf nicht mehr
+     neben Logo und Namen, er rutscht in eine eigene Zeile. */
+  .partner-stack-card { flex-wrap: wrap; gap: 14px 16px; padding: 22px 20px; }
   .partner-stack-card .btn { flex: 1 0 100%; justify-content: center; }
-  .partner-stack-item:nth-child(1) .partner-stack-card { z-index: 1; }
-  .partner-stack-item:nth-child(2) .partner-stack-card { z-index: 2; }
-  .partner-stack-item:nth-child(3) .partner-stack-card { z-index: 3; }
-  .partner-stack-item:nth-child(4) .partner-stack-card { z-index: 4; }
-  .partner-stack-item:nth-child(5) .partner-stack-card { z-index: 5; }
-  .partner-stack-item:nth-child(6) .partner-stack-card { z-index: 6; }
-  .partner-stack-item:nth-child(7) .partner-stack-card { z-index: 7; }
-
   .partner-logo-chip { margin-bottom: 0; width: 64px; height: 64px; }
-  .partner-stack-card .btn { margin-top: 0; }
+
+  /* Schmaler Bildschirm: Der Titel bricht auf mehr Zeilen um,
+     die Kopfleiste ist niedriger. */
+  #partner { --titel-hoehe: 168px; }
+  #partner .section-head { top: 84px; padding-bottom: 16px; }
+
+  .partner-stack-item:nth-child(1) .partner-stack-card { top: calc(84px + var(--titel-hoehe)); }
+  .partner-stack-item:nth-child(2) .partner-stack-card { top: calc(84px + var(--titel-hoehe) + 8px); }
+  .partner-stack-item:nth-child(3) .partner-stack-card { top: calc(84px + var(--titel-hoehe) + 16px); }
+  .partner-stack-item:nth-child(4) .partner-stack-card { top: calc(84px + var(--titel-hoehe) + 24px); }
+  .partner-stack-item:nth-child(5) .partner-stack-card { top: calc(84px + var(--titel-hoehe) + 32px); }
+  .partner-stack-item:nth-child(6) .partner-stack-card { top: calc(84px + var(--titel-hoehe) + 40px); }
+  .partner-stack-item:nth-child(7) .partner-stack-card { top: calc(84px + var(--titel-hoehe) + 48px); }
 }
 
 /* ---------- Events ---------- */
