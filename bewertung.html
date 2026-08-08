@@ -8,7 +8,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b0b0c'/><circle cx='32' cy='32' r='14' fill='%23fbe48b'/></svg>">
 <link rel="stylesheet" href="css/fonts.css?v=4">
 <meta name="description" content="Was ist deine Immobilie wirklich wert? Kostenlose, unverbindliche Immobilienbewertung in Wien, im Speckgürtel und im Weinviertel — Marktdaten plus persönliche Einschätzung.">
-<link rel="stylesheet" href="css/style.css?v=155">
+<link rel="stylesheet" href="css/style.css?v=156">
 </head>
 <body class="page-dark">
 
@@ -62,9 +62,8 @@
   <section class="page-hero bw-hero">
     <div class="container">
       <p class="eyebrow no-dot">Immobilienbewertung</p>
-      <h1 class="kein-punkt">Was ist deine Immobilie
-        <em class="leuchtwort" data-leuchtwort><span>wirklich</span></em>
-        wert<span class="marke-punkt">?</span></h1>
+      <h1 class="kein-punkt">Kenne deinen
+        <em class="leuchtwort" data-leuchtwort><span>Wert</span></em><span class="marke-punkt">.</span></h1>
       <p class="lede">Eine realistische Bewertung ist die Grundlage für die richtige Verkaufsstrategie. Wir verbinden aktuelle Marktdaten mit persönlicher Immobilienexpertise.</p>
 
       <div class="bw-hero-fuss">
@@ -201,7 +200,7 @@
 
   <!-- ================= BEWERTUNGSSTRECKE ================= -->
   <section class="section section-white" id="bewertungsformular">
-    <div class="container">
+    <div class="container" style="max-width:720px;">
       <div class="section-head" data-reveal>
         <div>
           <h2 class="h2-breit kein-punkt">Genug Theorie.<br>Was ist deine Immobilie wert<span class="marke-punkt">?</span></h2>
@@ -209,115 +208,83 @@
       </div>
       <p class="lede bw-intro" data-reveal>Beantworte uns ein paar Fragen zu deiner Immobilie und wir kümmern uns um den Rest.</p>
 
-      <div class="bw-strecke" data-reveal>
-        <div class="bw-fortschritt">
-          <div class="bw-fortschritt-balken"><span data-fortschritt></span></div>
-          <p class="bw-fortschritt-text">Schritt <strong data-schritt-nr>1</strong> von 5</p>
-        </div>
-
-        <form data-contact-form data-bewertung novalidate>
+      <div class="form-card" data-reveal>
+        <form data-contact-form>
           <input type="hidden" name="form_name" value="Kostenlose Immobilienbewertung">
           <div class="hp-field" aria-hidden="true"><label for="bew-website">Website</label><input type="text" id="bew-website" name="website" tabindex="-1" autocomplete="off"></div>
 
-          <!-- Schritt 1 -->
-          <fieldset class="bw-schritt ist-aktiv" data-schritt="1">
-            <legend class="bw-frage">Was möchtest du bewerten?</legend>
-            <div class="bw-wahl">
-              <label class="bw-karte"><input type="radio" name="typ" value="Haus" required><span>Haus</span></label>
-              <label class="bw-karte"><input type="radio" name="typ" value="Wohnung"><span>Wohnung</span></label>
-              <label class="bw-karte"><input type="radio" name="typ" value="Grundstück"><span>Grundstück</span></label>
-            </div>
-          </fieldset>
-
-          <!-- Schritt 2 -->
-          <fieldset class="bw-schritt" data-schritt="2">
-            <legend class="bw-frage">Wo befindet sich die Immobilie?</legend>
-            <div class="form-row">
-              <div class="field" style="flex:3;"><label for="bew-strasse">Straße</label><input type="text" id="bew-strasse" name="strasse"></div>
-              <div class="field" style="flex:1;"><label for="bew-hausnummer">Hausnummer</label><input type="text" id="bew-hausnummer" name="hausnummer"></div>
-            </div>
-            <div class="form-row">
-              <div class="field" style="flex:1;"><label for="bew-plz">PLZ</label><input type="text" id="bew-plz" name="plz" inputmode="numeric"></div>
-              <div class="field" style="flex:3;"><label for="bew-ort">Ort</label><input type="text" id="bew-ort" name="ort"></div>
-            </div>
-          </fieldset>
-
-          <!-- Schritt 3 -->
-          <fieldset class="bw-schritt" data-schritt="3">
-            <legend class="bw-frage">Objektdaten</legend>
-            <div class="form-row">
-              <div class="field" data-nur="Haus Wohnung"><label for="bew-wohnflaeche">Wohnfläche in m²</label><input type="number" id="bew-wohnflaeche" name="wohnflaeche" min="0" placeholder="z. B. 120"></div>
-              <div class="field" data-nur="Haus Grundstück"><label for="bew-grundflaeche">Grundstücksfläche in m²</label><input type="number" id="bew-grundflaeche" name="grundflaeche" min="0" placeholder="z. B. 600"></div>
-            </div>
-            <div class="form-row">
-              <div class="field" data-nur="Haus Wohnung"><label for="bew-zimmer">Zimmer</label><input type="number" id="bew-zimmer" name="zimmeranzahl" min="0" placeholder="z. B. 4"></div>
-              <div class="field" data-nur="Haus Wohnung"><label for="bew-baujahr">Baujahr</label><input type="number" id="bew-baujahr" name="baujahr" min="1800" max="2100" placeholder="z. B. 1998"></div>
-            </div>
-            <div class="form-row">
-              <div class="field" data-nur="Wohnung"><label for="bew-stockwerk">Stockwerk</label><input type="text" id="bew-stockwerk" name="stockwerk" placeholder="z. B. 3. Stock"></div>
-            </div>
-          </fieldset>
-
-          <!-- Schritt 4 -->
-          <fieldset class="bw-schritt" data-schritt="4" data-nur="Haus Wohnung">
-            <legend class="bw-frage">Zustand &amp; Ausstattung</legend>
-            <div class="bw-wahl bw-wahl-vier">
-              <label class="bw-karte bw-karte-klein"><input type="radio" name="zustand" value="Sanierungsbedürftig"><span>Sanierungsbedürftig</span></label>
-              <label class="bw-karte bw-karte-klein"><input type="radio" name="zustand" value="Gepflegt"><span>Gepflegt</span></label>
-              <label class="bw-karte bw-karte-klein"><input type="radio" name="zustand" value="Modernisiert"><span>Modernisiert</span></label>
-              <label class="bw-karte bw-karte-klein"><input type="radio" name="zustand" value="Neuwertig"><span>Neuwertig</span></label>
-            </div>
-            <p class="bw-unterfrage">Was ist vorhanden?</p>
-            <div class="bw-schalterfeld">
-            <label class="bw-schalter"><input type="checkbox" name="ausstattung[]" value="Balkon"><span>Balkon</span></label>
-            <label class="bw-schalter"><input type="checkbox" name="ausstattung[]" value="Terrasse"><span>Terrasse</span></label>
-            <label class="bw-schalter"><input type="checkbox" name="ausstattung[]" value="Garten"><span>Garten</span></label>
-            <label class="bw-schalter"><input type="checkbox" name="ausstattung[]" value="Garage"><span>Garage</span></label>
-            <label class="bw-schalter"><input type="checkbox" name="ausstattung[]" value="Stellplatz"><span>Stellplatz</span></label>
-            <label class="bw-schalter"><input type="checkbox" name="ausstattung[]" value="Keller"><span>Keller</span></label>
-            <label class="bw-schalter"><input type="checkbox" name="ausstattung[]" value="Lift"><span>Lift</span></label>
-            <label class="bw-schalter"><input type="checkbox" name="ausstattung[]" value="Fußbodenheizung"><span>Fußbodenheizung</span></label>
-            <label class="bw-schalter"><input type="checkbox" name="ausstattung[]" value="Photovoltaik"><span>Photovoltaik</span></label>
-            <label class="bw-schalter"><input type="checkbox" name="ausstattung[]" value="Klimaanlage"><span>Klimaanlage</span></label>
-            <label class="bw-schalter"><input type="checkbox" name="ausstattung[]" value="Sauna"><span>Sauna</span></label>
-            <label class="bw-schalter"><input type="checkbox" name="ausstattung[]" value="Pool"><span>Pool</span></label>
-            </div>
-          </fieldset>
-
-          <!-- Schritt 5 -->
-          <fieldset class="bw-schritt" data-schritt="5">
-            <legend class="bw-frage">Wohin dürfen wir die Einschätzung schicken?</legend>
-            <div class="form-row">
-              <div class="field"><label for="bew-vorname">Vorname</label><input type="text" id="bew-vorname" name="vorname"></div>
-              <div class="field"><label for="bew-nachname">Nachname</label><input type="text" id="bew-nachname" name="nachname"></div>
-            </div>
-            <div class="form-row">
-              <div class="field"><label for="bew-email">E-Mail</label><input type="email" id="bew-email" name="email"></div>
-              <div class="field"><label for="bew-telefon">Telefonnummer</label><input type="tel" id="bew-telefon" name="telefon"></div>
-            </div>
-            <button type="submit" class="btn btn-gold btn-block">
-              Bewertung anfordern
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </button>
-            <p class="field-note">Deine Angaben gehen direkt an office@putzrealestate.at. Du erhältst innerhalb von 48 Stunden eine erste Werteinschätzung deiner Immobilie. Mit dem Absenden stimmst du der Verarbeitung deiner Daten gemäß unserer <a href="datenschutz.html" style="text-decoration:underline;">Datenschutzerklärung</a> zu.</p>
-          </fieldset>
-
-          <div class="bw-navigation">
-            <button type="button" class="btn btn-outline" data-zurueck hidden>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
-              Zurück
-            </button>
-            <button type="button" class="btn btn-gold" data-weiter>
-              Weiter
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </button>
+          <div class="field">
+            <label for="bew-adresse">Adresse der Immobilie</label>
+            <input type="text" id="bew-adresse" name="adresse" placeholder="Straße, PLZ, Ort" required>
           </div>
-
-          <p class="bw-hinweis" data-bw-hinweis role="alert" hidden></p>
+          <div class="form-row">
+            <div class="field">
+              <label for="bew-typ">Art der Immobilie</label>
+              <select id="bew-typ" name="typ">
+                <option>Haus</option>
+                <option>Wohnung</option>
+                <option>Grundstück</option>
+                <option>Gewerbe</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="bew-zustand">Zustand</label>
+              <select id="bew-zustand" name="zustand">
+                <option>Neubau</option>
+                <option>Saniert</option>
+                <option>Sanierungsbedürftig</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="bew-grundflaeche">Grundfläche in m²</label>
+              <input type="number" id="bew-grundflaeche" name="grundflaeche" min="0" placeholder="z. B. 500">
+            </div>
+            <div class="field">
+              <label for="bew-wohnflaeche">Wohnfläche in m²</label>
+              <input type="number" id="bew-wohnflaeche" name="wohnflaeche" min="0" placeholder="z. B. 140">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="bew-nutzflaeche">Nutzfläche in m²</label>
+              <input type="number" id="bew-nutzflaeche" name="nutzflaeche" min="0" placeholder="z. B. 30">
+            </div>
+            <div class="field">
+              <label for="bew-baujahr">Baujahr</label>
+              <input type="number" id="bew-baujahr" name="baujahr" min="1800" max="2100" placeholder="z. B. 1998">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="bew-vorname">Vorname</label>
+              <input type="text" id="bew-vorname" name="vorname" required>
+            </div>
+            <div class="field">
+              <label for="bew-nachname">Nachname</label>
+              <input type="text" id="bew-nachname" name="nachname" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="bew-email">E-Mail</label>
+              <input type="email" id="bew-email" name="email" required>
+            </div>
+            <div class="field">
+              <label for="bew-telefon">Telefonnummer</label>
+              <input type="tel" id="bew-telefon" name="telefon" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-gold btn-block">
+            Kostenlose Bewertung anfordern
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <p class="field-note">Deine Angaben gehen direkt an office@putzrealestate.at. Du erhältst innerhalb von 48 Stunden eine erste Werteinschätzung deiner Immobilie. Mit dem Absenden stimmst du der Verarbeitung deiner Daten gemäß unserer <a href="datenschutz.html" style="text-decoration:underline;">Datenschutzerklärung</a> zu.</p>
           <div class="form-status"></div>
         </form>
       </div>
-    </div>
+
   </section>
 
   <!-- ================= ABSCHLUSS ================= -->
@@ -418,7 +385,7 @@
     </ul>
   </div>
 
-<script src="js/script.js?v=45"></script>
+<script src="js/script.js?v=46"></script>
 
 </body>
 </html>
