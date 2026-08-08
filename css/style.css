@@ -614,14 +614,19 @@ body.nav-open { overflow: hidden; }
      Nach oben schiebt man ihn deshalb ueber die UNTERE Polsterung.
      Erhoeht, seit die Kennzahlen unter den Buttons weggefallen sind:
      ohne sie sass der Block sonst zu tief und der Abstand zur
-     Navigationsleiste wurde zu gross. */
-  padding-bottom: 190px;
+     Navigationsleiste wurde zu gross. Wieder etwas verringert, damit
+     der Block eine Spur tiefer sitzt. */
+  padding-bottom: 150px;
 }
 
 .hero-content .eyebrow { margin-bottom: 22px; }
 
 .hero-title {
-  font-size: clamp(44px, 6.6vw, 92px);
+  font-size: clamp(30px, 5vw, 68px);
+  /* Duenner Schnitt fuer den Slogan — "putzen" bleibt kraeftig und
+     traegt die Zeile allein. */
+  font-weight: 300;
+  letter-spacing: -0.015em;
   color: var(--white);
   /* Breit genug fuer "Wir putzen Immobilien" in einer Zeile — der
      Umbruch vor "vom Markt" steht als <br> im Text. Bei 17ch brach
@@ -644,6 +649,7 @@ body.nav-open { overflow: hidden; }
    gleiche Groesse wie der Rest der Zeile. */
 .hero-title em {
   font-style: normal;
+  font-weight: 600;
   color: var(--gold-light);
   text-transform: none;
 }
@@ -677,7 +683,7 @@ body.nav-open { overflow: hidden; }
 @keyframes pulseLine { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
 
 @media (max-width: 720px) {
-  .hero-content { padding-top: 100px; padding-bottom: 165px; }
+  .hero-content { padding-top: 100px; padding-bottom: 135px; }
   .hero-title { margin-bottom: 12px; }
   .hero-sub { margin-bottom: 18px; }
   .hero-actions { margin-bottom: 20px; }
@@ -685,8 +691,8 @@ body.nav-open { overflow: hidden; }
 }
 
 @media (max-height: 800px) {
-  .hero-content { padding-top: 110px; padding-bottom: 130px; }
-  .hero-title { font-size: clamp(36px, 5.2vw, 66px); margin-bottom: 12px; }
+  .hero-content { padding-top: 110px; padding-bottom: 105px; }
+  .hero-title { font-size: clamp(30px, 4.2vw, 56px); margin-bottom: 12px; }
   .hero-sub { margin-bottom: 18px; }
   .hero-actions { margin-bottom: 24px; }
     .scroll-cue { display: none; }
