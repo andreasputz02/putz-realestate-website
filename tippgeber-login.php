@@ -148,8 +148,8 @@ if (!empty($_SESSION['tippgeber_id']) && !isset($_GET['token'])) {
 <meta name="theme-color" content="#0b0b0c">
 <meta name="robots" content="noindex, nofollow">
 <title>Tippgeber-Anmeldung — PUTZ Real Estate</title>
-<link rel="stylesheet" href="css/fonts.css?v=3">
-<link rel="stylesheet" href="css/style.css?v=139">
+<link rel="stylesheet" href="css/fonts.css?v=4">
+<link rel="stylesheet" href="css/style.css?v=140">
 </head>
 <body class="page-dark">
 

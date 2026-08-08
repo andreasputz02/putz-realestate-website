@@ -487,3 +487,44 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
     spur.appendChild(kopie);
   });
 })();
+
+// ---------- Zahlenband: einmaliges Hochzaehlen ----------
+// Die Endwerte stehen im HTML. Nur wenn das Band ins Bild kommt, wird
+// kurz von 0 hochgezaehlt — ohne JS oder bei reduzierter Bewegung
+// bleibt schlicht der Endwert stehen.
+(function () {
+  const band = document.querySelector("[data-zahlenband]");
+  if (!band) return;
+
+  const felder = [...band.querySelectorAll("strong[data-ziel]")];
+  if (!felder.length) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const schreiben = (el, wert) => {
+    const nk = Number(el.dataset.nachkomma || 0);
+    const zahl = wert.toLocaleString("de-AT", {
+      minimumFractionDigits: nk,
+      maximumFractionDigits: nk,
+    });
+    el.textContent = `${el.dataset.praefix || ""}${zahl}${el.dataset.suffix || ""}`;
+  };
+
+  function hochzaehlen() {
+    const dauer = 1400;
+    const start = performance.now();
+    function schritt(jetzt) {
+      const t = Math.min(1, (jetzt - start) / dauer);
+      const e = 1 - Math.pow(1 - t, 3);   // weich auslaufend
+      felder.forEach((el) => schreiben(el, Number(el.dataset.ziel) * e));
+      if (t < 1) requestAnimationFrame(schritt);
+    }
+    requestAnimationFrame(schritt);
+  }
+
+  const beobachter = new IntersectionObserver((eintraege) => {
+    if (!eintraege.some((e) => e.isIntersecting)) return;
+    beobachter.disconnect();
+    hochzaehlen();
+  }, { threshold: 0.4 });
+  beobachter.observe(band);
+})();

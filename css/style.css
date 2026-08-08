@@ -3020,3 +3020,106 @@ body.modal-open { overflow: hidden; }
   .filter-fuss .btn { width: 100%; justify-content: center; }
   .filter-ergebnis { margin-left: 0; }
 }
+
+/* ============================================================
+   VERKAUFEN — Schritte mit Bild, Fotogalerie, Zahlenband
+   ============================================================ */
+
+/* Dritte Spalte fuer das Bild. Nur auf der Verkaufsseite — auf der
+   Startseite bleiben die Schritte reiner Text. */
+.steps-bild .step-row {
+  grid-template-columns: 74px minmax(0, 1fr) 300px;
+  align-items: center;
+  gap: 24px 30px;
+}
+.step-bild {
+  margin: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  background: #0f0f11;
+}
+.step-bild img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+@media (max-width: 1000px) {
+  /* Bild unter den Text, ueber die volle Breite der Karte. Die Nummer
+     behaelt ihre eigene Spalte, damit die Karte nicht verrutscht. */
+  .steps-bild .step-row { grid-template-columns: 74px minmax(0, 1fr); }
+  .steps-bild .step-bild { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+}
+@media (max-width: 760px) {
+  .steps-bild .step-row { grid-template-columns: 56px minmax(0, 1fr); gap: 16px 18px; }
+}
+
+/* ---------- Fotogalerie ---------- */
+.foto-galerie {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+}
+.foto-kachel {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: #0f0f11;
+  aspect-ratio: 3 / 2;
+}
+/* Die ersten beiden Aufnahmen bekommen mehr Platz — sonst zerfaellt die
+   Reihe in sechs gleich grosse, gleich langweilige Kacheln. */
+.foto-kachel:nth-child(1) { grid-column: span 4; aspect-ratio: 16 / 9; }
+.foto-kachel:nth-child(2) { grid-column: span 2; aspect-ratio: 4 / 5; }
+.foto-kachel:nth-child(3),
+.foto-kachel:nth-child(4),
+.foto-kachel:nth-child(5) { grid-column: span 2; }
+.foto-kachel img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.6s var(--ease);
+}
+.foto-kachel:hover img { transform: scale(1.04); }
+
+@media (max-width: 900px) {
+  .foto-galerie { grid-template-columns: repeat(2, 1fr); }
+  .foto-kachel,
+  .foto-kachel:nth-child(1),
+  .foto-kachel:nth-child(2) { grid-column: span 1; aspect-ratio: 3 / 2; }
+  .foto-kachel:nth-child(1) { grid-column: span 2; aspect-ratio: 16 / 9; }
+}
+
+.text-link { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+.text-link:hover { color: var(--white); }
+
+/* ---------- Zahlenband ---------- */
+.zahlenband {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 46px 34px;
+  background: #131315;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-lg);
+}
+.zahlenband-feld { text-align: center; }
+.zahlenband-feld + .zahlenband-feld { border-left: 1px solid rgba(255, 255, 255, 0.08); }
+.zahlenband-feld strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(30px, 3.6vw, 48px);
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--gold);
+  /* Ziffern gleich breit — sonst zappelt die Zahl beim Hochzaehlen. */
+  font-variant-numeric: tabular-nums;
+}
+.zahlenband-feld span {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+@media (max-width: 820px) {
+  .zahlenband { grid-template-columns: repeat(2, 1fr); gap: 34px 20px; padding: 36px 22px; }
+  .zahlenband-feld:nth-child(odd) { border-left: 0; }
+}
