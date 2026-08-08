@@ -267,18 +267,18 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
         if (!status) return;
         status.classList.remove("error", "success");
         if (data.ok) {
-          status.textContent = "Danke! Ihre Nachricht wurde erfolgreich gesendet — wir melden uns bei Ihnen.";
+          status.textContent = "Danke! Deine Nachricht wurde erfolgreich gesendet — wir melden uns bei dir.";
           status.classList.add("show", "success");
           form.reset();
         } else {
-          status.textContent = "Es gab ein Problem beim Senden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.";
+          status.textContent = "Es gab ein Problem beim Senden. Bitte versuch es erneut oder ruf uns kurz an.";
           status.classList.add("show", "error");
         }
       })
       .catch(() => {
         if (!status) return;
         status.classList.remove("success");
-        status.textContent = "Es gab ein Problem beim Senden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.";
+        status.textContent = "Es gab ein Problem beim Senden. Bitte versuch es erneut oder ruf uns kurz an.";
         status.classList.add("show", "error");
       })
       .finally(() => {

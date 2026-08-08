@@ -202,35 +202,35 @@ function geld(float $b): string { return '€ ' . number_format($b, 0, ',', '.')
               <p class="tg-feld-wert"><?php echo htmlspecialchars($statusListe[$e['status']] ?? $e['status']); ?></p>
 
               <?php if ($betrag !== null && $betrag > 0): ?>
-                <p class="tg-feld-titel">Ihre Prämie</p>
+                <p class="tg-feld-titel">Deine Prämie</p>
                 <p class="tg-betrag"><?php echo geld($betrag); ?></p>
 
                 <?php if ($e['verkaufspreis'] && $e['provisionssatz']): ?>
                   <p class="tg-rechenweg">
                     Verkaufspreis <?php echo geld((float)$e['verkaufspreis']); ?>
                     · unsere Provision <?php echo rtrim(rtrim(number_format((float)$e['provisionssatz'], 2, ',', '.'), '0'), ','); ?> %
-                    · Ihr Anteil <?php echo rtrim(rtrim(number_format((float)($e['anteil_prozent'] ?: 20), 2, ',', '.'), '0'), ','); ?> %
+                    · Dein Anteil <?php echo rtrim(rtrim(number_format((float)($e['anteil_prozent'] ?: 20), 2, ',', '.'), '0'), ','); ?> %
                   </p>
                 <?php endif; ?>
 
                 <?php if ($bezahlt): ?>
                   <p class="tg-vermerk ist-gut">Bereits ausbezahlt.</p>
                 <?php elseif ($verkauft): ?>
-                  <p class="tg-vermerk">Die Auszahlung steht noch aus — wir melden uns bei Ihnen.</p>
+                  <p class="tg-vermerk">Die Auszahlung steht noch aus — wir melden uns bei dir.</p>
                 <?php else: ?>
                   <!-- Ausdrücklicher Vorbehalt: solange nicht verkauft ist,
                        ist der Betrag eine Momentaufnahme, keine Zusage. -->
                   <p class="tg-vermerk ist-vorbehalt">
-                    <strong>Vorläufiger Wert.</strong> So viel wäre Ihre Prämie beim derzeit
+                    <strong>Vorläufiger Wert.</strong> So viel wäre deine Prämie beim derzeit
                     angesetzten Preis. Fällt der tatsächliche Verkaufspreis niedriger aus,
                     verringert sich der Betrag entsprechend.
                   </p>
                 <?php endif; ?>
               <?php else: ?>
-                <p class="tg-feld-titel">Ihre Prämie</p>
+                <p class="tg-feld-titel">Deine Prämie</p>
                 <p class="tg-vermerk">
                   Steht noch nicht fest. Sobald ein Verkaufspreis feststeht, erscheint
-                  hier Ihr Anteil samt Rechenweg.
+                  hier dein Anteil samt Rechenweg.
                 </p>
               <?php endif; ?>
 

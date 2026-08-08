@@ -47,7 +47,7 @@ window.LISTINGS = [
     ],
     description: [
       "Diese gepflegte Wohnung in der Wallrissstraße überzeugt mit einem durchdachten Grundriss und hochwertiger Ausstattung. Die moderne Einbauküche sowie das großzügige Badezimmer mit freistehender Wanne wurden mit viel Liebe zum Detail gestaltet.",
-      "Die hellen Wohnräume bieten viel Platz für den Alltag, ergänzt durch stilvolle Details wie den antiken Kleiderschrank im Wohnbereich. Ideal für alle, die Wert auf Qualität und eine ruhige, dennoch gut angebundene Lage legen. Kontaktieren Sie uns gerne für eine unverbindliche Besichtigung."
+      "Die hellen Wohnräume bieten viel Platz für den Alltag, ergänzt durch stilvolle Details wie den antiken Kleiderschrank im Wohnbereich. Ideal für alle, die Wert auf Qualität und eine ruhige, dennoch gut angebundene Lage legen. Melde dich gerne für eine unverbindliche Besichtigung."
     ],
     video: {
       src: "assets/video/immobilie-wallrissstrasse.mp4",

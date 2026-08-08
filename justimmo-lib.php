@@ -352,7 +352,7 @@ function ji_umwandeln(string $xmlRoh): array
             'freitexte/objektbeschreibung', 'objektbeschreibung',
             'freitexte/dreizeiler', 'freitexte/lage', 'beschreibung',
         ]);
-        if (!$texte) $texte = ['Details zu diesem Objekt erhalten Sie gerne auf Anfrage.'];
+        if (!$texte) $texte = ['Details zu diesem Objekt bekommst du gerne auf Anfrage.'];
 
         $absaetze = [];
         foreach ($texte as $t) {

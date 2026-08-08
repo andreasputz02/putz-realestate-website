@@ -208,14 +208,14 @@ if ($sent && $formName === 'Tippgeber-Registrierung') {
     $link = SITE_URL . '/empfehlung.html?ref=' . $token;
 
     $confirmBody = "Hallo " . $vorname . ",\n\n"
-        . "vielen Dank für Ihre Registrierung als Tippgeber bei PUTZ Real Estate!\n\n"
-        . "Hier ist Ihr persönlicher Empfehlungslink:\n" . $link . "\n\n"
-        . "Kennen Sie jemanden, der eine Immobilie verkaufen möchte? Senden Sie ihm einfach diesen Link. "
-        . "Meldet sich die Person darüber bei uns, wissen wir automatisch, dass der Tipp von Ihnen kommt.\n\n"
-        . "Kommt es zu einem erfolgreichen Verkauf, erhalten Sie 20 % unserer Provision.\n\n"
-        . "Herzliche Grüße\nIhr PUTZ Real Estate Team";
+        . "vielen Dank für deine Registrierung als Tippgeber bei PUTZ Real Estate!\n\n"
+        . "Hier ist dein persönlicher Empfehlungslink:\n" . $link . "\n\n"
+        . "Kennst du jemanden, der eine Immobilie verkaufen möchte? Schick ihm einfach diesen Link. "
+        . "Meldet sich die Person darüber bei uns, wissen wir automatisch, dass der Tipp von dir kommt.\n\n"
+        . "Kommt es zu einem erfolgreichen Verkauf, erhältst du 20 % unserer Provision.\n\n"
+        . "Herzliche Grüße\nDein PUTZ Real Estate Team";
 
-    nachricht_senden($email, 'Ihr persönlicher Tippgeber-Link', $confirmBody);
+    nachricht_senden($email, 'Dein persönlicher Tippgeber-Link', $confirmBody);
 
     // Persist the registration so it can be viewed in the password-protected admin list.
     $tippgeber = [
@@ -254,11 +254,11 @@ if ($sent && $formName === 'Kostenlose Immobilienbewertung') {
     $vorname = trim($_POST['vorname'] ?? '');
 
     $confirmBody = "Hallo " . $vorname . ",\n\n"
-        . "vielen Dank für Ihre Anfrage zur kostenlosen Immobilienbewertung bei PUTZ Real Estate! Wir haben Ihre Angaben erhalten "
-        . "und melden uns innerhalb von 48 Stunden mit einer ersten, unverbindlichen Werteinschätzung Ihrer Immobilie bei Ihnen.\n\n"
-        . "Herzliche Grüße\nIhr PUTZ Real Estate Team";
+        . "vielen Dank für deine Anfrage zur kostenlosen Immobilienbewertung bei PUTZ Real Estate! Wir haben deine Angaben erhalten "
+        . "und melden uns innerhalb von 48 Stunden mit einer ersten, unverbindlichen Werteinschätzung deiner Immobilie bei dir.\n\n"
+        . "Herzliche Grüße\nDein PUTZ Real Estate Team";
 
-    nachricht_senden($email, 'Ihre Anfrage zur kostenlosen Immobilienbewertung ist bei uns angekommen', $confirmBody);
+    nachricht_senden($email, 'Deine Anfrage zur kostenlosen Immobilienbewertung ist bei uns angekommen', $confirmBody);
 }
 
 // For Suchkunde-Anfragen, also send a confirmation and store the search profile.

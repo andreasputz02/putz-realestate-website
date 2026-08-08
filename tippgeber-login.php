@@ -48,13 +48,13 @@ if (isset($_GET['token'])) {
         $link = $stmt->fetch();
 
         if (!$link) {
-            $meldung = 'Dieser Anmeldelink ist ungültig. Bitte fordern Sie einen neuen an.';
+            $meldung = 'Dieser Anmeldelink ist ungültig. Bitte fordere einen neuen an.';
             $art = 'fehler';
         } elseif ((int)$link['benutzt'] === 1) {
-            $meldung = 'Dieser Anmeldelink wurde bereits verwendet. Bitte fordern Sie einen neuen an.';
+            $meldung = 'Dieser Anmeldelink wurde bereits verwendet. Bitte fordere einen neuen an.';
             $art = 'fehler';
         } elseif (strtotime($link['gueltig_bis']) < time()) {
-            $meldung = 'Dieser Anmeldelink ist abgelaufen. Bitte fordern Sie einen neuen an.';
+            $meldung = 'Dieser Anmeldelink ist abgelaufen. Bitte fordere einen neuen an.';
             $art = 'fehler';
         } else {
             // Gueltig — Token verbrauchen und anmelden.
@@ -71,7 +71,7 @@ if (isset($_GET['token'])) {
         }
     } catch (Throwable $e) {
         error_log('Tippgeber-Anmeldung: ' . $e->getMessage());
-        $meldung = 'Die Anmeldung ist gerade nicht möglich. Bitte versuchen Sie es später erneut.';
+        $meldung = 'Die Anmeldung ist gerade nicht möglich. Bitte versuch es später erneut.';
         $art = 'fehler';
     }
 }
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
 
     // Immer dieselbe Antwort — sie verraet nicht, wer registriert ist.
-    $meldung = 'Falls diese Adresse als Tippgeber registriert ist, haben wir Ihnen soeben '
+    $meldung = 'Falls diese Adresse als Tippgeber registriert ist, haben wir dir soeben '
              . 'einen Anmeldelink geschickt. Er gilt ' . TG_LINK_GUELTIG_MINUTEN . ' Minuten.';
     $art = 'ok';
 
