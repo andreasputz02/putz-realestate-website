@@ -2776,3 +2776,13 @@ body.modal-open { overflow: hidden; }
 .tg-eintrag h1,
 .tg-eintrag h2,
 .tg-eintrag h3 { color: #fff; }
+
+/* Abschluss der sechs Schritte: der Weg zur Verkaufen-Seite. */
+.steps-cta {
+  margin-top: 48px;
+  display: flex;
+  justify-content: center;
+}
+@media (max-width: 560px) {
+  .steps-cta .btn { width: 100%; justify-content: center; }
+}
