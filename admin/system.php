@@ -30,6 +30,7 @@ function syntax_pruefen(string $pfad): array {
 $dateien = [
     'send-mail.php', 'justimmo.php', 'justimmo-lib.php',
     'ref-token.php', 'tippgeber-db.php', 'tippgeber-login.php', 'tippgeber-app.php',
+    'admin/empfehlungen.php',
 ];
 $pruefungen = [];
 foreach ($dateien as $d) {
@@ -74,7 +75,7 @@ foreach (['tippgeber.json', 'suchkunden.json', 'empfehlungen.json'] as $l) {
 <body>
 <div class="wrap">
   <h1>Systemprüfung</h1>
-  <p class="hinweis"><a href="tippgeber.php">← zurück zur Übersicht</a> · <a href="justimmo-test.php">Justimmo prüfen</a> · <a href="logout.php">Abmelden</a></p>
+  <p class="hinweis"><a href="tippgeber.php">← zurück zur Übersicht</a> · <a href="empfehlungen.php">Empfehlungen</a> · <a href="justimmo-test.php">Justimmo prüfen</a> · <a href="logout.php">Abmelden</a></p>
 
   <div class="karte">
     <h2>1. Syntax der PHP-Dateien</h2>
