@@ -16,3 +16,14 @@ Haus.jpg
 Video Siegenfeld.MOV
 Video Brunn.MOV
 Wohnung-Wallrissstraße.MP4
+
+# Originaldateien der Verkaufsseite — die verkleinerten Fassungen liegen
+# unter assets/img/schritte/ und assets/img/fotografie/. Die Originale
+# bleiben lokal liegen, gehoeren aber nicht ins Web-Verzeichnis.
+/kennenlernen.png
+/vorbereitung.png
+/Verfilmung.png
+/Vermarktung.png
+/abschluss.png
+/übergabe.png
+/fotos-verkaufenseite/
