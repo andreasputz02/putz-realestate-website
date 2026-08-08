@@ -3217,11 +3217,13 @@ body.modal-open { overflow: hidden; }
      von Hand gezogen wirken, ohne verspielt zu sein. */
   left: -0.08em;
   right: -0.08em;
-  /* Ausgemessen an der tatsaechlichen Schrift: oben und unten bleibt
-     gleich viel Luft, die Unterlaenge des "p" liegt vollstaendig im
-     Balken und stoesst nicht an dessen Kante. */
+  /* Ausgemessen: zwischen der Spitze des "p" und der Oberkante der
+     zweiten Zeile liegen nur 1,5 px. Der Balken kann die Unterlaenge
+     also nicht mit Luft umschliessen, ohne das "b" von "Immobilien"
+     zu streifen. Er endet deshalb knapp an der Spitze des "p" — das
+     Wort wirkt kompakter und die zweite Zeile bleibt frei. */
   top: 0.13em;
-  bottom: -0.14em;
+  bottom: -0.05em;
   background: #fce48c;
   border-radius: 3px;
   transform: scaleX(0);
