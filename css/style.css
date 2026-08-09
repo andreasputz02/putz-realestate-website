@@ -830,9 +830,9 @@ body.nav-open { overflow: hidden; }
   border-color: var(--gold);
 }
 
-/* Self-contained white cards keep their own light-card text colors
-   even when nested inside a dark section (broader .section-dark rules
-   above would otherwise wash them out to near-invisible on white). */
+/* Diese Karten waren einmal weiss und brauchten deshalb im dunklen
+   Abschnitt eigene, dunkle Textfarben. Seit sie selbst dunkel sind,
+   gilt wieder die helle Schrift — die Ausnahmen unten sind entfallen. */
 .section-dark .feature-card .eyebrow,
 .section-dark .listing-card .eyebrow,
 .section-dark .partner-card .eyebrow,
@@ -843,13 +843,13 @@ body.nav-open { overflow: hidden; }
 }
 .section-dark .location-card .field-note,
 .section-dark .form-card .field-note {
-  color: var(--ink-soft);
+  color: rgba(255, 255, 255, 0.5);
 }
 .section-dark .feature-card h3,
 .section-dark .listing-card h3,
 .section-dark .location-card h3,
 .section-dark .form-card h3 {
-  color: var(--ink);
+  color: var(--white);
 }
 
 .section-dark .back-link { color: rgba(255, 255, 255, 0.55); }
@@ -3457,3 +3457,105 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 680px) {
   .bw-hero-fuss .btn { width: 100%; justify-content: center; }
 }
+
+/* ============================================================
+   DURCHGEHEND DUNKEL
+   Die Website kennt keine hellen Flaechen mehr. Statt jede Regel
+   oben umzuschreiben, werden die hellen Bausteine hier gesammelt
+   ueberschrieben — so bleibt nachvollziehbar, was urspruenglich
+   hell war und was die Umstellung geaendert hat.
+   Ausgenommen: der Zahlen-Abschnitt, der bleibt gold.
+   ============================================================ */
+
+/* Frueher weisse Abschnitte — jetzt sehr dunkles Grau, damit sie
+   sich vom reinen Schwarz der Nachbarabschnitte absetzen. */
+.section-white {
+  background: var(--black-soft);
+  color: var(--cream);
+}
+.section-white h1,
+.section-white h2,
+.section-white h3,
+.section-white h4 { color: var(--white); }
+.section-white p,
+.section-white li,
+.section-white address { color: rgba(255, 255, 255, 0.68); }
+.section-white .lede { color: rgba(255, 255, 255, 0.72); }
+.section-white a:not(.btn) { color: inherit; }
+.section-white strong { color: var(--white); }
+
+/* ---------- Karten ---------- */
+.feature-card,
+.listing-card,
+.location-card,
+.form-card,
+.agent-card,
+.partner-card,
+.modal-panel {
+  background: #131315;
+  color: var(--cream);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+.feature-card h3, .feature-card h4,
+.listing-card h3,
+.location-card h3, .location-card h4, .location-card strong,
+.form-card h3, .form-card h4,
+.agent-card h3, .agent-card h4, .agent-card strong,
+.partner-card h3, .partner-card h4,
+.modal-panel h2, .modal-panel h3 { color: var(--white); }
+.feature-card p,
+.listing-card .loc,
+.location-card p, .location-card address,
+.form-card p,
+.agent-card p,
+.partner-card p,
+.modal-panel p { color: rgba(255, 255, 255, 0.62); }
+
+.listing-specs { border-top-color: rgba(255, 255, 255, 0.12); }
+.listing-specs strong { color: var(--white); }
+.listing-specs span { color: rgba(255, 255, 255, 0.5); }
+.listing-media .price-tag { background: rgba(11, 11, 12, 0.82); color: var(--gold); }
+
+/* ---------- Formularfelder ---------- */
+.field label { color: rgba(255, 255, 255, 0.55); }
+.field input,
+.field textarea,
+.field select {
+  background: #0f0f11;
+  border-color: rgba(255, 255, 255, 0.14);
+  color: var(--white);
+}
+.field input::placeholder,
+.field textarea::placeholder { color: rgba(255, 255, 255, 0.32); }
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  background: #0f0f11;
+  border-color: var(--gold);
+}
+/* Das Auswahlzeichen der Browser ist auf dunklem Grund kaum zu sehen. */
+.field select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fbe48b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 42px;
+}
+.field-note { color: rgba(255, 255, 255, 0.5); }
+.field-note a { color: var(--gold); }
+
+/* ---------- Einzelne helle Reste ---------- */
+.value-card .icon-wrap { background: rgba(255, 255, 255, 0.07); }
+.modal-close:hover { background: rgba(255, 255, 255, 0.1); color: var(--white); }
+.bw-faktor { color: rgba(255, 255, 255, 0.85); border-color: rgba(255, 255, 255, 0.18); }
+.bw-faktor:hover,
+.bw-faktor:focus-visible { color: var(--black); }
+.bw-frage { color: var(--white); }
+.company-copy p { color: rgba(255, 255, 255, 0.68); }
+.company-copy .company-punchline { color: var(--white); }
+.bw-abschluss .bw-gross { color: var(--white); }
+
+/* Die Logoplatte der Partner bleibt hell: die Logos sind dunkel
+   gezeichnet und waeren auf schwarzem Grund nicht mehr zu erkennen. */
