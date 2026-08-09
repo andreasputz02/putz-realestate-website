@@ -1018,9 +1018,14 @@ body.nav-open { overflow: hidden; }
 
 .profile-layout {
   display: grid;
-  grid-template-columns: 0.85fr 1.15fr;
-  gap: 72px;
+  /* Querformat links, Text rechts — bei gleicher Breite wirkt das
+     Bild sonst gequetscht. */
+  grid-template-columns: 1.05fr 1fr;
+  gap: 60px;
   align-items: center;
+}
+@media (max-width: 900px) {
+  .profile-layout { grid-template-columns: 1fr; gap: 34px; }
 }
 
 
@@ -1028,14 +1033,20 @@ body.nav-open { overflow: hidden; }
   position: relative;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  aspect-ratio: 3/3.7;
-  background: linear-gradient(160deg, #1c1a17, #0b0b0c);
+  /* Querformat. Beim spaeteren Teamfoto bleibt das Verhaeltnis
+     gleich — dann traegt object-fit: cover den Ausschnitt. */
+  aspect-ratio: 3 / 2;
+  background: var(--black);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 48px;
+  padding: 42px;
 }
-.company-logo-card img { width: 70%; height: auto; object-fit: contain; }
+.company-logo-card img { width: 62%; max-height: 100%; object-fit: contain; }
+/* Fuer das Teamfoto spaeter: Klasse "ist-foto" ergaenzen, dann fuellt
+   das Bild die Kachel randlos. */
+.company-logo-card.ist-foto { padding: 0; }
+.company-logo-card.ist-foto img { width: 100%; height: 100%; object-fit: cover; }
 
 .company-copy { display: flex; flex-direction: column; gap: 16px; }
 .company-copy p { color: var(--ink-soft); font-size: 15.5px; line-height: 1.75; }
@@ -1324,16 +1335,20 @@ body.nav-open { overflow: hidden; }
   padding: 34px 30px;
 }
 
-/* Im Laufband stehen weisse Karten auf schwarzem Grund. Bewusst nur
-   hier und nicht an der Grundregel: .testimonial-card wird auch
-   anderswo verwendet, dort sollen die Karten dunkel bleiben. */
+/* Im Laufband stehen schwarze Karten mit goldener Umrandung. Bewusst
+   nur hier und nicht an der Grundregel: .testimonial-card wird auch
+   anderswo verwendet. */
 .testimonial-marquee .testimonial-card {
-  background: var(--white);
-  border-color: rgba(0, 0, 0, 0.08);
+  background: var(--black);
+  border-color: #fce48c;
 }
-.testimonial-marquee .testimonial-card p { color: var(--ink-soft); }
-.testimonial-marquee .testimonial-who strong { color: var(--ink); }
-.testimonial-marquee .testimonial-who span { color: rgba(23, 22, 26, 0.55); }
+.testimonial-marquee .testimonial-card p { color: rgba(255, 255, 255, 0.82); }
+.testimonial-marquee .testimonial-who strong { color: var(--white); }
+.testimonial-marquee .testimonial-who span { color: rgba(255, 255, 255, 0.55); }
+.testimonial-marquee .testimonial-who .avatar {
+  background: rgba(252, 228, 140, 0.14);
+  color: #fce48c;
+}
 
 /* Wer Bewegung reduziert haben moechte, bekommt die Karten stehend. */
 @media (prefers-reduced-motion: reduce) {
