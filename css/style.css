@@ -3642,3 +3642,131 @@ body.modal-open { overflow: hidden; }
 /* Die Logokachel bei "Wir sind PUTZ Real Estate" bleibt schwarz. */
 .section-gold .company-copy p { color: rgba(11, 11, 12, 0.74); }
 .section-gold .company-copy .company-punchline { color: var(--black); }
+
+/* ============================================================
+   REFERENZEN
+   Jeder Fall nimmt eine ganze Zeile ein, Bild und Text wechseln
+   die Seite. Ausgangslage, Vorgehen und Ergebnis stehen als
+   Beschreibungsliste — so bleibt die Struktur auch ohne Gestaltung
+   lesbar und nachvollziehbar.
+   ============================================================ */
+.ref-liste { display: flex; flex-direction: column; gap: 0; }
+
+.ref-fall {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+  padding: 70px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+.ref-fall:last-child { border-bottom: 1px solid rgba(255, 255, 255, 0.09); }
+/* Bei jedem zweiten Fall wandert das Bild nach rechts. */
+.ref-fall.ist-rechts .ref-bild { order: 2; }
+
+.ref-bild {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  background: #0f0f11;
+}
+.ref-bild img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.7s var(--ease);
+}
+.ref-fall:hover .ref-bild img { transform: scale(1.03); }
+
+.ref-ort {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 12px;
+}
+.ref-nr {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 300;
+  letter-spacing: 0;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--gold);
+}
+.ref-text h3 {
+  font-size: clamp(23px, 2.6vw, 32px);
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 24px;
+  max-width: 20ch;
+}
+
+.ref-kennzahlen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.ref-kennzahl {
+  border: 1px solid rgba(252, 228, 140, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 12px 18px;
+}
+.ref-kennzahl strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 500;
+  color: #fce48c;
+  line-height: 1.2;
+}
+.ref-kennzahl span {
+  display: block;
+  margin-top: 3px;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.ref-verlauf { margin: 0; }
+.ref-verlauf dt {
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.ref-verlauf dt + dd { margin-bottom: 20px; }
+.ref-verlauf dd:last-child { margin-bottom: 0; }
+.ref-verlauf dd {
+  margin-left: 0;
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.66);
+}
+.ref-verlauf dd.ist-ergebnis { color: var(--white); font-weight: 500; }
+
+.ref-video { margin-top: 30px; }
+.ref-video video {
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--radius-md);
+  background: #000;
+  display: block;
+}
+.ref-videonote {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+@media (max-width: 900px) {
+  .ref-fall { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+  /* Untereinander steht das Bild immer oben — abwechselnd waere hier
+     nur verwirrend. */
+  .ref-fall.ist-rechts .ref-bild { order: 0; }
+  .ref-text h3 { max-width: none; }
+}
