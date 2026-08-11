@@ -8,7 +8,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b0b0c'/><circle cx='32' cy='32' r='14' fill='%23fbe48b'/></svg>">
 <link rel="stylesheet" href="css/fonts.css?v=4">
 <meta name="description" content="Vier verkaufte Objekte aus Wien und Niederösterreich — Ausgangslage, Vorgehen und Ergebnis. Von der Villa in Brunn am Gebirge bis zur Wohnung, die drei Makler nicht verkauft bekamen.">
-<link rel="stylesheet" href="css/style.css?v=160">
+<link rel="stylesheet" href="css/style.css?v=161">
 </head>
 <body class="page-dark">
 
@@ -21,6 +21,7 @@
       <ul>
         <li><a href="immobilien.html">Unsere Immobilien</a></li>
         <li><a href="verkaufen.html">Verkaufen</a></li>
+        <li><a href="referenzen.html" class="active">Referenzen</a></li>
         <li class="has-dropdown">
           <a href="index.html#ueber-uns">Über Uns
             <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -30,11 +31,9 @@
               <a href="index.html#ueber-uns">Das sind WIR</a>
               <a href="index.html#partner">Das sind unsere Partner</a>
               <a href="index.html#standorte">Unsere Standorte</a>
-              <a href="referenzen.html" class="active">Referenzen</a>
             </div>
           </div>
         </li>
-        <li><a href="bewertung.html">Kostenlose Bewertung</a></li>
         <li class="has-dropdown">
           <a href="news.html">Aktuelles
             <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -53,6 +52,7 @@
         <li><a href="index.html#kontakt">Kontakt</a></li>
       </ul>
     </nav>
+    <a href="bewertung.html" class="nav-pille">Kostenlose Bewertung</a>
   </div>
 </header>
 
@@ -62,16 +62,16 @@
   <section class="page-hero">
     <div class="container">
       <p class="eyebrow no-dot">Referenzen</p>
-      <h1 class="kein-punkt">Verkauft. Und so
-        <em class="leuchtwort" data-leuchtwort><span>kam</span></em>
-        es dazu<span class="marke-punkt">.</span></h1>
+      <h1 class="kein-punkt">Ein
+        <em class="leuchtwort" data-leuchtwort><span>TOP</span></em>
+        Makler bringt also nichts<span class="marke-punkt">?</span></h1>
       <p class="lede">Vier Objekte, vier Ausgangslagen, vier Wege dorthin. Kein Hochglanz — sondern das, was wir tatsächlich gemacht haben und was dabei herausgekommen ist.</p>
       <div class="breadcrumb"><a href="index.html">Start</a> / Referenzen</div>
     </div>
   </section>
 
   <!-- ===== Kennzahlen ===== -->
-  <section class="section section-dark" style="padding-top:0;">
+  <section class="section section-dark" style="padding-top:80px;">
     <div class="container">
       <div class="zahlenband" data-zahlenband>
         <div class="zahlenband-feld"><strong data-ziel="100" data-suffix="+">100+</strong><span>Zufriedene Kunden</span></div>
@@ -113,10 +113,10 @@
             <dt>Ergebnis</dt>
             <dd class="ist-ergebnis">Trotz eines schwierigen Marktes hat es zwei Monate gedauert, bis wir beim Notar saßen.</dd>
           </dl>
-          <div class="ref-video">
-            <video src="assets/video/reel-brunn.mp4" controls preload="none" poster="assets/img/referenzen/brunn.jpg" playsinline></video>
-            <p class="ref-videonote">Der Film, mit dem die Villa vermarktet wurde</p>
-          </div>
+          <button type="button" class="btn btn-outline ref-videoknopf" data-modal-open="film-brunn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 5.5v13l11-6.5z"/></svg>
+            Den Film zur Villa ansehen
+          </button>
         </div>
       </article>
       <article class="ref-fall ist-rechts" data-reveal>
@@ -192,60 +192,108 @@
   </section>
 
   <!-- ===== Stimmen ===== -->
-  <section class="section section-gold">
+  <section class="section section-dark">
     <div class="container">
       <div class="section-head" data-reveal>
         <div>
           <h2 class="h2-breit">Das sagen unsere Kunden</h2>
         </div>
       </div>
-      <!-- Die Kopie fuer das endlose Band legt js/script.js an. -->
-      <div class="testimonial-marquee" data-laufband>
-        <div class="testimonial-track">
-<div class="testimonial-card">
-          <div class="stars">
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-          </div>
-          <p>„Herr Putz hat unseren Verkauf von Anfang bis Ende professionell begleitet. Immer erreichbar, immer ehrlich.“</p>
-          <div class="testimonial-who">
-            <div class="avatar">M.</div>
-            <div><strong>Familie M.</strong><span>Hausverkauf, Wolkersdorf</span></div>
-          </div>
-        </div>
-        <div class="testimonial-card">
-          <div class="stars">
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-          </div>
-          <p>„Schnelle, unkomplizierte Vermittlung unserer Wohnung in Wien. Die Bewertung war absolut treffend.“</p>
-          <div class="testimonial-who">
-            <div class="avatar">S.</div>
-            <div><strong>Sophie K.</strong><span>Wohnungsverkauf, Wien</span></div>
-          </div>
-        </div>
-        <div class="testimonial-card">
-          <div class="stars">
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-            <svg viewBox="0 0 20 20"><path d="M10 1l2.6 5.8L19 7.6l-4.6 4.3 1.2 6.4L10 15.3 4.4 18.3l1.2-6.4L1 7.6l6.4-.8z"/></svg>
-          </div>
-          <p>„Als Käufer hat mich die persönliche und ehrliche Beratung überzeugt. Klare Empfehlung.“</p>
-          <div class="testimonial-who">
-            <div class="avatar">D.</div>
-            <div><strong>David R.</strong><span>Immobilienkauf, Donaustadt</span></div>
-          </div>
-        </div>
-        </div>
-      </div>
+
+      <div class="video-slider" data-reveal>
+              <div class="video-slider-track">
+                <div class="video-slide">
+                  <div class="video-feature">
+                    <div>
+                      <h2 class="kein-punkt" style="font-size:clamp(28px,3.4vw,40px);">Julia und Christian</h2>
+                      <p class="eyebrow no-dot" style="color:var(--white); margin-top:14px;">Haus in Siegenfeld gekauft + zwei Wohnungen in Baden verkauft</p>
+                    </div>
+                    <div class="video-feature-body">
+                      <div class="video-feature-player">
+                        <video controls preload="metadata" poster="assets/img/testimonial-poster-v2.jpg">
+                          <source src="assets/video/testimonial-julia-christian.mp4" type="video/mp4">
+                          Dein Browser unterstützt das Video-Element leider nicht.
+                        </video>
+                      </div>
+                      <div class="slider-controls slider-controls-mobile">
+                        <div class="slider-progress" role="tablist" aria-label="Video Auswahl">
+                          <button class="slider-dot" type="button" data-index="0" aria-label="Video 1 von 2"></button>
+                          <button class="slider-dot" type="button" data-index="1" aria-label="Video 2 von 2"></button>
+                        </div>
+                        <div class="slider-arrows">
+                          <button class="slider-arrow" data-dir="-1" aria-label="Vorheriges Video">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+                          </button>
+                          <button class="slider-arrow" data-dir="1" aria-label="Nächstes Video">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="video-cta-card">
+                        <h3>Bereit, deine Erfolgsgeschichte erzählen zu können?</h3>
+                        <p>Alles beginnt mit dem ersten Kontakt.</p>
+                        <div class="cta-actions">
+                          <a href="bewertung.html" class="btn btn-gold">Kostenlose Bewertung</a>
+                          <a href="#kontakt" class="btn btn-outline">Kontakt</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="video-slide">
+                  <div class="video-feature">
+                    <div>
+                      <h2 class="kein-punkt" style="font-size:clamp(28px,3.4vw,40px);">Max</h2>
+                      <p class="eyebrow no-dot" style="color:var(--white); margin-top:14px;">Villa in Brunn gekauft und Reihenhaus am Gießhübl verkauft</p>
+                    </div>
+                    <div class="video-feature-body">
+                      <div class="video-feature-player">
+                        <video controls preload="metadata" poster="assets/img/testimonial-poster-max.jpg">
+                          <source src="assets/video/testimonial-max.mp4" type="video/mp4">
+                          Dein Browser unterstützt das Video-Element leider nicht.
+                        </video>
+                      </div>
+                      <div class="slider-controls slider-controls-mobile">
+                        <div class="slider-progress" role="tablist" aria-label="Video Auswahl">
+                          <button class="slider-dot" type="button" data-index="0" aria-label="Video 1 von 2"></button>
+                          <button class="slider-dot" type="button" data-index="1" aria-label="Video 2 von 2"></button>
+                        </div>
+                        <div class="slider-arrows">
+                          <button class="slider-arrow" data-dir="-1" aria-label="Vorheriges Video">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+                          </button>
+                          <button class="slider-arrow" data-dir="1" aria-label="Nächstes Video">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="video-cta-card">
+                        <h3>Bereit, deine Erfolgsgeschichte erzählen zu können?</h3>
+                        <p>Alles beginnt mit dem ersten Kontakt.</p>
+                        <div class="cta-actions">
+                          <a href="bewertung.html" class="btn btn-gold">Kostenlose Bewertung</a>
+                          <a href="#kontakt" class="btn btn-outline">Kontakt</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="slider-controls slider-controls-desktop">
+                <div class="slider-progress" role="tablist" aria-label="Video Auswahl">
+                  <button class="slider-dot" type="button" data-index="0" aria-label="Video 1 von 2"></button>
+                  <button class="slider-dot" type="button" data-index="1" aria-label="Video 2 von 2"></button>
+                </div>
+                <div class="slider-arrows">
+                  <button class="slider-arrow" data-dir="-1" aria-label="Vorheriges Video">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+                  </button>
+                  <button class="slider-arrow" data-dir="1" aria-label="Nächstes Video">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
     </div>
   </section>
 
@@ -266,6 +314,20 @@
     </div>
   </section>
 </main>
+
+  <!-- Film zur Villa in Brunn — liegt ausserhalb des Textflusses,
+       damit die Reihenfolge der Fallbeispiele ruhig bleibt. -->
+  <div class="modal-overlay" data-modal="film-brunn" hidden>
+    <div class="modal-panel modal-film">
+      <button class="modal-close" type="button" data-modal-close aria-label="Schließen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <h3>Brunn am Gebirge</h3>
+      <p>Der Film, mit dem die Villa vermarktet wurde.</p>
+      <video src="assets/video/reel-brunn.mp4" controls preload="none" poster="assets/img/referenzen/brunn.jpg" playsinline></video>
+    </div>
+  </div>
+
 
 <footer class="site-footer">
   <div class="container">
@@ -324,6 +386,7 @@
     <ul>
       <li><a href="immobilien.html">Unsere Immobilien</a></li>
       <li><a href="verkaufen.html">Verkaufen</a></li>
+      <li><a href="referenzen.html" class="active">Referenzen</a></li>
       <li class="mobile-nav-group">
         <button type="button" class="mobile-nav-toggle" aria-expanded="false">
           Über Uns
@@ -333,10 +396,8 @@
           <a href="index.html#ueber-uns" class="mobile-nav-sub">Das sind WIR</a>
           <a href="index.html#partner" class="mobile-nav-sub">Das sind unsere Partner</a>
           <a href="index.html#standorte" class="mobile-nav-sub">Unsere Standorte</a>
-          <a href="referenzen.html" class="mobile-nav-sub">Referenzen</a>
         </div>
       </li>
-      <li><a href="bewertung.html">Kostenlose Bewertung</a></li>
       <li class="mobile-nav-group">
         <button type="button" class="mobile-nav-toggle" aria-expanded="false">
           Aktuelles
@@ -352,6 +413,7 @@
         </div>
       </li>
       <li><a href="index.html#kontakt">Kontakt</a></li>
+      <li><a href="bewertung.html" class="mobile-hervor">Kostenlose Bewertung</a></li>
     </ul>
   </div>
 

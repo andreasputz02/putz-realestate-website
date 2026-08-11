@@ -3770,3 +3770,56 @@ body.modal-open { overflow: hidden; }
   .ref-fall.ist-rechts .ref-bild { order: 0; }
   .ref-text h3 { max-width: none; }
 }
+
+/* ============================================================
+   KOPFLEISTE — Pille rechts aussen
+   "Kostenlose Bewertung" steht nicht mehr in der Liste, sondern als
+   eigener Knopf ganz rechts. Der Container ist bereits
+   space-between, die Pille bildet damit das dritte Element.
+   ============================================================ */
+.site-header .container { gap: 20px; }
+.main-nav { margin-left: auto; }
+
+.nav-pille {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 11px 22px;
+  border-radius: 100px;
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background 0.35s var(--ease), color 0.35s var(--ease);
+}
+.nav-pille:hover,
+.nav-pille:focus-visible { background: var(--gold-light); }
+.nav-pille.ist-aktiv { background: var(--white); }
+
+/* Unter der Umbruchgrenze uebernimmt das Menue mit dem Hamburger. */
+@media (max-width: 1100px) {
+  .nav-pille { display: none; }
+}
+
+/* Im mobilen Menue steht sie als hervorgehobener Eintrag am Ende. */
+.mobile-menu a.mobile-hervor {
+  color: var(--gold);
+}
+
+/* ---------- Fenster mit dem Film ---------- */
+.modal-film { max-width: 460px; text-align: center; }
+.modal-film h3 { margin-bottom: 6px; }
+.modal-film p { margin-bottom: 20px; }
+.modal-film video {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  max-height: 70vh;
+  border-radius: var(--radius-md);
+  background: #000;
+  display: block;
+  margin: 0 auto;
+}
+
+.ref-videoknopf { margin-top: 28px; }
+.ref-videoknopf svg { width: 17px; height: 17px; fill: currentColor; stroke: none; }
