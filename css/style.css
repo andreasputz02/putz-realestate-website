@@ -3559,3 +3559,86 @@ body.modal-open { overflow: hidden; }
 
 /* Die Logoplatte der Partner bleibt hell: die Logos sind dunkel
    gezeichnet und waeren auf schwarzem Grund nicht mehr zu erkennen. */
+
+/* ============================================================
+   GOLDENE ABSCHNITTE
+   Fuer "Wir sind PUTZ Real Estate", die Google-Bewertungen, die
+   Standorte und das Kontaktformular. Auf Gold wird alles dunkel —
+   auch Dinge, die sonst gold sind und hier verschwinden wuerden:
+   der Markenpunkt, die goldenen Knoepfe und die Kartenraender.
+   ============================================================ */
+.section-gold { background: #fce48c; color: var(--ink); }
+
+.section-gold h1,
+.section-gold h2,
+.section-gold h3,
+.section-gold h4 { color: var(--black); }
+.section-gold p,
+.section-gold li,
+.section-gold address,
+.section-gold .lede { color: rgba(11, 11, 12, 0.74); }
+.section-gold strong { color: var(--black); }
+.section-gold .eyebrow { color: rgba(11, 11, 12, 0.62); }
+
+/* Der Markenpunkt waere gold auf gold. */
+.section-gold .section-head h2::after,
+.section-gold h2::after,
+.section-gold .marke-punkt { color: var(--black); }
+
+/* Knoepfe: der goldene waere unsichtbar, deshalb hier schwarz. */
+.section-gold .btn-gold {
+  background: var(--black);
+  color: #fce48c;
+}
+.section-gold .btn-gold:hover { background: #1c1a17; }
+.section-gold .btn-outline {
+  border-color: rgba(11, 11, 12, 0.35);
+  color: var(--black);
+}
+.section-gold .btn-outline:hover {
+  background: var(--black);
+  color: #fce48c;
+  border-color: var(--black);
+}
+
+/* Karten bleiben dunkel — auf Gold ist das der staerkste Kontrast.
+   Ihr goldener Rand faellt weg, er wuerde mit dem Grund verschmelzen. */
+.section-gold .form-card,
+.section-gold .location-card,
+.section-gold .agent-card,
+.section-gold .feature-card,
+.section-gold .testimonial-card,
+.section-gold .testimonial-marquee .testimonial-card {
+  background: var(--black);
+  border-color: rgba(11, 11, 12, 0.25);
+  color: var(--cream);
+}
+.section-gold .form-card h3,
+.section-gold .form-card h4,
+.section-gold .location-card h3,
+.section-gold .location-card h4,
+.section-gold .location-card strong,
+.section-gold .agent-card h3,
+.section-gold .agent-card strong,
+.section-gold .testimonial-card strong { color: var(--white); }
+.section-gold .form-card p,
+.section-gold .location-card p,
+.section-gold .location-card address,
+.section-gold .agent-card p,
+.section-gold .testimonial-card p,
+.section-gold .testimonial-card span { color: rgba(255, 255, 255, 0.72); }
+.section-gold .field-note { color: rgba(255, 255, 255, 0.5); }
+.section-gold .field-note a { color: var(--gold); }
+.section-gold .field label { color: rgba(255, 255, 255, 0.55); }
+.section-gold .location-card .loc-detail { border-top-color: rgba(255, 255, 255, 0.12); }
+
+/* Innerhalb der dunklen Karten bleibt der Knopf golden. */
+.section-gold .form-card .btn-gold {
+  background: var(--gold);
+  color: var(--black);
+}
+.section-gold .form-card .btn-gold:hover { background: var(--gold-light); }
+
+/* Die Logokachel bei "Wir sind PUTZ Real Estate" bleibt schwarz. */
+.section-gold .company-copy p { color: rgba(11, 11, 12, 0.74); }
+.section-gold .company-copy .company-punchline { color: var(--black); }
