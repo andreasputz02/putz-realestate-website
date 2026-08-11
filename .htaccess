@@ -1,4 +1,26 @@
 # ============================================================
+#  EINE ADRESSE FUER ALLES
+#
+#  Die Seite war unter putz-realestate.at UND unter
+#  www.putz-realestate.at erreichbar — fuer Suchmaschinen sind das
+#  zwei Websites mit demselben Inhalt, deren Staerke sich aufteilt
+#  statt sich zu addieren. Das www wird deshalb dauerhaft (301) auf
+#  die Adresse ohne www umgeleitet.
+#
+#  Diese Regel steht ganz oben, damit sie auch im Wartungsmodus
+#  greift und Google beide Varianten sofort zusammenfuehrt.
+#  Auf https leitet der Server bereits von sich aus um.
+# ============================================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+</IfModule>
+
+
+# ============================================================
 #  WARTUNGSMODUS — die Seite ist oeffentlich nicht erreichbar.
 #
 #  Zum Wiederonlinegehen: den Rewrite-Block unten entfernen
@@ -12,12 +34,16 @@
   RewriteEngine On
 
   # Ausnahmen, die weiterhin ausgeliefert werden:
+  #  - robots.txt und sitemap.xml, damit Suchmaschinen auch waehrend
+  #    der Wartung wissen, was es gibt
   #  - die Wartungsseite selbst (sonst Endlosschleife)
   #  - das Logo, das die Wartungsseite anzeigt
   #  - der passwortgeschuetzte Admin-Bereich
   RewriteCond %{REQUEST_URI} !^/wartung\.html$
   RewriteCond %{REQUEST_URI} !^/assets/img/logo\.png$
   RewriteCond %{REQUEST_URI} !^/admin/
+  RewriteCond %{REQUEST_URI} !^/robots\.txt$
+  RewriteCond %{REQUEST_URI} !^/sitemap\.xml$
   RewriteRule ^ - [R=503,L]
 </IfModule>
 

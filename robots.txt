@@ -1,0 +1,17 @@
+# robots.txt fuer putz-realestate.at
+
+User-agent: *
+Allow: /
+
+# Nicht fuer die Suche gedacht: der geschuetzte Verwaltungsbereich,
+# die Datenablage und die Seiten, die nur ueber ein Formular oder
+# einen persoenlichen Link erreicht werden.
+Disallow: /admin/
+Disallow: /data/
+Disallow: /wartung.html
+Disallow: /tippgeber-app.php
+Disallow: /tippgeber-login.php
+Disallow: /send-mail.php
+Disallow: /justimmo.php
+
+Sitemap: https://putz-realestate.at/sitemap.xml
