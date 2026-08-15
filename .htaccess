@@ -21,6 +21,24 @@
 
 
 # ============================================================
+#  ADRESSEN OHNE .html
+#
+#  /immobilien-verkaufen-mistelbach liefert die Datei
+#  immobilien-verkaufen-mistelbach.html aus. Damit dieselbe Seite
+#  nicht unter zwei Adressen zaehlt, traegt jede Seite eine
+#  kanonische Angabe im Kopf — die entscheidet fuer Google.
+# ============================================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}\.html -f
+  RewriteRule ^([^.]+)$ $1.html [L]
+</IfModule>
+
+
+# ============================================================
 #  WARTUNGSMODUS — die Seite ist oeffentlich nicht erreichbar.
 #
 #  Zum Wiederonlinegehen: den Rewrite-Block unten entfernen

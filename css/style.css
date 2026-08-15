@@ -3823,3 +3823,112 @@ body.modal-open { overflow: hidden; }
 
 .ref-videoknopf { margin-top: 28px; }
 .ref-videoknopf svg { width: 17px; height: 17px; fill: currentColor; stroke: none; }
+
+/* ============================================================
+   ORTSSEITEN
+   ============================================================ */
+.ort-hero h1 { max-width: 16ch; }
+
+.ort-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+.ort-chart {
+  margin: 0;
+  background: #131315;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-lg);
+  padding: 28px 26px 24px;
+}
+.ort-chart figcaption h3 { font-size: 19px; font-weight: 600; margin-bottom: 6px; }
+.ort-chart figcaption p { font-size: 13.5px; color: rgba(255, 255, 255, 0.55); margin-bottom: 18px; }
+.ort-chart-flaeche svg { width: 100%; height: auto; display: block; }
+
+/* Die Zahlen stehen als Tabelle im Dokument — sichtbar bleibt das
+   Diagramm, vorgelesen und ausgewertet wird die Tabelle. Deshalb
+   nicht display:none, das wuerde sie auch fuer Screenreader tilgen. */
+.ort-daten {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.ort-quelle {
+  margin-top: 16px;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+/* ---------- Ablauf ---------- */
+.ort-schritte {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.09);
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+.ort-schritt { background: var(--black); padding: 36px 26px 40px; }
+.ort-schritt-nr {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 300;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--gold);
+  margin-bottom: 20px;
+}
+.ort-schritt h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+.ort-schritt p { font-size: 14.5px; line-height: 1.7; color: rgba(255, 255, 255, 0.6); }
+
+/* ---------- Lagen ---------- */
+.ort-lagen { display: grid; grid-template-columns: 1fr 1fr; gap: 34px 46px; }
+.ort-lagen h3 { font-size: 19px; font-weight: 600; margin-bottom: 10px; }
+.ort-lagen p { font-size: 15px; line-height: 1.75; }
+
+/* ---------- Fragen ---------- */
+.ort-fragen { border-top: 1px solid rgba(255, 255, 255, 0.09); }
+.ort-frage { border-bottom: 1px solid rgba(255, 255, 255, 0.09); }
+.ort-frage summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 22px 40px 22px 0;
+  font-size: 16.5px;
+  font-weight: 500;
+  color: var(--white);
+  position: relative;
+}
+.ort-frage summary::-webkit-details-marker { display: none; }
+.ort-frage summary::after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  width: 10px; height: 10px;
+  border-right: 1.5px solid var(--gold);
+  border-bottom: 1.5px solid var(--gold);
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform 0.3s var(--ease);
+}
+.ort-frage[open] summary::after { transform: translateY(-30%) rotate(225deg); }
+.ort-frage p {
+  margin: 0 0 24px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.66);
+  max-width: 66ch;
+}
+
+@media (max-width: 900px) {
+  .ort-charts { grid-template-columns: 1fr; }
+  .ort-schritte { grid-template-columns: repeat(2, 1fr); }
+  .ort-lagen { grid-template-columns: 1fr; gap: 26px; }
+}
+@media (max-width: 560px) {
+  .ort-schritte { grid-template-columns: 1fr; }
+}

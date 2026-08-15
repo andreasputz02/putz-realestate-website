@@ -561,3 +561,126 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
   });
 })();
 
+
+// ---------- Diagramme auf den Ortsseiten ----------
+// Gezeichnet wird aus der Tabelle daneben, nicht aus einer eigenen
+// Datenliste: so stehen die Zahlen genau einmal im Dokument, sind
+// ohne JavaScript lesbar und fuer Suchmaschinen auswertbar.
+(function () {
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (name, attr) => {
+    const k = document.createElementNS(NS, name);
+    for (const [a, v] of Object.entries(attr)) k.setAttribute(a, v);
+    return k;
+  };
+  const zahl = (t) => Number(String(t).replace(/[^\d,.-]/g, "").replace(/\./g, "").replace(",", "."));
+
+  function tabelleLesen(figur) {
+    const zeilen = [...figur.querySelectorAll("tbody tr")];
+    return zeilen.map((tr) => ({
+      name: tr.querySelector("th").textContent.trim(),
+      werte: [...tr.querySelectorAll("td")].map((td) => zahl(td.textContent)),
+    }));
+  }
+
+  // ---- Liniendiagramm: ein Wert je Zeile ----
+  document.querySelectorAll("[data-linienchart]").forEach((flaeche) => {
+    const daten = tabelleLesen(flaeche.closest("figure"));
+    if (daten.length < 2) return;
+    const farbe = flaeche.dataset.farbe || "#fce48c";
+    const einheit = flaeche.dataset.einheit || "";
+
+    const B = 600, H = 260, links = 54, rechts = 12, oben = 18, unten = 32;
+    const werte = daten.map((d) => d.werte[0]);
+    const max = Math.max(...werte), min = Math.min(...werte);
+    // Achse bei null beginnen zu lassen wuerde die Aenderung platt
+    // druecken; stattdessen etwas Luft unter dem kleinsten Wert.
+    const untenWert = min - (max - min) * 0.18;
+    const x = (i) => links + (i * (B - links - rechts)) / (daten.length - 1);
+    const y = (v) => oben + (1 - (v - untenWert) / (max - untenWert)) * (H - oben - unten);
+
+    const svg = el("svg", { viewBox: `0 0 ${B} ${H}`, role: "img",
+      "aria-label": flaeche.closest("figure").querySelector("figcaption p").textContent });
+
+    [0, 0.5, 1].forEach((t) => {
+      const wert = untenWert + t * (max - untenWert);
+      svg.appendChild(el("line", { x1: links, x2: B - rechts, y1: y(wert), y2: y(wert),
+        stroke: "rgba(255,255,255,0.1)", "stroke-width": 1 }));
+      const b = el("text", { x: links - 10, y: y(wert) + 4, "text-anchor": "end",
+        fill: "rgba(255,255,255,0.45)", "font-size": 11 });
+      b.textContent = Math.round(wert).toLocaleString("de-AT") + " " + einheit;
+      svg.appendChild(b);
+    });
+
+    const punkte = werte.map((v, i) => `${x(i)},${y(v)}`).join(" ");
+    svg.appendChild(el("polygon", { points: `${links},${y(untenWert)} ${punkte} ${B - rechts},${y(untenWert)}`,
+      fill: farbe, "fill-opacity": 0.1 }));
+    const linie = el("polyline", { points: punkte, fill: "none", stroke: farbe,
+      "stroke-width": 2.5, "stroke-linejoin": "round", "stroke-linecap": "round" });
+    svg.appendChild(linie);
+
+    werte.forEach((v, i) => {
+      svg.appendChild(el("circle", { cx: x(i), cy: y(v), r: 3, fill: farbe }));
+      // Nicht jedes Jahr beschriften, sonst ueberlappen die Zahlen.
+      if (i === 0 || i === werte.length - 1 || i % 3 === 0) {
+        const b = el("text", { x: x(i), y: H - 10, "text-anchor": "middle",
+          fill: "rgba(255,255,255,0.45)", "font-size": 11 });
+        b.textContent = daten[i].name;
+        svg.appendChild(b);
+      }
+    });
+
+    flaeche.appendChild(svg);
+
+    // Die Linie zeichnet sich beim Sichtbarwerden einmal auf.
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const laenge = linie.getTotalLength();
+      linie.style.strokeDasharray = laenge;
+      linie.style.strokeDashoffset = laenge;
+      new IntersectionObserver((e, o) => {
+        if (!e.some((x) => x.isIntersecting)) return;
+        o.disconnect();
+        linie.style.transition = "stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1)";
+        linie.style.strokeDashoffset = 0;
+      }, { threshold: 0.3 }).observe(flaeche);
+    }
+  });
+
+  // ---- Spannendiagramm: von-bis je Zeile ----
+  document.querySelectorAll("[data-spannenchart]").forEach((flaeche) => {
+    const daten = tabelleLesen(flaeche.closest("figure"));
+    if (!daten.length) return;
+    const farbe = flaeche.dataset.farbe || "#fce48c";
+    const einheit = flaeche.dataset.einheit || "";
+
+    // Links Platz fuer den laengsten Gemeindenamen, rechts eine feste
+    // Spalte fuer die Preisangabe — sonst wird beides abgeschnitten,
+    // sobald ein Balken bis ans Ende reicht.
+    const B = 600, links = 190, rechts = 86, hoeheZeile = 46, oben = 10;
+    const H = oben + daten.length * hoeheZeile + 24;
+    const max = Math.max(...daten.map((d) => d.werte[1]));
+    const x = (v) => links + (v / max) * (B - links - rechts);
+
+    const svg = el("svg", { viewBox: `0 0 ${B} ${H}`, role: "img",
+      "aria-label": flaeche.closest("figure").querySelector("figcaption p").textContent });
+
+    daten.forEach((d, i) => {
+      const yy = oben + i * hoeheZeile + hoeheZeile / 2;
+      const b = el("text", { x: links - 12, y: yy + 4, "text-anchor": "end",
+        fill: "rgba(255,255,255,0.72)", "font-size": 12.5 });
+      b.textContent = d.name;
+      svg.appendChild(b);
+
+      svg.appendChild(el("line", { x1: links, x2: B - rechts, y1: yy, y2: yy,
+        stroke: "rgba(255,255,255,0.08)", "stroke-width": 1 }));
+      svg.appendChild(el("line", { x1: x(d.werte[0]), x2: x(d.werte[1]), y1: yy, y2: yy,
+        stroke: farbe, "stroke-width": 7, "stroke-linecap": "round", opacity: 0.85 }));
+
+      const t = el("text", { x: B - rechts + 10, y: yy + 4, fill: "rgba(255,255,255,0.5)", "font-size": 11 });
+      t.textContent = `${d.werte[0]}–${d.werte[1]} ${einheit}`;
+      svg.appendChild(t);
+    });
+
+    flaeche.appendChild(svg);
+  });
+})();
