@@ -54,7 +54,7 @@
       : `<div class="scene" style="background:${listing.gradient}"></div>`;
 
     return `
-      <a class="listing-card" data-reveal data-listing-type="${listing.type}" href="immobilie.html?id=${listing.id}">
+      <a class="listing-card" data-reveal data-listing-type="${listing.type}" href="immobilie?id=${listing.id}">
         <div class="listing-media">
           ${deckblatt}
           <span class="tag">${listing.type === "miete" ? "Miete" : "Kauf"}</span>
@@ -178,7 +178,7 @@
       <div class="property-not-found">
         <h2>Immobilie nicht gefunden</h2>
         <p class="lede" style="margin:16px auto 28px;">Dieses Objekt ist nicht mehr verfügbar oder der Link ist fehlerhaft.</p>
-        <a href="immobilien.html" class="btn btn-dark">Zu allen Immobilien</a>
+        <a href="immobilien" class="btn btn-dark">Zu allen Immobilien</a>
       </div>`;
   }
 
@@ -202,7 +202,7 @@
     // Objekte gerade aus Justimmo dazukommen.
     const karten = [...gitter.children].map((karte) => ({
       el: karte,
-      objekt: objekte.find((o) => karte.getAttribute("href") === `immobilie.html?id=${o.id}`),
+      objekt: objekte.find((o) => karte.getAttribute("href") === `immobilie?id=${o.id}`),
     })).filter((k) => k.objekt);
 
     // Objektarten aus dem Bestand — keine feste Liste, sonst stünden

@@ -18,7 +18,7 @@ require_once __DIR__ . '/mail-versand.php';
 const TG_DB_DATEI = __DIR__ . '/data/tippgeber.sqlite';
 
 // Anteil des Tippgebers an unserer Provision, in Prozent.
-// Steht so auch auf tippgeber.html — beide muessen zusammenpassen.
+// Steht so auch auf der Seite tippgeber — beide muessen zusammenpassen.
 const TG_ANTEIL_STANDARD = 20.0;
 
 /**

@@ -23,15 +23,34 @@
 # ============================================================
 #  ADRESSEN OHNE .html
 #
-#  /immobilien-verkaufen-mistelbach liefert die Datei
-#  immobilien-verkaufen-mistelbach.html aus. Damit dieselbe Seite
-#  nicht unter zwei Adressen zaehlt, traegt jede Seite eine
-#  kanonische Angabe im Kopf — die entscheidet fuer Google.
+#  Nach aussen gibt es nur noch /verkaufen, /referenzen und so
+#  weiter. Zwei Schritte sind dafuer noetig:
+#
+#    1. Wer noch /verkaufen.html aufruft, wird dauerhaft (301) auf
+#       /verkaufen geschickt. Ohne das haette jede Seite zwei
+#       Adressen mit demselben Inhalt.
+#    2. /verkaufen liefert intern verkaufen.html aus.
+#
+#  Geprueft wird THE_REQUEST, also die urspruengliche Anfrage —
+#  die interne Umschreibung in Schritt 2 loest Schritt 1 deshalb
+#  nicht erneut aus, es entsteht keine Schleife.
+#
+#  wartung.html bleibt aussen vor: darauf zeigt ErrorDocument.
 # ============================================================
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # /index.html und /index -> /
+  RewriteCond %{THE_REQUEST} \s/+index(\.html)?[\s?] [NC]
+  RewriteRule ^ / [R=301,L]
+
+  # /irgendwas.html -> /irgendwas
+  RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+  RewriteCond %{REQUEST_URI} !^/wartung\.html$
+  RewriteRule ^ /%1 [R=301,L]
+
+  # /irgendwas -> intern irgendwas.html ausliefern
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}\.html -f
   RewriteRule ^([^.]+)$ $1.html [L]

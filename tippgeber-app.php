@@ -69,12 +69,12 @@ foreach ($empfehlungen as $e) {
 
 // --- Persoenlicher Empfehlungslink ---
 //
-// Ziel ist empfehlung.html — nur dort traegt das Formular das
+// Ziel ist die Seite empfehlung — nur dort traegt das Formular das
 // versteckte ref-Feld. Auf jeder anderen Seite ginge die Zuordnung
 // zum Tippgeber verloren. Dieselbe Adresse steht in der
 // Bestaetigungsmail nach der Registrierung (send-mail.php).
 require_once __DIR__ . '/ref-token.php';
-$empfehlungslink = SITE_URL . '/empfehlung.html?ref='
+$empfehlungslink = SITE_URL . '/empfehlung?ref='
     . build_ref_token($ich['vorname'], $ich['nachname'], $ich['email']);
 
 function geld(float $b): string { return '€ ' . number_format($b, 0, ',', '.'); }
@@ -95,7 +95,7 @@ function geld(float $b): string { return '€ ' . number_format($b, 0, ',', '.')
 <body class="page-dark tg-app-body">
 
 <header class="tg-kopf">
-  <a href="index.html" class="tg-kopf-logo"><img src="assets/img/logo.png" alt="PUTZ Real Estate"></a>
+  <a href="/" class="tg-kopf-logo"><img src="assets/img/logo.png" alt="PUTZ Real Estate"></a>
   <a href="?abmelden=1" class="tg-abmelden">Abmelden</a>
 </header>
 

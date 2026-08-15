@@ -155,7 +155,7 @@ if (!empty($_SESSION['tippgeber_id']) && !isset($_GET['token'])) {
 
 <main class="tg-anmeldung">
   <div class="tg-karte">
-    <a href="index.html" class="tg-logo">
+    <a href="/" class="tg-logo">
       <img src="assets/img/logo.png" alt="PUTZ Real Estate">
     </a>
 
@@ -183,8 +183,8 @@ if (!empty($_SESSION['tippgeber_id']) && !isset($_GET['token'])) {
     </form>
 
     <p class="tg-fuss">
-      Noch kein Tippgeber? <a href="tippgeber.html">Hier registrieren</a><br>
-      <a href="index.html">Zurück zur Website</a>
+      Noch kein Tippgeber? <a href="tippgeber">Hier registrieren</a><br>
+      <a href="/">Zurück zur Website</a>
     </p>
   </div>
 </main>

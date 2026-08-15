@@ -164,7 +164,7 @@ function feld($wert, $leerOk = false) {
               <span class="hinweis">— ohne diese Nummer landet eine Anfrage nur per E-Mail bei Ihnen, nicht in Justimmo</span>
             <?php endif; ?>
           </td></tr>
-          <tr><td>Adresse auf der Seite</td><td class="hinweis">immobilie.html?id=<?php echo htmlspecialchars($ob['id']); ?></td></tr>
+          <tr><td>Adresse auf der Seite</td><td class="hinweis">immobilie?id=<?php echo htmlspecialchars($ob['id']); ?></td></tr>
         </table>
         <?php if ($ob['images']): ?>
           <h3>Erstes Bild</h3>

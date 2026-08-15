@@ -207,7 +207,7 @@ if ($sent && $formName === 'Tippgeber-Registrierung') {
     $vorname = trim($_POST['vorname'] ?? '');
     $nachname = trim($_POST['nachname'] ?? '');
     $token = build_ref_token($vorname, $nachname, $email);
-    $link = SITE_URL . '/empfehlung.html?ref=' . $token;
+    $link = SITE_URL . '/empfehlung?ref=' . $token;
 
     $confirmBody = "Hallo " . $vorname . ",\n\n"
         . "vielen Dank für deine Registrierung als Tippgeber bei PUTZ Real Estate!\n\n"

@@ -121,7 +121,7 @@ try {
             $objekte[] = [
                 'id'    => (string)($o['objektId'] ?? ''),
                 'titel' => (string)($o['title'] ?? ''),
-                'seite' => 'https://putz-realestate.at/immobilie.html?id=' . rawurlencode((string)($o['id'] ?? '')),
+                'seite' => 'https://putz-realestate.at/immobilie?id=' . rawurlencode((string)($o['id'] ?? '')),
             ];
         }
     }
