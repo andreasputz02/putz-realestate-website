@@ -790,6 +790,10 @@ body.nav-open { overflow: hidden; }
 .section { padding: 110px 0; }
 .section-tight { padding: 70px 0; }
 .section-dark { background: var(--black); color: var(--cream); }
+/* Die Website ist durchgehend schwarz. Diese zwei Klassen gab es
+   frueher fuer helle und goldene Abschnitte — sie stehen nur noch
+   hier, damit nichts weiss aufblitzt, falls sie irgendwo auftauchen. */
+.section-white, .section-gold { background: var(--black); color: var(--cream); }
 .section-dark h2, .section-dark h3 { color: var(--white); }
 .section-dark p.lede { color: rgba(255,255,255,0.68); }
 .section-dark .eyebrow { color: var(--gold-light); }
@@ -3467,23 +3471,6 @@ body.modal-open { overflow: hidden; }
    Ausgenommen: der Zahlen-Abschnitt, der bleibt gold.
    ============================================================ */
 
-/* Frueher weisse Abschnitte — jetzt sehr dunkles Grau, damit sie
-   sich vom reinen Schwarz der Nachbarabschnitte absetzen. */
-.section-white {
-  background: var(--black-soft);
-  color: var(--cream);
-}
-.section-white h1,
-.section-white h2,
-.section-white h3,
-.section-white h4 { color: var(--white); }
-.section-white p,
-.section-white li,
-.section-white address { color: rgba(255, 255, 255, 0.68); }
-.section-white .lede { color: rgba(255, 255, 255, 0.72); }
-.section-white a:not(.btn) { color: inherit; }
-.section-white strong { color: var(--white); }
-
 /* ---------- Karten ---------- */
 .feature-card,
 .listing-card,
@@ -3559,89 +3546,6 @@ body.modal-open { overflow: hidden; }
 
 /* Die Logoplatte der Partner bleibt hell: die Logos sind dunkel
    gezeichnet und waeren auf schwarzem Grund nicht mehr zu erkennen. */
-
-/* ============================================================
-   GOLDENE ABSCHNITTE
-   Fuer "Wir sind PUTZ Real Estate", die Google-Bewertungen, die
-   Standorte und das Kontaktformular. Auf Gold wird alles dunkel —
-   auch Dinge, die sonst gold sind und hier verschwinden wuerden:
-   der Markenpunkt, die goldenen Knoepfe und die Kartenraender.
-   ============================================================ */
-.section-gold { background: #fce48c; color: var(--ink); }
-
-.section-gold h1,
-.section-gold h2,
-.section-gold h3,
-.section-gold h4 { color: var(--black); }
-.section-gold p,
-.section-gold li,
-.section-gold address,
-.section-gold .lede { color: rgba(11, 11, 12, 0.74); }
-.section-gold strong { color: var(--black); }
-.section-gold .eyebrow { color: rgba(11, 11, 12, 0.62); }
-
-/* Der Markenpunkt waere gold auf gold. */
-.section-gold .section-head h2::after,
-.section-gold h2::after,
-.section-gold .marke-punkt { color: var(--black); }
-
-/* Knoepfe: der goldene waere unsichtbar, deshalb hier schwarz. */
-.section-gold .btn-gold {
-  background: var(--black);
-  color: #fce48c;
-}
-.section-gold .btn-gold:hover { background: #1c1a17; }
-.section-gold .btn-outline {
-  border-color: rgba(11, 11, 12, 0.35);
-  color: var(--black);
-}
-.section-gold .btn-outline:hover {
-  background: var(--black);
-  color: #fce48c;
-  border-color: var(--black);
-}
-
-/* Karten bleiben dunkel — auf Gold ist das der staerkste Kontrast.
-   Ihr goldener Rand faellt weg, er wuerde mit dem Grund verschmelzen. */
-.section-gold .form-card,
-.section-gold .location-card,
-.section-gold .agent-card,
-.section-gold .feature-card,
-.section-gold .testimonial-card,
-.section-gold .testimonial-marquee .testimonial-card {
-  background: var(--black);
-  border-color: rgba(11, 11, 12, 0.25);
-  color: var(--cream);
-}
-.section-gold .form-card h3,
-.section-gold .form-card h4,
-.section-gold .location-card h3,
-.section-gold .location-card h4,
-.section-gold .location-card strong,
-.section-gold .agent-card h3,
-.section-gold .agent-card strong,
-.section-gold .testimonial-card strong { color: var(--white); }
-.section-gold .form-card p,
-.section-gold .location-card p,
-.section-gold .location-card address,
-.section-gold .agent-card p,
-.section-gold .testimonial-card p,
-.section-gold .testimonial-card span { color: rgba(255, 255, 255, 0.72); }
-.section-gold .field-note { color: rgba(255, 255, 255, 0.5); }
-.section-gold .field-note a { color: var(--gold); }
-.section-gold .field label { color: rgba(255, 255, 255, 0.55); }
-.section-gold .location-card .loc-detail { border-top-color: rgba(255, 255, 255, 0.12); }
-
-/* Innerhalb der dunklen Karten bleibt der Knopf golden. */
-.section-gold .form-card .btn-gold {
-  background: var(--gold);
-  color: var(--black);
-}
-.section-gold .form-card .btn-gold:hover { background: var(--gold-light); }
-
-/* Die Logokachel bei "Wir sind PUTZ Real Estate" bleibt schwarz. */
-.section-gold .company-copy p { color: rgba(11, 11, 12, 0.74); }
-.section-gold .company-copy .company-punchline { color: var(--black); }
 
 /* ============================================================
    REFERENZEN
@@ -4071,3 +3975,88 @@ body.modal-open { overflow: hidden; }
 .gebiet-karte:hover .gebiet-pfeil svg { transform: translateX(5px); }
 
 @media (max-width: 900px) { .gebiet-raster { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   GOLDENE AKZENTE
+   Die Website ist durchgehend schwarz — das Gold trägt sie jetzt
+   über Details statt über ganze Flächen.
+   ============================================================ */
+
+/* Kurzer goldener Strich über jeder Abschnittsüberschrift. */
+.section-head > div::before,
+.bw-gross::before {
+  content: "";
+  display: block;
+  width: 38px;
+  height: 2px;
+  background: var(--gold);
+  margin-bottom: 22px;
+  border-radius: 2px;
+}
+.page-hero .section-head > div::before { display: none; }
+
+/* Karten bekennen sich beim Überfahren zur Hausfarbe. */
+.listing-card,
+.location-card,
+.feature-card,
+.partner-card,
+.ort-buero,
+.ort-chart {
+  transition: border-color 0.4s var(--ease);
+}
+.listing-card:hover,
+.location-card:hover,
+.feature-card:hover,
+.partner-card:hover { border-color: rgba(252, 228, 140, 0.55); }
+
+/* Markierter Text in der Hausfarbe statt im Browserblau. */
+::selection { background: #fce48c; color: var(--black); }
+
+/* Bewertungskarten: goldene Kante links statt rundum — auf Schwarz
+   wirkt der volle Rahmen wie ein Kasten, die Kante wie ein Zitat. */
+.testimonial-marquee .testimonial-card {
+  border-color: rgba(255, 255, 255, 0.1);
+  border-left: 2px solid #fce48c;
+}
+
+/* Die Trennlinien zwischen Abschnitten dürfen eine Spur Gold tragen. */
+.ort-fakten,
+.ort-schritte,
+.bw-gruende {
+  border-top-color: rgba(252, 228, 140, 0.28);
+  border-bottom-color: rgba(252, 228, 140, 0.28);
+}
+
+/* Aufzählungen in Fließtexten mit goldenem Punkt. */
+.ort-frage[open] summary { color: var(--gold-light); }
+.bw-einsatzliste li { border-color: rgba(252, 228, 140, 0.28); }
+
+/* Reste aus der Zeit heller Abschnitte: diese Bausteine standen frueher
+   auf Weiss und trugen deshalb dunkle Schrift. Auf Schwarz waren sie
+   damit unlesbar. */
+.news-article { border-top-color: rgba(255, 255, 255, 0.09); }
+.news-article p,
+.news-article .news-date,
+.news-article .news-source { color: rgba(255, 255, 255, 0.66); }
+.news-article .news-date { color: rgba(255, 255, 255, 0.45); }
+.news-article .news-source { color: rgba(255, 255, 255, 0.42); }
+.news-article .news-source a { color: var(--gold); }
+.news-article strong { color: var(--white); }
+
+/* Die Kontaktkachel auf der Objektseite. */
+.agent-card .agent-titel { color: var(--gold); }
+.agent-card a { color: rgba(255, 255, 255, 0.72); }
+.agent-card a:hover { color: var(--gold-light); }
+.agent-card span,
+.agent-card div { color: rgba(255, 255, 255, 0.72); }
+.agent-card strong,
+.agent-card h4 { color: var(--white); }
+
+/* Die Punkte unter den Schiebereglern in Gold statt Weiss. */
+.slider-dot { background: rgba(255, 255, 255, 0.25); }
+.slider-dot.is-active { background: #fce48c; }
+
+/* Die Logoplatte der Partner bleibt hell — die Logos sind fremdes
+   Material mit dunkler Zeichnung, auf Schwarz waeren sie nicht mehr
+   zu erkennen. Eine goldene Haarlinie bindet sie ans Farbschema. */
+.partner-logo-chip { border: 1px solid rgba(252, 228, 140, 0.45); }
