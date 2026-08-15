@@ -3940,3 +3940,31 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 1000px) {
   .footer-top.ist-fuenf { grid-template-columns: 1fr 1fr; }
 }
+
+/* Platzhalter, solange die Zahlen fuer ein Diagramm noch fehlen.
+   Haelt die Hoehe des fertigen Diagramms, damit sich das Bild der
+   Seite beim Nachtragen nicht mehr verschiebt. */
+.ort-chart-platzhalter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 190px;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-md);
+  color: rgba(255, 255, 255, 0.32);
+}
+.ort-chart-platzhalter svg { width: 30px; height: 30px; }
+.ort-chart-platzhalter p {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Die Regionenliste in der Fusszeile wird laenger als die anderen
+   Spalten — deshalb zweispaltig, sonst zieht sie die Fusszeile
+   unnoetig in die Hoehe. */
+.footer-regionen-liste { display: grid; grid-template-columns: 1fr 1fr; gap: 11px 18px; }
+@media (max-width: 1000px) { .footer-regionen-liste { grid-template-columns: 1fr 1fr; } }
