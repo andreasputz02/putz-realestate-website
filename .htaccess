@@ -136,3 +136,5 @@ ErrorDocument 503 /wartung.html
 # CSS, JS, Bilder duerfen lange gespeichert bleiben — die tragen
 # ohnehin eine Versionsnummer (?v=…) im Link.
 
+
+# Stand: 2026-08-17 18:14:05
