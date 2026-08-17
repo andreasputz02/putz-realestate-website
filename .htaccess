@@ -21,23 +21,49 @@
 
 
 # ============================================================
-#  Die Seite ist oeffentlich erreichbar.
+#  WARTUNGSMODUS — die Seite ist oeffentlich nicht erreichbar.
 #
-#  Zum Offlinenehmen diesen Block hier wieder einsetzen — er muss
-#  VOR den Adressregeln stehen, sonst beendet deren [L] den
-#  Durchlauf und die 503-Regel greift nicht:
+#  Zum Wiederonlinegehen: den Rewrite-Block unten entfernen
+#  (der Rest der Datei muss bleiben) und pushen.
 #
-#    <IfModule mod_rewrite.c>
-#      RewriteEngine On
-#      RewriteCond %{REQUEST_URI} !^/wartung(\.html)?$
-#      RewriteCond %{REQUEST_URI} !^/assets/img/logo\.png$
-#      RewriteCond %{REQUEST_URI} !^/admin/
-#      RewriteCond %{REQUEST_URI} !^/robots\.txt$
-#      RewriteCond %{REQUEST_URI} !^/sitemap\.xml$
-#      RewriteRule ^ - [R=503,L]
-#    </IfModule>
-#    ErrorDocument 503 /wartung.html
+#  Wirkt NUR auf dem Hostinger-Server. Lokal geoeffnete
+#  Dateien sind davon nicht betroffen.
+#
+#  WICHTIG: Dieser Block steht VOR den Adressregeln weiter unten.
+#  Andernfalls beendet deren [L] den Durchlauf und die 503-Regel
+#  greift nicht mehr — die Seite waere trotz Wartung erreichbar.
 # ============================================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Ausnahmen, die weiterhin ausgeliefert werden:
+  #  - robots.txt und sitemap.xml, damit Suchmaschinen auch waehrend
+  #    der Wartung wissen, was es gibt
+  #  - die Wartungsseite selbst (sonst Endlosschleife)
+  #  - das Logo, das die Wartungsseite anzeigt
+  #  - der passwortgeschuetzte Admin-Bereich
+  RewriteCond %{REQUEST_URI} !^/wartung(\.html)?$
+  RewriteCond %{REQUEST_URI} !^/assets/img/logo\.png$
+  RewriteCond %{REQUEST_URI} !^/admin/
+  RewriteCond %{REQUEST_URI} !^/robots\.txt$
+  RewriteCond %{REQUEST_URI} !^/sitemap\.xml$
+  RewriteRule ^ - [R=503,L]
+</IfModule>
+
+# 503 = "voruebergehend nicht verfuegbar". Wichtig fuer Google:
+# die Seite wird dadurch NICHT aus dem Index entfernt.
+ErrorDocument 503 /wartung.html
+
+<IfModule mod_headers.c>
+  # Suchmaschinen: in einer Stunde wieder vorbeischauen.
+  #
+  # Achtung beim Wiederonlinegehen: manche Zwischenspeicher nehmen
+  # diese Stunde woertlich. Wenn die Seite nach dem Abschalten noch
+  # 503 liefert, hilft ein zusaetzlicher Commit als Anstoss.
+  Header always set Retry-After "3600"
+</IfModule>
+
 
 # ============================================================
 #  ADRESSEN OHNE .html
@@ -110,4 +136,3 @@
 # CSS, JS, Bilder duerfen lange gespeichert bleiben — die tragen
 # ohnehin eine Versionsnummer (?v=…) im Link.
 
-# Auslieferung angestossen: 2026-08-17 17:58
