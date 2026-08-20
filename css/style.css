@@ -4060,3 +4060,76 @@ body.modal-open { overflow: hidden; }
    Material mit dunkler Zeichnung, auf Schwarz waeren sie nicht mehr
    zu erkennen. Eine goldene Haarlinie bindet sie ans Farbschema. */
 .partner-logo-chip { border: 1px solid rgba(252, 228, 140, 0.45); }
+
+/* ============================================================
+   VERKAUFTE OBJEKTE
+   ============================================================ */
+.verkauft-raster {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.verkauft-karte {
+  background: #131315;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color 0.4s var(--ease), transform 0.4s var(--ease);
+}
+.verkauft-karte:hover {
+  border-color: rgba(252, 228, 140, 0.55);
+  transform: translateY(-3px);
+}
+
+.verkauft-bild {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #0f0f11;
+}
+.verkauft-bild img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.7s var(--ease);
+}
+.verkauft-karte:hover .verkauft-bild img { transform: scale(1.05); }
+
+/* Der Vermerk sitzt im Bild, nicht darunter — so ist auf einen Blick
+   klar, dass es sich nicht um ein laufendes Angebot handelt. */
+.verkauft-marke {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #fce48c;
+  color: var(--black);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 100px;
+}
+
+.verkauft-text { padding: 18px 20px 22px; }
+.verkauft-text h3 {
+  font-size: 16.5px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.verkauft-ort {
+  font-size: 14px;
+  color: #fce48c;
+  margin-bottom: 3px;
+}
+.verkauft-bezirk {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 1100px) { .verkauft-raster { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 800px)  { .verkauft-raster { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+@media (max-width: 480px) {
+  .verkauft-raster { grid-template-columns: 1fr; }
+  .verkauft-text { padding: 16px 18px 20px; }
+}
