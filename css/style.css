@@ -4136,3 +4136,20 @@ body.modal-open { overflow: hidden; }
   .verkauft-raster { grid-template-columns: 1fr; }
   .verkauft-text { padding: 16px 18px 20px; }
 }
+
+/* Gekuerzte Ansicht: genau zwei Reihen, egal wie viele Spalten das
+   Raster gerade hat. Die Klasse setzt das Skript — ohne JavaScript
+   stehen alle Objekte da, statt unerreichbar zu verschwinden. */
+.verkauft-raster.ist-gekuerzt .verkauft-karte:nth-child(n+9) { display: none; }
+@media (max-width: 1100px) {
+  .verkauft-raster.ist-gekuerzt .verkauft-karte:nth-child(n+7) { display: none; }
+}
+@media (max-width: 800px) {
+  .verkauft-raster.ist-gekuerzt .verkauft-karte:nth-child(n+5) { display: none; }
+}
+@media (max-width: 480px) {
+  .verkauft-raster.ist-gekuerzt .verkauft-karte:nth-child(n+3) { display: none; }
+}
+
+.verkauft-mehr { margin-top: 28px; }
+.verkauft-mehr .btn svg { width: 17px; height: 17px; }

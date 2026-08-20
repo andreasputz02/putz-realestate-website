@@ -684,3 +684,33 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
     flaeche.appendChild(svg);
   });
 })();
+
+// ---------- Verkaufte Objekte: zwei Reihen, Rest auf Knopfdruck ----------
+// Wie viele Karten in zwei Reihen passen, haengt von der Fensterbreite
+// ab — das entscheidet das CSS. Hier wird nur geprueft, ob ueberhaupt
+// etwas verborgen ist, und der Knopf entsprechend ein- oder ausgeblendet.
+(function () {
+  document.querySelectorAll(".verkauft-raster").forEach((raster) => {
+    const bereich = raster.parentElement;
+    const huelle = bereich.querySelector("[data-verkauft-mehr]");
+    if (!huelle) return;
+    const knopf = huelle.querySelector("button");
+
+    raster.classList.add("ist-gekuerzt");
+
+    const pruefen = () => {
+      if (!raster.classList.contains("ist-gekuerzt")) return;
+      const verborgen = [...raster.children].some((k) => k.offsetParent === null);
+      huelle.hidden = !verborgen;
+    };
+
+    knopf.addEventListener("click", () => {
+      raster.classList.remove("ist-gekuerzt");
+      huelle.hidden = true;
+    });
+
+    pruefen();
+    // Beim Drehen des Telefons aendert sich die Spaltenzahl.
+    window.addEventListener("resize", pruefen, { passive: true });
+  });
+})();
