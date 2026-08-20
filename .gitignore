@@ -31,3 +31,9 @@ Wohnung-Wallrissstraße.MP4
 # Originalfotos der verkauften Objekte — die verkleinerten
 # Fassungen liegen unter assets/img/verkauft/.
 /Verkaufte Objekte/
+
+# Objekt Wallrissstrasse — von der Website genommen. Die Dateien
+# bleiben lokal liegen, falls sie noch einmal gebraucht werden.
+/assets/img/objekte/wallriss/
+/assets/video/immobilie-wallrissstrasse.mp4
+/assets/img/immobilie-wallriss-poster.jpg

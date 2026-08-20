@@ -1600,6 +1600,7 @@ body.nav-open { overflow: hidden; }
 .partner-stack-item:nth-child(5) .partner-stack-card { top: calc(92px + var(--titel-hoehe) + 48px); z-index: 5; }
 .partner-stack-item:nth-child(6) .partner-stack-card { top: calc(92px + var(--titel-hoehe) + 60px); z-index: 6; }
 .partner-stack-item:nth-child(7) .partner-stack-card { top: calc(92px + var(--titel-hoehe) + 72px); z-index: 7; }
+.partner-stack-item:nth-child(8) .partner-stack-card { top: calc(92px + var(--titel-hoehe) + 84px); z-index: 8; }
 
 .partner-logo-chip {
   width: 84px;
@@ -1642,6 +1643,7 @@ body.nav-open { overflow: hidden; }
   .partner-stack-item:nth-child(5) .partner-stack-card { top: calc(84px + var(--titel-hoehe) + 32px); }
   .partner-stack-item:nth-child(6) .partner-stack-card { top: calc(84px + var(--titel-hoehe) + 40px); }
   .partner-stack-item:nth-child(7) .partner-stack-card { top: calc(84px + var(--titel-hoehe) + 48px); }
+  .partner-stack-item:nth-child(8) .partner-stack-card { top: calc(84px + var(--titel-hoehe) + 56px); }
 }
 
 /* ---------- Events ---------- */
