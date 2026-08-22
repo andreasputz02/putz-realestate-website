@@ -3870,13 +3870,15 @@ body.modal-open { overflow: hidden; }
   color: var(--gold);
   margin-bottom: 14px;
 }
+/* Ein Ort je Zeile. Zweispaltig entstanden bei ungerader Anzahl
+   Luecken, und die Gruppen waren unterschiedlich hoch. */
 .footer-regionen-gruppe ul {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .footer-regionen-gruppe a { font-size: 14px; }
 .footer-regionen-gruppe a:hover { color: var(--gold-light); }
