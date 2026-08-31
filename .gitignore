@@ -37,3 +37,6 @@ Wohnung-Wallrissstraße.MP4
 /assets/img/objekte/wallriss/
 /assets/video/immobilie-wallrissstrasse.mp4
 /assets/img/immobilie-wallriss-poster.jpg
+
+# Lokaler Vorschauserver, gehoert nicht auf den Webspace.
+/.dev-server.py
