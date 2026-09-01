@@ -3720,22 +3720,35 @@ body.modal-open { overflow: hidden; }
 .site-header .container { gap: 20px; }
 .main-nav { margin-left: auto; }
 
+/* Nur goldener Rand, wie die Knoepfe im Aufmacher. Die Kopfleiste ist
+   immer dunkel — durchsichtig ueber dem Aufmacherbild, sonst dunkel
+   hinterlegt —, goldene Schrift traegt also auf jeder Seite. */
 .nav-pille {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  padding: 11px 22px;
+  padding: 9.5px 20.5px;   /* 1,5px Rand ausgeglichen, Hoehe bleibt gleich */
   border-radius: 100px;
-  background: var(--gold);
-  color: var(--ink);
+  border: 1.5px solid var(--gold);
+  background: transparent;
+  color: var(--gold-light);
   font-size: 15px;
   font-weight: 700;
   white-space: nowrap;
-  transition: background 0.35s var(--ease), color 0.35s var(--ease);
+  transition: background 0.35s var(--ease), color 0.35s var(--ease),
+              border-color 0.35s var(--ease);
 }
 .nav-pille:hover,
-.nav-pille:focus-visible { background: var(--gold-light); }
-.nav-pille.ist-aktiv { background: var(--white); }
+.nav-pille:focus-visible {
+  background: rgba(251, 228, 139, 0.12);
+  border-color: var(--gold-light);
+}
+/* Steht man schon auf der Bewertungsseite, fuellt sich die Pille leicht —
+   sonst waere nicht mehr zu sehen, wo man gerade ist. */
+.nav-pille.ist-aktiv {
+  background: rgba(251, 228, 139, 0.18);
+  border-color: var(--gold-light);
+}
 
 /* Unter der Umbruchgrenze uebernimmt das Menue mit dem Hamburger. */
 @media (max-width: 1100px) {
