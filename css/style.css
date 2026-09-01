@@ -3087,12 +3087,26 @@ body.modal-open { overflow: hidden; }
   .steps-bild .step-num { font-size: 26px; }
   .steps-bild .step-text p { font-size: 14.5px; line-height: 1.62; }
   .steps-bild .step-text h3 { font-size: 19px; margin-bottom: 8px; }
-  /* 3:2 ist das Format der Originalfotos — so wird nichts vom Bild
-     weggeschnitten. */
-  .steps-bild .step-bild { grid-column: 1; aspect-ratio: 3 / 2; }
-}
-@media (max-width: 760px) {
-  .steps-bild .step-row { grid-template-columns: 56px minmax(0, 1fr); gap: 16px 18px; }
+  /* Das Bild steht ganz oben und ueber die volle Breite — im
+     Originalformat 3:2, es wird also nichts weggeschnitten. Oben
+     deshalb, weil eine klebende Karte immer von oben sichtbar wird:
+     so ist das Foto zu sehen, auch wenn die Karte hoch ist. */
+  .steps-bild .step-bild {
+    grid-column: 1;
+    order: -1;
+    aspect-ratio: 3 / 2;
+    margin: -22px -20px 6px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  /* Ganz aufeinander: alle Karten kleben auf derselben Hoehe, die
+     naechste schiebt sich vollstaendig ueber die vorherige. */
+  .steps-bild .step-row,
+  .steps-bild .step-row:nth-child(2),
+  .steps-bild .step-row:nth-child(3),
+  .steps-bild .step-row:nth-child(4),
+  .steps-bild .step-row:nth-child(5),
+  .steps-bild .step-row:nth-child(6) { top: 84px; }
 }
 
 /* ---------- Fotogalerie ---------- */

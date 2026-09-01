@@ -732,8 +732,8 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
     stapel.classList.remove("kein-stapel");
     const hoechste = Math.max(...karten.map((k) => k.offsetHeight));
     const abstand = Math.max(...karten.map((k) => parseFloat(getComputedStyle(k).top) || 0));
-    // Etwas Luft lassen, damit die Karte nicht bündig am Rand klebt.
-    if (hoechste + abstand + 24 > window.innerHeight) {
+    // Etwas Luft lassen, damit die Karte nicht buendig am Rand klebt.
+    if (hoechste + abstand + 10 > window.innerHeight) {
       stapel.classList.add("kein-stapel");
     }
   }
