@@ -4355,3 +4355,19 @@ body.modal-open { overflow: hidden; }
     grid-row: 2;
   }
 }
+
+/* ------------------------------------------------------------
+   Vorlaeufige Ortsseiten
+
+   Solange die ausfuehrlichen Inhalte herausgenommen sind, besteht die
+   Seite nur aus Titelbereich und Fuss. Ohne Mindesthoehe klebte der
+   Fuss unmittelbar unter der Ueberschrift und die Seite wirkte
+   abgebrochen statt bewusst kurz.
+   ------------------------------------------------------------ */
+.ort-platzhalter {
+  min-height: 68vh;
+  display: flex;
+  align-items: center;
+  padding-bottom: 120px;
+}
+.ort-platzhalter .container { width: 100%; }

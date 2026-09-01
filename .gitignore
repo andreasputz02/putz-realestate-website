@@ -44,3 +44,4 @@ Wohnung-Wallrissstraße.MP4
 # Rohvideos — die webtauglichen Fassungen liegen unter assets/video/.
 *.MOV
 *.mov
+.ortsseiten-inhalt/
