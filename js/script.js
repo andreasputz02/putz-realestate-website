@@ -745,3 +745,25 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
     warten = setTimeout(pruefen, 150);
   }, { passive: true });
 })();
+
+// ---------- Kundenvideos: erst Standbild, dann Steuerleiste ----------
+// Mit dem Attribut "controls" zeigt der Browser im Standbild dauerhaft
+// eine dunkle Leiste ueber dem unteren Bildrand. Deshalb startet das
+// Video ohne, und die Leiste kommt erst beim Abspielen dazu.
+document.querySelectorAll(".video-abspielen").forEach((knopf) => {
+  const video = knopf.parentElement.querySelector("video");
+  if (!video) return;
+
+  knopf.addEventListener("click", () => {
+    video.controls = true;
+    knopf.hidden = true;
+    video.play();
+  });
+
+  // Wird anderswo pausiert und zurueckgespult, darf der Knopf zurueck.
+  video.addEventListener("ended", () => {
+    video.controls = false;
+    video.currentTime = 0;
+    knopf.hidden = false;
+  });
+});

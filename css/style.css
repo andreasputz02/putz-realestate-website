@@ -4229,3 +4229,44 @@ body.modal-open { overflow: hidden; }
 
 /* Setzt das Skript, wenn eine Karte nicht ins Fenster passt. */
 .steps-bild.kein-stapel .step-row { position: static; }
+
+/* Eigener Abspielknopf statt der Steuerleiste des Browsers. Die bleibt
+   im Standbild dauerhaft als dunkler Balken ueber dem unteren Bildrand
+   stehen — beim Klick wird sie eingeschaltet und der Knopf verschwindet. */
+.video-abspielen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.35s var(--ease);
+}
+.video-abspielen::before {
+  content: "";
+  position: absolute;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #fce48c;
+  transition: transform 0.35s var(--ease);
+}
+.video-abspielen svg {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  fill: var(--black);
+  margin-left: 3px;
+}
+.video-abspielen:hover::before { transform: scale(1.08); }
+.video-abspielen:focus-visible { outline: 2px solid var(--gold); outline-offset: -4px; }
+.video-abspielen[hidden] { display: none; }
+
+@media (max-width: 640px) {
+  .video-abspielen::before { width: 56px; height: 56px; }
+  .video-abspielen svg { width: 22px; height: 22px; }
+}
