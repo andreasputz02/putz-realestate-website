@@ -35,9 +35,10 @@ header('Cache-Control: no-store, must-revalidate');
  * Traegt ein handgepflegtes Objekt dieselbe Kennung wie eines aus
  * Justimmo, gewinnt Justimmo — sonst stuende es doppelt auf der Seite.
  */
-function ji_ausgabe(string $json): string
+function ji_ausgabe(string $json, string $vermerk = ''): string
 {
-    return "window.LISTINGS = (function (ausJustimmo, vonHand) {\n"
+    return ($vermerk !== '' ? "/* Justimmo: $vermerk */\n" : '')
+         . "window.LISTINGS = (function (ausJustimmo, vonHand) {\n"
          . "  var bekannt = {};\n"
          . "  ausJustimmo.forEach(function (o) { bekannt[o.id] = true; });\n"
          . "  return ausJustimmo.concat(vonHand.filter(function (o) { return !bekannt[o.id]; }));\n"
@@ -70,37 +71,65 @@ $anzahl        = min(100, max(1, (int)($konfig['anzahl'] ?? 100)));
 //
 //  Mit ?frisch=1 laesst sich das Holen erzwingen, hoechstens
 //  einmal pro Minute.
+//
+//  WICHTIG: Das Alter haengt am Aenderungsdatum der Speicherdatei.
+//  Die darf deshalb nur geschrieben werden, wenn wirklich neue Daten
+//  vorliegen. Wurde sie schon beim START des Hintergrundlaufs
+//  angefasst, galt der Speicher nach jedem Aufruf wieder als frisch —
+//  bricht der Lauf dann ab, altert er nie mehr und die Objektliste
+//  friert dauerhaft ein. Gegen mehrere gleichzeitige Laeufe dient
+//  darum eine eigene Sperrdatei.
 // ------------------------------------------------------------
-define('JI_FRISCH_SEKUNDEN', 60);   // so lange gilt der Speicher als aktuell
+define('JI_FRISCH_SEKUNDEN', 60);    // so lange gilt der Speicher als aktuell
+define('JI_SPERRE_SEKUNDEN', 120);   // so lange laeuft hoechstens ein Hintergrundlauf
+const JI_SPERR_DATEI = __DIR__ . '/data/justimmo-laeuft.lock';
 
-$alter    = is_file(JI_CACHE_DATEI) ? time() - filemtime(JI_CACHE_DATEI) : PHP_INT_MAX;
+/**
+ * Beendet die Antwort an den Besucher, laesst das Skript aber
+ * weiterlaufen. Der Name der Funktion haengt davon ab, wie PHP
+ * eingebunden ist: LiteSpeed (Hostinger) bringt litespeed_,
+ * PHP-FPM bringt fastcgi_. Fehlen beide, geht es nicht.
+ */
+function ji_antwortAbschliessen(): bool
+{
+    foreach (['litespeed_finish_request', 'fastcgi_finish_request'] as $fn) {
+        if (function_exists($fn)) { $fn(); return true; }
+    }
+    return false;
+}
+
+$alter     = is_file(JI_CACHE_DATEI) ? time() - filemtime(JI_CACHE_DATEI) : PHP_INT_MAX;
 $erzwingen = isset($_GET['frisch']) && $alter > JI_FRISCH_SEKUNDEN;
-$roh      = $alter < PHP_INT_MAX ? file_get_contents(JI_CACHE_DATEI) : false;
+$roh       = $alter < PHP_INT_MAX ? file_get_contents(JI_CACHE_DATEI) : false;
 $brauchbar = ($roh !== false && $roh !== '');
 
 if (!$erzwingen && $brauchbar && $alter < JI_FRISCH_SEKUNDEN) {
-    echo ji_ausgabe($roh);
+    echo ji_ausgabe($roh, "Stand {$alter} s, frisch");
     exit;
 }
 
 // Speicher ist da, aber nicht mehr taufrisch: erst ausliefern, dann
-// im Hintergrund erneuern. Das geht nur, wenn die Verbindung zum
-// Besucher vorher geschlossen werden kann — sonst wartet er doch.
+// im Hintergrund erneuern. Nur ein Lauf gleichzeitig — die Sperrdatei
+// haelt die uebrigen Aufrufe zurueck, ohne den Speicher zu verjuengen.
 $imHintergrund = false;
-if (!$erzwingen && $brauchbar && $alter < $cacheSekunden && function_exists('fastcgi_finish_request')) {
-    echo ji_ausgabe($roh);
-    // Datum vorziehen, damit nicht mehrere Aufrufe gleichzeitig holen.
-    @touch(JI_CACHE_DATEI);
-    ignore_user_abort(true);
-    fastcgi_finish_request();
-    $imHintergrund = true;
-}
+if (!$erzwingen && $brauchbar && $alter < $cacheSekunden) {
+    $sperrAlter = is_file(JI_SPERR_DATEI) ? time() - filemtime(JI_SPERR_DATEI) : PHP_INT_MAX;
 
-// Ohne fastcgi_finish_request bleibt es beim bisherigen Verhalten:
-// solange der Speicher gilt, wird er ausgeliefert.
-if (!$imHintergrund && !$erzwingen && $brauchbar && $alter < $cacheSekunden) {
-    echo ji_ausgabe($roh);
-    exit;
+    if ($sperrAlter > JI_SPERRE_SEKUNDEN) {
+        if (!is_dir(dirname(JI_SPERR_DATEI))) @mkdir(dirname(JI_SPERR_DATEI), 0755, true);
+        @touch(JI_SPERR_DATEI);
+        echo ji_ausgabe($roh, "Stand {$alter} s, wird im Hintergrund erneuert");
+        ignore_user_abort(true);
+        @set_time_limit(60);
+        $imHintergrund = ji_antwortAbschliessen();
+        // Laesst sich die Antwort nicht abschliessen, wuerde der
+        // Besucher auf die Schnittstelle warten. Dann lieber nicht
+        // holen — spaetestens nach Ablauf greift der harte Weg unten.
+        if (!$imHintergrund) { @unlink(JI_SPERR_DATEI); exit; }
+    } else {
+        echo ji_ausgabe($roh, "Stand {$alter} s, Erneuerung laeuft bereits");
+        exit;
+    }
 }
 
 // ------------------------------------------------------------
@@ -114,6 +143,7 @@ $xmlRoh = ji_abrufen('objekt/list', [
 ], $konfig);
 
 if ($xmlRoh === null) {
+    @unlink(JI_SPERR_DATEI);
     if (!$imHintergrund) echo "/* Justimmo nicht erreichbar — es gilt die handgepflegte Liste. */\n";
     exit;
 }
@@ -121,6 +151,7 @@ if ($xmlRoh === null) {
 $objekte = ji_umwandeln($xmlRoh);
 
 if (!$objekte) {
+    @unlink(JI_SPERR_DATEI);
     if (!$imHintergrund) echo "/* Justimmo lieferte keine Objekte — es gilt die handgepflegte Liste. */\n";
     exit;
 }
@@ -132,8 +163,9 @@ if (!is_dir(dirname(JI_CACHE_DATEI))) {
     @mkdir(dirname(JI_CACHE_DATEI), 0755, true);
 }
 @file_put_contents(JI_CACHE_DATEI, $json, LOCK_EX);
+@unlink(JI_SPERR_DATEI);
 
 // Im Hintergrund ist die Antwort laengst raus — dann nichts mehr senden.
 if (!$imHintergrund) {
-    echo ji_ausgabe($json);
+    echo ji_ausgabe($json, 'soeben bei Justimmo geholt');
 }
