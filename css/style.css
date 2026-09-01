@@ -4335,7 +4335,23 @@ body.modal-open { overflow: hidden; }
     row-gap: 56px;
     align-items: end;        /* Knopf auf Grundlinie der Ueberschrift */
   }
-  .objekt-vorschau .section-head { margin-bottom: 0; }
-  .objekt-vorschau .listen-knopf { margin-top: 0; justify-self: end; }
-  .objekt-vorschau .listing-grid { grid-column: 1 / -1; }
+  /* Jeder Baustein bekommt seinen Platz ausdruecklich zugewiesen. Ohne
+     das verteilt das Raster sie in Dokumentreihenfolge — der Knopf kaeme
+     dann hinter den Inseraten in eine dritte Zeile statt neben die
+     Ueberschrift, und die zweite Spalte bliebe 0 breit. */
+  .objekt-vorschau .section-head {
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: 0;
+  }
+  .objekt-vorschau .listen-knopf {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    margin-top: 0;
+  }
+  .objekt-vorschau .listing-grid {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
 }
