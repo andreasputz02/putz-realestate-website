@@ -3075,16 +3075,21 @@ body.modal-open { overflow: hidden; }
 .step-bild img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 @media (max-width: 1000px) {
-  /* Bild unter den Text, ueber die volle Breite der Karte. Die Nummer
-     behaelt ihre eigene Spalte, damit die Karte nicht verrutscht. */
-  .steps-bild .step-row { grid-template-columns: 74px minmax(0, 1fr); }
-  .steps-bild .step-bild { grid-column: 1 / -1; aspect-ratio: 21 / 9; }
-
-  /* Kein Stapeln mehr, sobald das Bild unter den Text rutscht: die
-     Karte wird dann hoeher als das Fenster, und weil eine klebende
-     Karte nicht mitscrollt, waere ihr unterer Teil — also genau das
-     Bild — nie vollstaendig zu sehen. */
-  .steps-bild .step-row { position: static; }
+  /* Auf schmalen Fenstern steht alles untereinander: Nummer, Text,
+     Bild. Die Nummer bekommt hier KEINE eigene Spalte mehr — sonst
+     bleiben dem Text nur gut 200 px und die Karte wird doppelt so
+     hoch, wie sie sein muesste. */
+  .steps-bild .step-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 22px 20px 26px;
+  }
+  .steps-bild .step-num { font-size: 26px; }
+  .steps-bild .step-text p { font-size: 14.5px; line-height: 1.62; }
+  .steps-bild .step-text h3 { font-size: 19px; margin-bottom: 8px; }
+  /* 3:2 ist das Format der Originalfotos — so wird nichts vom Bild
+     weggeschnitten. */
+  .steps-bild .step-bild { grid-column: 1; aspect-ratio: 3 / 2; }
 }
 @media (max-width: 760px) {
   .steps-bild .step-row { grid-template-columns: 56px minmax(0, 1fr); gap: 16px 18px; }
@@ -4207,3 +4212,6 @@ body.modal-open { overflow: hidden; }
   .verkauft-beispiel { grid-template-columns: 1fr; gap: 26px; }
   .beispiel-text h3 { max-width: none; }
 }
+
+/* Setzt das Skript, wenn eine Karte nicht ins Fenster passt. */
+.steps-bild.kein-stapel .step-row { position: static; }

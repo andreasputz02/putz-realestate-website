@@ -714,3 +714,34 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
     window.addEventListener("resize", pruefen, { passive: true });
   });
 })();
+
+// ---------- Sechs Schritte: stapeln nur, wenn die Karte hineinpasst ----------
+// Eine klebende Karte scrollt nicht mit. Ist sie hoeher als das
+// Fenster, bleibt ihr unteres Ende — und damit das Bild — dauerhaft
+// unerreichbar. Statt das per Bildschirmbreite zu raten, wird hier
+// gemessen und der Stapel notfalls aufgeloest.
+(function () {
+  const stapel = document.querySelector(".steps-bild");
+  if (!stapel) return;
+
+  const karten = [...stapel.querySelectorAll(".step-row")];
+  if (!karten.length) return;
+
+  function pruefen() {
+    // Zum Messen immer erst den Normalzustand herstellen.
+    stapel.classList.remove("kein-stapel");
+    const hoechste = Math.max(...karten.map((k) => k.offsetHeight));
+    const abstand = Math.max(...karten.map((k) => parseFloat(getComputedStyle(k).top) || 0));
+    // Etwas Luft lassen, damit die Karte nicht bündig am Rand klebt.
+    if (hoechste + abstand + 24 > window.innerHeight) {
+      stapel.classList.add("kein-stapel");
+    }
+  }
+
+  pruefen();
+  let warten;
+  window.addEventListener("resize", () => {
+    clearTimeout(warten);
+    warten = setTimeout(pruefen, 150);
+  }, { passive: true });
+})();
