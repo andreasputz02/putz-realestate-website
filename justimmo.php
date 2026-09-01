@@ -58,8 +58,16 @@ $anzahl        = min(100, max(1, (int)($konfig['anzahl'] ?? 100)));
 
 // ------------------------------------------------------------
 //  Zwischenspeicher: solange frisch, gar nicht erst anfragen
+//
+//  Mit ?frisch=1 laesst er sich umgehen — praktisch, wenn in
+//  Justimmo gerade etwas freigegeben wurde und man nicht bis zu
+//  15 Minuten warten will. Damit niemand die Schnittstelle damit
+//  ueberrennt, wird trotzdem hoechstens einmal pro Minute wirklich
+//  neu angefragt.
 // ------------------------------------------------------------
-if (is_file(JI_CACHE_DATEI) && (time() - filemtime(JI_CACHE_DATEI)) < $cacheSekunden) {
+$frisch = isset($_GET['frisch']) && (time() - @filemtime(JI_CACHE_DATEI)) > 60;
+
+if (!$frisch && is_file(JI_CACHE_DATEI) && (time() - filemtime(JI_CACHE_DATEI)) < $cacheSekunden) {
     $roh = file_get_contents(JI_CACHE_DATEI);
     if ($roh !== false && $roh !== '') {
         echo ji_ausgabe($roh);
