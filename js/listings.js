@@ -46,6 +46,24 @@
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[z]));
   }
 
+  // Ein Grundstueck hat keine Wohnflaeche und keine Zimmer — dort ist
+  // die Grundflaeche die Angabe, die zaehlt. Felder ohne Wert werden
+  // weggelassen statt mit einem Strich gefuellt.
+  function masse(listing) {
+    const zeile = (wert, name) =>
+      wert && wert !== "–" ? `            <div><strong>${wert}</strong><span>${name}</span></div>` : "";
+
+    const istGrund = /grundst/i.test(listing.objektart || "") || /grundst/i.test(listing.title || "");
+    const felder = istGrund
+      ? [[listing.grundArea, "Grundfläche"]]
+      : [[listing.area, "Wohnfläche"], [listing.rooms, "Zimmer"]];
+
+    // Faellt alles weg, wenigstens die Grundflaeche zeigen, wenn es sie gibt.
+    const zeilen = felder.map(([w, n]) => zeile(w, n)).filter(Boolean);
+    if (!zeilen.length && listing.grundArea) zeilen.push(zeile(listing.grundArea, "Grundfläche"));
+    return zeilen.join("\n");
+  }
+
   function renderCard(listing) {
     // Liegt ein echtes Foto vor, steht es auf der Karte. Sonst der Farbverlauf.
     const fotos = Array.isArray(listing.images) ? listing.images : [];
@@ -64,8 +82,7 @@
           <h3>${listing.title}</h3>
           <div class="loc">${listing.location}</div>
           <div class="listing-specs">
-            <div><strong>${listing.area}</strong><span>Wohnfläche</span></div>
-            <div><strong>${listing.rooms}</strong><span>Zimmer</span></div>
+${masse(listing)}
             ${listing.justimmoId ? `<div><strong>${sicher(listing.justimmoId)}</strong><span>Objektnr.</span></div>` : ""}
           </div>
         </div>
@@ -312,7 +329,18 @@
       setText("title", listing.title);
       setText("title-crumb", listing.title);
       setText("location", listing.location);
-      setText("area", listing.area);
+      // Grundstueck: Grundflaeche statt Wohnflaeche, und die
+      // Beschriftung wandert mit.
+      const istGrund = /grundst/i.test(listing.objektart || "") || /grundst/i.test(listing.title || "");
+      const flaeche = istGrund && listing.grundArea ? listing.grundArea : listing.area;
+      const flaechenName = istGrund ? "Grundfläche" : "Wohnfläche";
+      const setLabel = (name, text) => {
+        const el = detailRoot.querySelector(`[data-label="${name}"]`);
+        if (el) el.textContent = text;
+      };
+
+      setText("area", flaeche);
+      setLabel("area", flaechenName);
       setText("rooms", listing.rooms);
       setText("baths", listing.baths);
       setText("baths-label", listing.baths === "1" ? "Bad" : "Bäder");
@@ -320,7 +348,8 @@
 
       // Eckdaten auf dem Deckblatt
       setText("hero-price", listing.price);
-      setText("hero-area", listing.area);
+      setText("hero-area", flaeche);
+      setLabel("hero-area", flaechenName);
       setText("hero-rooms", listing.rooms);
 
       // Deckblatt: erstes Objektfoto als Hintergrund. Fehlen Fotos,

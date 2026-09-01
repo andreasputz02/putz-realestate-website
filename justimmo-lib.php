@@ -345,6 +345,7 @@ function ji_umwandeln(string $xmlRoh): array
         $preisRoh = $istMiete ? ($miete ?: $kauf) : ($kauf ?: $miete);
 
         $flaeche = ji_ersterWert($o, ['flaechen/wohnflaeche', 'wohnflaeche', 'flaechen/nutzflaeche', 'nutzflaeche', 'flaeche']);
+        $grundflaeche = ji_ersterWert($o, ['flaechen/grundstuecksflaeche', 'grundstuecksflaeche', 'flaechen/grundflaeche', 'grundflaeche']);
         $zimmer  = ji_ersterWert($o, ['flaechen/anzahl_zimmer', 'anzahl_zimmer', 'zimmer']);
         $baeder  = ji_ersterWert($o, ['flaechen/anzahl_badezimmer', 'anzahl_badezimmer', 'badezimmer']);
 
@@ -440,7 +441,11 @@ function ji_umwandeln(string $xmlRoh): array
             'mapQuery'    => $karte,
             'lat'         => $lat,
             'lng'         => $lng,
+            // Bei Grundstuecken gibt es keine Wohnflaeche — dort ist die
+            // Grundflaeche die Angabe, auf die es ankommt.
             'area'        => ji_flaecheFormat($flaeche) ?: '–',
+            'grundArea'   => ji_flaecheFormat($grundflaeche) ?: '',
+            'grundWert'   => is_numeric(str_replace(',', '.', $grundflaeche)) ? (float)str_replace(',', '.', $grundflaeche) : null,
             'rooms'       => ji_ganzzahl($zimmer) ?: '–',
             'baths'       => ji_ganzzahl($baeder) ?: '–',
             'gradient'    => 'linear-gradient(135deg,#2c2822,#0f0e0c)',
