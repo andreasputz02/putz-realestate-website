@@ -4311,3 +4311,31 @@ body.modal-open { overflow: hidden; }
   color: var(--gold-light);
   box-shadow: none;
 }
+
+/* ------------------------------------------------------------
+   Objektvorschau der Startseite
+
+   Am Handy stand "Alle Immobilien ansehen" zwischen Ueberschrift und
+   Angeboten — man wurde also weggeschickt, bevor man die drei Objekte
+   ueberhaupt gesehen hatte. Im Dokument steht der Knopf jetzt hinter
+   den Inseraten und liest sich dort als Fortsetzung.
+
+   Ab Tablettbreite gehoert er wieder neben die Ueberschrift. Weil er
+   dafuer an einer anderen Stelle stehen muss als im Dokument, ordnet
+   ein Raster die drei Bausteine: Ueberschrift links, Knopf rechts,
+   Inserate ueber die volle Breite darunter.
+   ------------------------------------------------------------ */
+.objekt-vorschau .listen-knopf { margin-top: 32px; }
+
+@media (min-width: 721px) {
+  .objekt-vorschau {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 40px;
+    row-gap: 56px;
+    align-items: end;        /* Knopf auf Grundlinie der Ueberschrift */
+  }
+  .objekt-vorschau .section-head { margin-bottom: 0; }
+  .objekt-vorschau .listen-knopf { margin-top: 0; justify-self: end; }
+  .objekt-vorschau .listing-grid { grid-column: 1 / -1; }
+}
