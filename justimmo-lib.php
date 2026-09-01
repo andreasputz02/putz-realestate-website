@@ -153,11 +153,19 @@ function ji_videoSuche(SimpleXMLElement $o): string
 {
     $muster = '#https?://[^\s"\'<>]*(?:youtube\.com|youtu\.be|vimeo\.com)[^\s"\'<>]*#i';
 
+    // Erst ausserhalb der Beschreibung suchen — dort stehen die
+    // eigens dafuer vorgesehenen Felder, das ist die sichere Quelle.
     foreach (@$o->xpath('.//*[not(ancestor-or-self::freitexte)]') ?: [] as $el) {
         if (preg_match($muster, (string)$el, $t)) return html_entity_decode($t[0]);
         foreach ($el->attributes() ?? [] as $wert) {
             if (preg_match($muster, (string)$wert, $t)) return html_entity_decode($t[0]);
         }
+    }
+
+    // Sonst in der Beschreibung nachsehen: viele Objekte tragen den
+    // Link nur dort im Fliesstext.
+    foreach (@$o->xpath('.//freitexte//*') ?: [] as $el) {
+        if (preg_match($muster, (string)$el, $t)) return html_entity_decode($t[0]);
     }
     return '';
 }

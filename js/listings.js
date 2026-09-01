@@ -301,6 +301,46 @@ ${masse(listing)}
     anwenden();
   })();
 
+  // Blanke Adressen im Beschreibungstext anklickbar machen. Es wird
+  // ueber die Textknoten gegangen, nicht ueber das Markup — so bleiben
+  // bereits vorhandene Verweise unberuehrt und es kann nichts kaputt
+  // gehen, was Justimmo an HTML mitliefert.
+  function adressenVerlinken(wurzel) {
+    const muster = /https?:\/\/[^\s<>"')\]]+/g;
+    const lauf = document.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT, {
+      acceptNode: (n) =>
+        n.parentElement.closest("a") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT,
+    });
+
+    const knoten = [];
+    while (lauf.nextNode()) if (muster.test(lauf.currentNode.nodeValue)) knoten.push(lauf.currentNode);
+    muster.lastIndex = 0;
+
+    knoten.forEach((n) => {
+      const teile = document.createDocumentFragment();
+      let zuletzt = 0;
+      n.nodeValue.replace(muster, (treffer, pos) => {
+        if (pos > zuletzt) teile.appendChild(document.createTextNode(n.nodeValue.slice(zuletzt, pos)));
+        // Satzzeichen am Ende gehoeren nicht mehr zur Adresse.
+        const sauber = treffer.replace(/[.,;:!?]+$/, "");
+        const a = document.createElement("a");
+        a.href = sauber;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.className = "text-link";
+        a.textContent = sauber;
+        teile.appendChild(a);
+        if (sauber.length < treffer.length) {
+          teile.appendChild(document.createTextNode(treffer.slice(sauber.length)));
+        }
+        zuletzt = pos + treffer.length;
+        return treffer;
+      });
+      if (zuletzt < n.nodeValue.length) teile.appendChild(document.createTextNode(n.nodeValue.slice(zuletzt)));
+      n.parentNode.replaceChild(teile, n);
+    });
+  }
+
   const detailRoot = document.querySelector("[data-property-detail]");
   if (detailRoot) {
     const id = new URLSearchParams(window.location.search).get("id");
@@ -378,7 +418,10 @@ ${masse(listing)}
       // Beschreibungen aus Justimmo bringen ihre eigenen Absaetze mit —
       // nur reiner Text wird hier noch in <p> gefasst.
       const alsAbsatz = (t) => (/<(p|ul|ol|h[1-6]|div)[\s>]/i.test(t) ? t : `<p>${t}</p>`);
-      if (descEl) descEl.innerHTML = listing.description.map(alsAbsatz).join("");
+      if (descEl) {
+        descEl.innerHTML = listing.description.map(alsAbsatz).join("");
+        adressenVerlinken(descEl);
+      }
 
       // Karte: liegen Koordinaten vor, zeichnen wir den Umkreis von
       // 500 Metern um die Adresse. Ohne Koordinaten bleibt es bei der

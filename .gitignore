@@ -40,3 +40,7 @@ Wohnung-Wallrissstraße.MP4
 
 # Lokaler Vorschauserver, gehoert nicht auf den Webspace.
 /.dev-server.py
+
+# Rohvideos — die webtauglichen Fassungen liegen unter assets/video/.
+*.MOV
+*.mov
