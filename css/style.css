@@ -4371,3 +4371,17 @@ body.modal-open { overflow: hidden; }
   padding-bottom: 120px;
 }
 .ort-platzhalter .container { width: 100%; }
+
+/* ------------------------------------------------------------
+   Laufband der Google-Rezensionen
+
+   Die echten Texte sind unterschiedlich lang. Da alle Karten im Band
+   auf dieselbe Hoehe gezogen werden, stand der Name mal hoeher, mal
+   tiefer. Er sitzt jetzt bei allen unten am Kartenrand.
+   ------------------------------------------------------------ */
+.testimonial-marquee .testimonial-card {
+  display: flex;
+  flex-direction: column;
+}
+.testimonial-marquee .testimonial-card p { margin-bottom: 24px; }
+.testimonial-marquee .testimonial-who { margin-top: auto; }
