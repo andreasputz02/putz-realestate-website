@@ -410,14 +410,19 @@ body.page-dark .site-header:not(.is-scrolled) { background: transparent; }
     padding: 0;
     justify-content: center;
     gap: 0;
-    border: none;
+    /* Nur ein goldener Ring mit drei goldenen Strichen — der volle
+       Goldkreis wirkte wie ein zweiter Hauptknopf. Die dunkle Scheibe
+       darunter ist fast durchsichtig und haelt die Striche auch ueber
+       hellen Fotos lesbar. */
+    border: 1.5px solid var(--gold);
     border-radius: 50%;
-    background: linear-gradient(180deg, var(--gold-light), var(--gold));
-    color: var(--ink);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    background: rgba(11, 11, 12, 0.45);
+    color: var(--gold);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     transition: background 0.45s var(--ease), color 0.35s var(--ease),
-                box-shadow 0.4s var(--ease), width 0.5s var(--ease),
-                border-radius 0.5s var(--ease), padding 0.5s var(--ease);
+                border-color 0.35s var(--ease), box-shadow 0.4s var(--ease),
+                width 0.5s var(--ease), border-radius 0.5s var(--ease),
+                padding 0.5s var(--ease);
   }
   /* Geschlossen zeigt nur das Symbol — die Beschriftung fuer Screenreader
      steckt im aria-label des Buttons. */
@@ -440,6 +445,7 @@ body.page-dark .site-header:not(.is-scrolled) { background: transparent; }
     gap: 12px;
     justify-content: space-between;
     border-radius: 26px 26px 0 0;
+    border-color: transparent;
     background: transparent;
     color: var(--gold);
     box-shadow: none;
@@ -4269,4 +4275,26 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 640px) {
   .video-abspielen::before { width: 56px; height: 56px; }
   .video-abspielen svg { width: 22px; height: 22px; }
+}
+
+/* ------------------------------------------------------------
+   Aufmacher der Startseite: beide Knoepfe nur mit goldenem Rand.
+   Der gefuellte Knopf daneben zog den Blick einseitig auf sich —
+   jetzt stehen beide Wege gleichwertig nebeneinander. Die Klasse
+   sitzt nur auf der Startseite, die Gebietsseiten behalten ihren
+   gefuellten Knopf.
+   ------------------------------------------------------------ */
+.hero-actions.nur-rand .btn-gold,
+.hero-actions.nur-rand .btn-outline {
+  background: transparent;
+  color: var(--gold-light);
+  border: 1.5px solid var(--gold);
+  box-shadow: none;
+}
+.hero-actions.nur-rand .btn-gold:hover,
+.hero-actions.nur-rand .btn-outline:hover {
+  background: rgba(251, 228, 139, 0.1);
+  border-color: var(--gold-light);
+  color: var(--gold-light);
+  box-shadow: none;
 }
