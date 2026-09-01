@@ -3078,7 +3078,13 @@ body.modal-open { overflow: hidden; }
   /* Bild unter den Text, ueber die volle Breite der Karte. Die Nummer
      behaelt ihre eigene Spalte, damit die Karte nicht verrutscht. */
   .steps-bild .step-row { grid-template-columns: 74px minmax(0, 1fr); }
-  .steps-bild .step-bild { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+  .steps-bild .step-bild { grid-column: 1 / -1; aspect-ratio: 21 / 9; }
+
+  /* Kein Stapeln mehr, sobald das Bild unter den Text rutscht: die
+     Karte wird dann hoeher als das Fenster, und weil eine klebende
+     Karte nicht mitscrollt, waere ihr unterer Teil — also genau das
+     Bild — nie vollstaendig zu sehen. */
+  .steps-bild .step-row { position: static; }
 }
 @media (max-width: 760px) {
   .steps-bild .step-row { grid-template-columns: 56px minmax(0, 1fr); gap: 16px 18px; }
