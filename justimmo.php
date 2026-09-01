@@ -57,22 +57,50 @@ $cacheSekunden = (int)($konfig['cache_sekunden'] ?? 900);
 $anzahl        = min(100, max(1, (int)($konfig['anzahl'] ?? 100)));
 
 // ------------------------------------------------------------
-//  Zwischenspeicher: solange frisch, gar nicht erst anfragen
+//  Zwischenspeicher
 //
-//  Mit ?frisch=1 laesst er sich umgehen — praktisch, wenn in
-//  Justimmo gerade etwas freigegeben wurde und man nicht bis zu
-//  15 Minuten warten will. Damit niemand die Schnittstelle damit
-//  ueberrennt, wird trotzdem hoechstens einmal pro Minute wirklich
-//  neu angefragt.
+//  Drei Faelle, damit Aenderungen in Justimmo von selbst ankommen,
+//  ohne dass jemand auf die Schnittstelle warten muss:
+//
+//    juenger als 60 s   -> aus dem Speicher, keine Anfrage
+//    60 s bis Ablauf    -> aus dem Speicher, danach im Hintergrund
+//                          neu holen. Der Besucher wartet nicht,
+//                          der naechste sieht den neuen Stand.
+//    aelter als Ablauf  -> jetzt holen, sonst waeren die Daten alt
+//
+//  Mit ?frisch=1 laesst sich das Holen erzwingen, hoechstens
+//  einmal pro Minute.
 // ------------------------------------------------------------
-$frisch = isset($_GET['frisch']) && (time() - @filemtime(JI_CACHE_DATEI)) > 60;
+define('JI_FRISCH_SEKUNDEN', 60);   // so lange gilt der Speicher als aktuell
 
-if (!$frisch && is_file(JI_CACHE_DATEI) && (time() - filemtime(JI_CACHE_DATEI)) < $cacheSekunden) {
-    $roh = file_get_contents(JI_CACHE_DATEI);
-    if ($roh !== false && $roh !== '') {
-        echo ji_ausgabe($roh);
-        exit;
-    }
+$alter    = is_file(JI_CACHE_DATEI) ? time() - filemtime(JI_CACHE_DATEI) : PHP_INT_MAX;
+$erzwingen = isset($_GET['frisch']) && $alter > JI_FRISCH_SEKUNDEN;
+$roh      = $alter < PHP_INT_MAX ? file_get_contents(JI_CACHE_DATEI) : false;
+$brauchbar = ($roh !== false && $roh !== '');
+
+if (!$erzwingen && $brauchbar && $alter < JI_FRISCH_SEKUNDEN) {
+    echo ji_ausgabe($roh);
+    exit;
+}
+
+// Speicher ist da, aber nicht mehr taufrisch: erst ausliefern, dann
+// im Hintergrund erneuern. Das geht nur, wenn die Verbindung zum
+// Besucher vorher geschlossen werden kann — sonst wartet er doch.
+$imHintergrund = false;
+if (!$erzwingen && $brauchbar && $alter < $cacheSekunden && function_exists('fastcgi_finish_request')) {
+    echo ji_ausgabe($roh);
+    // Datum vorziehen, damit nicht mehrere Aufrufe gleichzeitig holen.
+    @touch(JI_CACHE_DATEI);
+    ignore_user_abort(true);
+    fastcgi_finish_request();
+    $imHintergrund = true;
+}
+
+// Ohne fastcgi_finish_request bleibt es beim bisherigen Verhalten:
+// solange der Speicher gilt, wird er ausgeliefert.
+if (!$imHintergrund && !$erzwingen && $brauchbar && $alter < $cacheSekunden) {
+    echo ji_ausgabe($roh);
+    exit;
 }
 
 // ------------------------------------------------------------
@@ -86,14 +114,14 @@ $xmlRoh = ji_abrufen('objekt/list', [
 ], $konfig);
 
 if ($xmlRoh === null) {
-    echo "/* Justimmo nicht erreichbar — es gilt die handgepflegte Liste. */\n";
+    if (!$imHintergrund) echo "/* Justimmo nicht erreichbar — es gilt die handgepflegte Liste. */\n";
     exit;
 }
 
 $objekte = ji_umwandeln($xmlRoh);
 
 if (!$objekte) {
-    echo "/* Justimmo lieferte keine Objekte — es gilt die handgepflegte Liste. */\n";
+    if (!$imHintergrund) echo "/* Justimmo lieferte keine Objekte — es gilt die handgepflegte Liste. */\n";
     exit;
 }
 
@@ -105,4 +133,7 @@ if (!is_dir(dirname(JI_CACHE_DATEI))) {
 }
 @file_put_contents(JI_CACHE_DATEI, $json, LOCK_EX);
 
-echo ji_ausgabe($json);
+// Im Hintergrund ist die Antwort laengst raus — dann nichts mehr senden.
+if (!$imHintergrund) {
+    echo ji_ausgabe($json);
+}
