@@ -10,10 +10,25 @@
 const JI_BASIS       = 'https://api.justimmo.at/rest/v1/';
 const JI_CACHE_DATEI = __DIR__ . '/data/justimmo-cache.json';
 
-// Objekte dieses Abgebers stehen auf der Website immer vorne. Es genuegt
-// ein Teil des Namens, gross oder klein geschrieben ist egal. Leer
-// lassen schaltet die Bevorzugung ab.
+// ------------------------------------------------------------
+//  Objekte, die auf der Website vorne stehen sollen
+//
+//  Zwei Wege, weil Justimmo den Abgeber ueber die Schnittstelle nicht
+//  mitliefert — dort steht bei jedem Objekt nur die eigene Firma als
+//  Kontakt:
+//
+//    1. Steht der Name irgendwo im Objekt (etwa im Freitext oder in
+//       einem Zusatzfeld), greift JI_VORRANG_ABGEBER von selbst. Das ist
+//       der Weg, der auch bei neuen Objekten ohne Zutun funktioniert.
+//    2. Solange das nicht der Fall ist, zaehlen die hier eingetragenen
+//       Objektnummern. Die muessen bei jedem neuen Objekt ergaenzt
+//       werden — dafuer wirkt es sofort.
+// ------------------------------------------------------------
 const JI_VORRANG_ABGEBER = '888koy';
+
+const JI_VORRANG_NUMMERN = [
+    // z. B. '2439/54', '2439/61',
+];
 
 // ------------------------------------------------------------
 //  Abruf bei Justimmo
@@ -289,8 +304,9 @@ function ji_abgeber(SimpleXMLElement $o): string
  * gesamten Objekt. So greift die Bevorzugung auch dann, wenn Justimmo
  * den Abgeber an einer Stelle fuehrt, die oben nicht aufgezaehlt ist.
  */
-function ji_hatVorrang(SimpleXMLElement $o, string $abgeber): bool
+function ji_hatVorrang(SimpleXMLElement $o, string $abgeber, string $nummer): bool
 {
+    if (in_array($nummer, JI_VORRANG_NUMMERN, true)) return true;
     if (JI_VORRANG_ABGEBER === '') return false;
     if (stripos($abgeber, JI_VORRANG_ABGEBER) !== false) return true;
     return stripos((string)$o->asXML(), JI_VORRANG_ABGEBER) !== false;
@@ -473,7 +489,7 @@ function ji_umwandeln(string $xmlRoh): array
         $video = ji_video($videoUrl, $bilder[0] ?? '');
 
         $abgeber = ji_abgeber($o);
-        $vorrang = ji_hatVorrang($o, $abgeber);
+        $vorrang = ji_hatVorrang($o, $abgeber, $id);
 
         $ergebnis[] = [
             'id'          => ji_kennung($titel, $id),
