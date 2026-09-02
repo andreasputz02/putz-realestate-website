@@ -10,6 +10,11 @@
 const JI_BASIS       = 'https://api.justimmo.at/rest/v1/';
 const JI_CACHE_DATEI = __DIR__ . '/data/justimmo-cache.json';
 
+// Objekte dieses Abgebers stehen auf der Website immer vorne. Es genuegt
+// ein Teil des Namens, gross oder klein geschrieben ist egal. Leer
+// lassen schaltet die Bevorzugung ab.
+const JI_VORRANG_ABGEBER = '888koy';
+
 // ------------------------------------------------------------
 //  Abruf bei Justimmo
 // ------------------------------------------------------------
@@ -254,6 +259,43 @@ function ji_objektKnoten(SimpleXMLElement $xml): array
 // ------------------------------------------------------------
 //  XML -> Format der Website
 // ------------------------------------------------------------
+/**
+ * Sucht den Abgeber eines Objekts.
+ *
+ * Justimmo legt die abgebende Firma je nach Konto an unterschiedlichen
+ * Stellen ab — mal als Firma der Kontaktperson, mal als eigenes Feld,
+ * mal am Projekt. Deshalb werden erst die ueblichen Pfade gefragt.
+ */
+function ji_abgeber(SimpleXMLElement $o): string
+{
+    return ji_ersterWert($o, [
+        'user_defined_simplefield[@feldname="abgeber"]',
+        'user_defined_simplefield[@feldname="auftraggeber"]',
+        'user_defined_simplefield[@feldname="bautraeger"]',
+        'user_defined_simplefield[@feldname="eigentuemer"]',
+        'verwaltung_objekt/abgeber',
+        'kontaktperson/firma',
+        'kontaktperson/firma_zusatz',
+        'projekt/name',
+        'projekt/titel',
+        'user_defined_simplefield[@feldname="projekt_name"]',
+    ]);
+}
+
+/**
+ * Steht das Objekt dem bevorzugten Abgeber zu?
+ *
+ * Der Name wird nicht nur im gefundenen Abgeberfeld gesucht, sondern im
+ * gesamten Objekt. So greift die Bevorzugung auch dann, wenn Justimmo
+ * den Abgeber an einer Stelle fuehrt, die oben nicht aufgezaehlt ist.
+ */
+function ji_hatVorrang(SimpleXMLElement $o, string $abgeber): bool
+{
+    if (JI_VORRANG_ABGEBER === '') return false;
+    if (stripos($abgeber, JI_VORRANG_ABGEBER) !== false) return true;
+    return stripos((string)$o->asXML(), JI_VORRANG_ABGEBER) !== false;
+}
+
 function ji_umwandeln(string $xmlRoh): array
 {
     libxml_use_internal_errors(true);
@@ -430,6 +472,9 @@ function ji_umwandeln(string $xmlRoh): array
 
         $video = ji_video($videoUrl, $bilder[0] ?? '');
 
+        $abgeber = ji_abgeber($o);
+        $vorrang = ji_hatVorrang($o, $abgeber);
+
         $ergebnis[] = [
             'id'          => ji_kennung($titel, $id),
             'justimmoId'  => $id,
@@ -456,6 +501,8 @@ function ji_umwandeln(string $xmlRoh): array
             'grundWert'   => is_numeric(str_replace(',', '.', $grundflaeche)) ? (float)str_replace(',', '.', $grundflaeche) : null,
             'rooms'       => ji_ganzzahl($zimmer) ?: '–',
             'baths'       => ji_ganzzahl($baeder) ?: '–',
+            'abgeber'     => $abgeber,
+            'vorrang'     => $vorrang,
             'gradient'    => 'linear-gradient(135deg,#2c2822,#0f0e0c)',
             'images'      => $bilder,
             'description' => array_slice($absaetze, 0, 4),
@@ -463,5 +510,11 @@ function ji_umwandeln(string $xmlRoh): array
         ];
     }
 
-    return $ergebnis;
+    // Die bevorzugten Objekte nach vorne, alles andere behaelt die
+    // Reihenfolge aus Justimmo. array_filter erhaelt sie, deshalb bleibt
+    // die Sortierung stabil und wackelt nicht von Abruf zu Abruf.
+    $vorne = array_values(array_filter($ergebnis, fn($e) => $e['vorrang']));
+    $rest  = array_values(array_filter($ergebnis, fn($e) => !$e['vorrang']));
+
+    return array_merge($vorne, $rest);
 }
