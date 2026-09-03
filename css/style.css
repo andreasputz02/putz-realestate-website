@@ -784,7 +784,12 @@ body.nav-open { overflow: hidden; }
 .breadcrumb {
   display: flex;
   align-items: center;
-  gap: 8px;
+  /* Umbrechen erlaubt: die Kette endet mit dem vollen Objekttitel und
+     passt auf schmalen Schirmen in keine Zeile. Ohne flex-wrap kann
+     eine Flexzeile nicht umbrechen, und die Glieder schrumpfen wegen
+     min-width: auto auch nicht unter ihren Text. */
+  flex-wrap: wrap;
+  gap: 4px 8px;
   font-size: 13px;
   color: rgba(255,255,255,0.45);
   margin-top: 28px;
@@ -2957,7 +2962,10 @@ body.modal-open { overflow: hidden; }
 
 .filter-gitter {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  /* min(230px, 100%) statt 230px: auf sehr schmalen Schirmen ist der
+     Behaelter enger als die Untergrenze, und die Spur ragte darueber
+     hinaus. */
+  grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
   gap: 20px 26px;
 }
 /* Drei feste Spalten: so stehen Art/Objektart/Ort in der ersten und
@@ -4385,3 +4393,121 @@ body.modal-open { overflow: hidden; }
 }
 .testimonial-marquee .testimonial-card p { margin-bottom: 24px; }
 .testimonial-marquee .testimonial-who { margin-top: auto; }
+
+/* ------------------------------------------------------------
+   Lange Zusammensetzungen dürfen umbrechen
+
+   "Dachgeschosswohnung" ist bei 38px 453px breit — in eine 331px
+   schmale Spalte passt das Wort nicht. Weil .page-hero mit
+   overflow: hidden arbeitet, wurde der Titel rechts abgeschnitten
+   statt umgebrochen.
+
+   overflow-wrap: break-word greift ausschliesslich dann, wenn ein
+   Wort allein nicht in die Zeile passt — am uebrigen Umbruch aendert
+   sich nichts. Die Titel der Objektseiten kommen aus Justimmo und
+   sind darum am wenigsten vorhersehbar; dort wird auf schmalen
+   Schirmen zusaetzlich getrennt, weil ein Trennstrich besser liest
+   als ein harter Schnitt mitten im Wort. Deutsche Trennregeln greifen
+   dank lang="de" im html-Element.
+   ------------------------------------------------------------ */
+/* Die Eigenschaft wird geerbt, deshalb genuegt sie am body: sie wirkt
+   damit auch auf Fliesstext mit langen Adressen (Impressum,
+   Datenschutz) und auf die Brotkrumen mit dem vollen Objekttitel.
+
+   "anywhere" und nicht "break-word": beide brechen ein zu langes Wort
+   gleich um, aber nur anywhere senkt dabei auch das Mindestmass des
+   Elements. Genau daran hing der Fehler — "Vergleichswertverfahren"
+   ist 282px breit, und mit break-word blieb dieses Mindestmass
+   bestehen, sodass die Rasterspur darum herum auf 282px wuchs,
+   obwohl nur 261px Platz waren. Sichtbar unterscheiden sich die
+   beiden Werte nicht. */
+body {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  [data-field="title"] {
+    hyphens: auto;
+  }
+}
+
+/* ------------------------------------------------------------
+   Sehr schmale Schirme (320px, etwa iPhone SE der ersten Reihe)
+
+   Zwei Stellen sprengten dort die Breite:
+
+   1. "Kostenlose Immobilienbewertung" ist als Knopf 344px breit und
+      darf wegen white-space: nowrap nicht umbrechen — im Aufmacher
+      mit overflow: hidden wurde der Text schlicht abgeschnitten.
+   2. Im Kontaktraster wuchs die Spur auf 310px, obwohl der Behaelter
+      nur 276px breit ist. Grund: eine 1fr-Spur hat als Mindestmass
+      den Inhalt, und Eingabefelder bringen eine eigene Grundbreite
+      mit. min-width: 0 hebt dieses Mindestmass auf.
+   ------------------------------------------------------------ */
+/* ------------------------------------------------------------
+   Raster- und Flexkinder duerfen unter ihren Inhalt schrumpfen
+
+   Eine 1fr-Spur nimmt als Mindestmass den Inhalt ihres Feldes, und
+   Flexglieder schrumpfen wegen min-width: auto nicht unter ihren
+   Text. Auf schmalen Schirmen wuchsen die Spuren dadurch ueber den
+   Behaelter hinaus — im Vergleich auf der Verkaufenseite etwa auf
+   324px bei 276px Platz. Wo der Behaelter mit overflow: hidden
+   arbeitet, wurde der Inhalt rechts abgeschnitten; sonst liess sich
+   die Seite seitlich verschieben.
+
+   Aufgezaehlt statt pauschal, damit Leisten, die absichtlich nicht
+   schrumpfen (Navigation, Laufbaender), unberuehrt bleiben.
+   ------------------------------------------------------------ */
+.contact-layout > *,
+.vergleich > *,
+.filter-gitter > *,
+.zahlenband > *,
+.bw-gruende > *,
+.bw-faktoren > *,
+.bw-verfahrensliste > *,
+.ref-liste > *,
+.cta-banner > * {
+  min-width: 0;
+}
+
+/* Reicht das Schrumpfen nicht, muss die Zeile umbrechen duerfen. */
+@media (max-width: 520px) {
+  /* .bw-verfahrensliste steht bewusst nicht dabei: sie laeuft in
+     Spaltenrichtung, dort bewirkt flex-wrap nichts. */
+  .bw-faktoren,
+  .ref-liste,
+  .cta-banner {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 380px) {
+  /* Lange Beschriftungen wie "Kostenlose Immobilienbewertung" sind als
+     Knopf 344px breit und duerfen wegen white-space: nowrap nicht
+     umbrechen — im Aufmacher mit overflow: hidden wurde der Text
+     schlicht abgeschnitten. */
+  .btn {
+    white-space: normal;
+    text-align: center;
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+  .form-card {
+    padding: 30px 24px;
+  }
+}
+
+/* ------------------------------------------------------------
+   Kein seitliches Verschieben
+
+   Sperre fuer den Fall, dass irgendwo doch etwas ueber den Rand
+   ragt: die Seite laesst sich dann trotzdem nicht seitwaerts
+   ziehen. Bewusst "clip" und nicht "hidden" — hidden macht das
+   Element zu einem Rollbehaelter, und daran zerbricht jedes
+   position: sticky auf der Seite (die sechs Schritte, der
+   Partnerstapel, die Zahlen). clip klemmt nur ab, ohne einen
+   Rollbehaelter anzulegen.
+   ------------------------------------------------------------ */
+body {
+  overflow-x: clip;
+}
