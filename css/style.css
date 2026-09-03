@@ -4511,3 +4511,14 @@ body {
 body {
   overflow-x: clip;
 }
+
+/* Profilbild statt Anfangsbuchstabe im Rezensionskreis. Der Kreis
+   traegt sonst einen goldenen Verlauf — mit Bild fuellt dieses die
+   ganze Flaeche, der Verlauf bleibt fuer alle ohne Bild bestehen. */
+.testimonial-who .avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
