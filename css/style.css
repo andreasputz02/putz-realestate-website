@@ -1903,9 +1903,9 @@ body.nav-open { overflow: hidden; }
 .property-gallery.is-wide-layout .gallery-tile.is-main { grid-column: span 2; }
 .property-gallery.is-wide-layout .gallery-tile.is-side { grid-column: span 1; }
 
-.gallery-tile .placeholder-icon { color: rgba(255,255,255,0.4); }
-.gallery-tile .placeholder-icon svg { width: 26px; height: 26px; }
-.gallery-tile.is-main .placeholder-icon svg { width: 40px; height: 40px; }
+/* Kacheln ohne Foto: dasselbe Zeichen, hier mittig als Platzhalter. */
+.gallery-tile .wasserzeichen { width: 30px; height: auto; opacity: 0.3; display: block; }
+.gallery-tile.is-main .wasserzeichen { width: 46px; }
 
 .gallery-tile.is-more::after {
   content: "";
@@ -1992,8 +1992,19 @@ body.modal-open { overflow: hidden; }
   justify-content: center;
   overflow: hidden;
 }
-.lightbox-stage .placeholder-icon { color: rgba(255,255,255,0.35); }
-.lightbox-stage .placeholder-icon svg { width: 56px; height: 56px; }
+/* Wasserzeichen in der Grossansicht: unten rechts, zurueckhaltend.
+   Vorher stand dort mittig ein Kamerasymbol mitten im Foto. */
+.lightbox-stage { position: relative; }
+.lightbox-stage .wasserzeichen {
+  position: absolute;
+  right: 3.2%;
+  bottom: 4.4%;
+  width: clamp(38px, 7.5%, 76px);
+  height: auto;
+  opacity: 0.34;
+  pointer-events: none;
+  display: block;
+}
 
 .lightbox-close,
 .lightbox-arrow {

@@ -1,7 +1,8 @@
 // ---------- Listings rendering (grid cards + detail page) ----------
 (function () {
-  const cameraIcon =
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg>';
+  // Kacheln ohne Foto tragen das Hauszeichen statt einer Kamera.
+  const zeichen =
+    '<img class="wasserzeichen" src="assets/img/wasserzeichen-p.png" alt="" aria-hidden="true">';
 
   // Radius des Umkreises auf der Objektseite, in Metern.
   const UMKREIS_METER = 500;
@@ -118,7 +119,7 @@ ${masse(listing)}
   }
 
   function buildGallery(gradient, hasVideo) {
-    const icon = `<span class="placeholder-icon">${cameraIcon}</span>`;
+    const icon = zeichen;
     const more = `<span class="gallery-more">+</span>`;
 
     if (hasVideo) {
