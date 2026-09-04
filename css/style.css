@@ -1319,31 +1319,29 @@ body.nav-open { overflow: hidden; }
 
 /* ---------- Testimonials ---------- */
 
-/* ---------- Bewertungen: endlos laufendes Band ----------
-   Die Karten stehen zweimal hintereinander; das Band wandert um genau
-   eine Haelfte und beginnt dann wieder von vorn — dadurch ist der
-   Uebergang unsichtbar.
+/* ---------- Bewertungen: Karussell zum Weiterklicken ----------
+   Frueher lief hier ein Band von selbst durch. Am Handy loeste die
+   Beruehrung den Schwebezustand aus, die Bewegung blieb stehen und die
+   Karten waren weg — auf einem Zeigegeraet gibt es kein Verlassen des
+   Elements, das den Zustand wieder aufhebt.
 
-   Bewusst KEIN gap, sondern margin-right an den Karten: bei gap
-   enthaelt die halbe Breite einen Abstand zu viel, und das Band
-   wuerde bei jedem Durchlauf um diesen Betrag springen.            */
-.testimonial-marquee { overflow: hidden; }
-.testimonial-track {
+   Jetzt blaettert man selbst: wischen, Pfeile oder Punkte. Dieselbe
+   Mechanik wie bei den Reels und den Kundenvideos, gesteuert von
+   setupTrackSlider in js/script.js.                                */
+.testimonial-slider-track {
   display: flex;
-  width: max-content;
-  animation: bewertungen-lauf 46s linear infinite;
+  gap: 26px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 4px;
+  scrollbar-width: none;
 }
-.testimonial-marquee:hover .testimonial-track,
-.testimonial-marquee:focus-within .testimonial-track { animation-play-state: paused; }
-
-@keyframes bewertungen-lauf {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
+.testimonial-slider-track::-webkit-scrollbar { display: none; }
 
 .testimonial-card {
   flex: 0 0 clamp(260px, 30vw, 400px);
-  margin-right: 26px;
+  scroll-snap-align: start;
   background: var(--black-soft);
   border: 1px solid var(--line-dark);
   border-radius: var(--radius-md);
@@ -1353,22 +1351,22 @@ body.nav-open { overflow: hidden; }
 /* Im Laufband stehen schwarze Karten mit goldener Umrandung. Bewusst
    nur hier und nicht an der Grundregel: .testimonial-card wird auch
    anderswo verwendet. */
-.testimonial-marquee .testimonial-card {
+.testimonial-slider .testimonial-card {
   background: var(--black);
   border-color: #fce48c;
 }
-.testimonial-marquee .testimonial-card p { color: rgba(255, 255, 255, 0.82); }
-.testimonial-marquee .testimonial-who strong { color: var(--white); }
-.testimonial-marquee .testimonial-who span { color: rgba(255, 255, 255, 0.55); }
-.testimonial-marquee .testimonial-who .avatar {
+.testimonial-slider .testimonial-card p { color: rgba(255, 255, 255, 0.82); }
+.testimonial-slider .testimonial-who strong { color: var(--white); }
+.testimonial-slider .testimonial-who span { color: rgba(255, 255, 255, 0.55); }
+.testimonial-slider .testimonial-who .avatar {
   background: rgba(252, 228, 140, 0.14);
   color: #fce48c;
 }
 
-/* Wer Bewegung reduziert haben moechte, bekommt die Karten stehend. */
+/* Wer Bewegung reduziert haben moechte, blaettert ohne Gleiten — die
+   Karten springen dann direkt an ihre Stelle. */
 @media (prefers-reduced-motion: reduce) {
-  .testimonial-track { animation: none; flex-wrap: wrap; width: auto; }
-  .testimonial-kopie { display: none; }
+  .testimonial-slider-track { scroll-behavior: auto; }
 }
 .testimonial-card .stars { display: flex; gap: 4px; margin-bottom: 22px; }
 .testimonial-card .stars svg { width: 16px; height: 16px; fill: var(--gold); }
@@ -4084,7 +4082,7 @@ body.modal-open { overflow: hidden; }
 
 /* Bewertungskarten: goldene Kante links statt rundum — auf Schwarz
    wirkt der volle Rahmen wie ein Kasten, die Kante wie ein Zitat. */
-.testimonial-marquee .testimonial-card {
+.testimonial-slider .testimonial-card {
   border-color: rgba(255, 255, 255, 0.1);
   border-left: 2px solid #fce48c;
 }
@@ -4398,12 +4396,12 @@ body.modal-open { overflow: hidden; }
    auf dieselbe Hoehe gezogen werden, stand der Name mal hoeher, mal
    tiefer. Er sitzt jetzt bei allen unten am Kartenrand.
    ------------------------------------------------------------ */
-.testimonial-marquee .testimonial-card {
+.testimonial-slider .testimonial-card {
   display: flex;
   flex-direction: column;
 }
-.testimonial-marquee .testimonial-card p { margin-bottom: 24px; }
-.testimonial-marquee .testimonial-who { margin-top: auto; }
+.testimonial-slider .testimonial-card p { margin-bottom: 24px; }
+.testimonial-slider .testimonial-who { margin-top: auto; }
 
 /* ------------------------------------------------------------
    Lange Zusammensetzungen dürfen umbrechen
