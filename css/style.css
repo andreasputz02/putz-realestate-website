@@ -4497,20 +4497,11 @@ body {
   }
 }
 
-/* ------------------------------------------------------------
-   Kein seitliches Verschieben
-
-   Sperre fuer den Fall, dass irgendwo doch etwas ueber den Rand
-   ragt: die Seite laesst sich dann trotzdem nicht seitwaerts
-   ziehen. Bewusst "clip" und nicht "hidden" — hidden macht das
-   Element zu einem Rollbehaelter, und daran zerbricht jedes
-   position: sticky auf der Seite (die sechs Schritte, der
-   Partnerstapel, die Zahlen). clip klemmt nur ab, ohne einen
-   Rollbehaelter anzulegen.
-   ------------------------------------------------------------ */
-body {
-  overflow-x: clip;
-}
+/* Kein seitliches Verschieben: dafuer sorgt bereits overflow-x: hidden
+   am html-Element ganz oben in dieser Datei. Eine zusaetzliche Sperre
+   am body stand hier kurzzeitig — sie ist wieder heraus, weil sie nach
+   dem Beheben der eigentlichen Ursachen nichts mehr beitraegt und als
+   einzige Aenderung in die Naehe des Zoom-Abschnitts reichte. */
 
 /* Profilbild statt Anfangsbuchstabe im Rezensionskreis. Der Kreis
    traegt sonst einen goldenen Verlauf — mit Bild fuellt dieses die
