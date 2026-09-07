@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b0b0c">
-<title>Unsere Immobilien — PUTZ Real Estate</title>
-<meta name="description" content="Aktuelle Immobilien von PUTZ Real Estate in Wien, im Speckgürtel und im Weinviertel — Wohnungen, Häuser und Grundstücke, filterbar nach Preis, Fläche und Ort.">
+<title>Projekt Mengergasse, Wien 21 | PUTZ Real Estate</title>
+<meta name="description" content="Alle Wohnungen im Projekt Mengergasse in 1210 Wien-Floridsdorf: Erstbezug nach Sanierung, Grundrisse von der Single-Wohnung bis zur Terrassenwohnung.">
 <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/webicon-192.png">
 <link rel="apple-touch-icon" href="/assets/img/webicon-192.png">
-<link rel="canonical" href="https://putz-realestate.at/immobilien">
+<link rel="canonical" href="https://putz-realestate.at/projekt-mengergasse">
 <link rel="stylesheet" href="css/fonts.css?v=4">
 <link rel="stylesheet" href="css/style.css?v=193">
 <script type="application/ld+json">
@@ -238,77 +238,17 @@
   <section class="page-hero">
     <div class="container">
       <!-- Ohne Schlusspunkt: den setzt die Regel für .page-hero h1 in Gold. -->
-      <h1>Achtung, kann Kauflust auslösen</h1>
-      <div class="breadcrumb"><a href="/">Start</a> / Unsere Immobilien</div>
+      <p class="eyebrow no-dot">1210 Wien · Floridsdorf</p>
+      <h1>Projekt Mengergasse</h1>
+      <p class="lede">Alle Wohnungen des Hauses auf einen Blick — vom kompakten
+        Grundriss bis zur Wohnung mit Terrasse.</p>
+      <div class="breadcrumb"><a href="/">Start</a> / <a href="immobilien">Unsere Immobilien</a> / Projekt Mengergasse</div>
     </div>
   </section>
 
   <section class="section section-dark">
     <div class="container">
-      <!-- Suchmaske. Die Auswahl der Objektarten füllt js/listings.js
-           aus den tatsächlich vorhandenen Objekten — eine feste Liste
-           würde Arten anbieten, zu denen es nichts gibt. -->
-      <form class="objekt-filter" data-objekt-filter>
-        <div class="filter-gitter">
-          <div class="filter-feld">
-            <label for="f-art">Kaufen oder mieten</label>
-            <select id="f-art" name="art">
-              <option value="">Alle</option>
-              <option value="kauf">Kaufen</option>
-              <option value="miete">Mieten</option>
-            </select>
-          </div>
-
-          <div class="filter-feld">
-            <label for="f-objektart">Objektart</label>
-            <select id="f-objektart" name="objektart">
-              <option value="">Alle</option>
-            </select>
-          </div>
-
-          <div class="filter-feld">
-            <label for="f-ort">Ort oder PLZ</label>
-            <input type="text" id="f-ort" name="ort" placeholder="z. B. 1180 oder Wien">
-          </div>
-
-          <div class="filter-feld">
-            <label>Kaufpreis / Miete</label>
-            <div class="filter-paar">
-              <input type="text" inputmode="numeric" name="preisVon" placeholder="von €" aria-label="Preis von">
-              <input type="text" inputmode="numeric" name="preisBis" placeholder="bis €" aria-label="Preis bis">
-            </div>
-          </div>
-
-          <div class="filter-feld">
-            <label>Fläche</label>
-            <div class="filter-paar">
-              <input type="text" inputmode="numeric" name="flaecheVon" placeholder="von m²" aria-label="Fläche von">
-              <input type="text" inputmode="numeric" name="flaecheBis" placeholder="bis m²" aria-label="Fläche bis">
-            </div>
-          </div>
-
-          <div class="filter-feld">
-            <label for="f-zimmer">Zimmer ab</label>
-            <input type="text" inputmode="numeric" id="f-zimmer" name="zimmer" placeholder="z. B. 3">
-          </div>
-        </div>
-
-        <div class="filter-fuss">
-          <button type="submit" class="btn btn-gold">
-            Objekte suchen
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-          <button type="reset" class="filter-zuruecksetzen" hidden>Filter zurücksetzen</button>
-          <p class="filter-ergebnis" data-filter-ergebnis aria-live="polite"></p>
-        </div>
-      </form>
-
-      <div class="listing-grid" data-listings></div>
-      <p class="filter-leer" data-filter-leer hidden>
-        Zu dieser Suche haben wir gerade nichts im Angebot.
-        <a href="#" data-filter-loeschen>Filter zurücksetzen</a>
-        — oder sag uns, was du suchst, dann halten wir Ausschau.
-      </p>
+      <div class="listing-grid" data-listings data-projekt="Mengergasse"></div>
 
     </div>
   </section>

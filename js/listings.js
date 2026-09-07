@@ -202,7 +202,17 @@ ${masse(listing)}
 
   document.querySelectorAll("[data-listings]").forEach((grid) => {
     const limit = grid.dataset.limit ? Number(grid.dataset.limit) : Infinity;
-    grid.innerHTML = window.LISTINGS.slice(0, limit).map(renderCard).join("");
+
+    // Ein Raster laesst sich auf ein Bauvorhaben einschraenken. Gesucht
+    // wird im ganzen Objekt, nicht nur in der Adresse: Justimmo fuehrt die
+    // Gasse mal im Ortsfeld, mal nur im Beschreibungstext.
+    const projekt = (grid.dataset.projekt || "").trim().toLowerCase();
+    const liste = projekt
+      ? window.LISTINGS.filter((o) => JSON.stringify(o).toLowerCase().includes(projekt))
+      : window.LISTINGS;
+
+    grid.innerHTML = liste.slice(0, limit).map(renderCard).join("");
+    if (projekt) grid.dataset.anzahl = liste.length;
   });
 
   // ---------- Suchmaske ----------

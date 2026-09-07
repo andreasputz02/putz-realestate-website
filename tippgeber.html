@@ -187,7 +187,17 @@
     </a>
     <nav class="main-nav">
       <ul>
-        <li><a href="immobilien">Unsere Immobilien</a></li>
+        <li class="has-dropdown">
+          <a href="immobilien">Unsere Immobilien
+            <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </a>
+          <div class="dropdown">
+            <div class="dropdown-panel">
+              <a href="immobilien">Alle Immobilien</a>
+              <a href="projekt-mengergasse">Projekt Mengergasse</a>
+            </div>
+          </div>
+        </li>
         <li><a href="verkaufen">Verkaufen</a></li>
         <li><a href="referenzen">Referenzen</a></li>
         <li class="has-dropdown">
@@ -411,7 +421,16 @@
     </button>
   <div class="mobile-menu">
     <ul>
-      <li><a href="immobilien">Unsere Immobilien</a></li>
+      <li class="mobile-nav-group">
+        <button type="button" class="mobile-nav-toggle" aria-expanded="false">
+          Unsere Immobilien
+          <svg class="mobile-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="mobile-nav-panel">
+          <a href="immobilien" class="mobile-nav-sub">Alle Immobilien</a>
+          <a href="projekt-mengergasse" class="mobile-nav-sub">Projekt Mengergasse</a>
+        </div>
+      </li>
       <li><a href="verkaufen">Verkaufen</a></li>
       <li><a href="referenzen">Referenzen</a></li>
       <li class="mobile-nav-group">
