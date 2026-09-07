@@ -393,7 +393,13 @@
     </ul>
   </div>
 
-<script src="js/script.js?v=53"></script>
+  <!-- Alle vier mit defer: so haelt kein Skript das Aufbauen der Seite
+       auf, und die Reihenfolge bleibt trotzdem erhalten. script.js steht
+       bewusst zuerst — es verdrahtet Menue, Schieber und Formulare. Stand
+       es hinter justimmo.php, war das Menue so lange tot, wie die
+       Schnittstelle brauchte; bei kaltem Zwischenspeicher sind das
+       mehrere Sekunden. -->
+  <script defer src="js/script.js?v=53"></script>
 
 </body>
 </html>

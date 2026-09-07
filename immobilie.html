@@ -256,7 +256,7 @@
           <div class="property-video" data-field="video-wrap" hidden>
             <h2>Video-Rundgang</h2>
             <div class="video-feature-player">
-              <video preload="metadata" playsinline>
+              <video preload="none" playsinline>
                 <source src="" type="video/mp4">
                 Dein Browser unterstützt das Video-Element leider nicht.
               </video>
@@ -574,10 +574,16 @@
   </div>
 
 <script src="js/maplibre/maplibre-gl.js?v=1"></script>
-<script src="js/listings-data.js?v=8"></script>
-<script src="justimmo.php?v=5"></script>
-<script src="js/listings.js?v=24"></script>
-<script src="js/script.js?v=53"></script>
+  <!-- Alle vier mit defer: so haelt kein Skript das Aufbauen der Seite
+       auf, und die Reihenfolge bleibt trotzdem erhalten. script.js steht
+       bewusst zuerst — es verdrahtet Menue, Schieber und Formulare. Stand
+       es hinter justimmo.php, war das Menue so lange tot, wie die
+       Schnittstelle brauchte; bei kaltem Zwischenspeicher sind das
+       mehrere Sekunden. -->
+  <script defer src="js/script.js?v=53"></script>
+  <script defer src="js/listings-data.js?v=8"></script>
+  <script defer src="justimmo.php?v=5"></script>
+  <script defer src="js/listings.js?v=24"></script>
 
 </body>
 </html>
