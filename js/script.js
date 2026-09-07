@@ -56,8 +56,13 @@ document.querySelectorAll(".mobile-nav-group").forEach((group) => {
 });
 
 // ---------- Scroll reveal ----------
-const revealEls = document.querySelectorAll("[data-reveal]");
-if ("IntersectionObserver" in window && revealEls.length) {
+// Die Objektkarten entstehen erst spaeter durch js/listings.js. Weil
+// dieses Skript nun VOR listings.js laeuft (sonst haengt das Menue an der
+// Justimmo-Schnittstelle), waeren sie beim ersten Durchgang noch nicht da
+// — und ohne Beobachter blieben sie dauerhaft auf opacity: 0 stehen,
+// also unsichtbar. Ein MutationObserver nimmt darum alles auf, was
+// nachtraeglich hinzukommt.
+if ("IntersectionObserver" in window) {
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -69,9 +74,19 @@ if ("IntersectionObserver" in window && revealEls.length) {
     },
     { threshold: 0.14, rootMargin: "0px 0px -60px 0px" }
   );
-  revealEls.forEach((el) => io.observe(el));
+
+  const aufnehmen = (wurzel) => {
+    if (wurzel.nodeType !== 1) return;
+    if (wurzel.hasAttribute("data-reveal")) io.observe(wurzel);
+    wurzel.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+  };
+
+  aufnehmen(document.body);
+  new MutationObserver((eintraege) => {
+    eintraege.forEach((e) => e.addedNodes.forEach(aufnehmen));
+  }).observe(document.body, { childList: true, subtree: true });
 } else {
-  revealEls.forEach((el) => el.classList.add("in-view"));
+  document.querySelectorAll("[data-reveal]").forEach((el) => el.classList.add("in-view"));
 }
 
 // ---------- Accordion ----------
