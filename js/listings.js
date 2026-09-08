@@ -492,9 +492,16 @@ ${masse(listing)}
         halt.innerHTML =
           "<span>Umgebungskarte \u2014 wird erst auf Klick von einem anderen Anbieter geladen.</span>" +
           '<button type="button" class="btn btn-outline">Karte laden</button>';
-        halt.querySelector("button").addEventListener("click", () => {
+        const nachladen = () => {
+          if (!halt.isConnected) return;
           halt.replaceWith(mapEl);
           karteAufbauen();
+        };
+        halt.querySelector("button").addEventListener("click", nachladen);
+        // Wird die Erlaubnis spaeter im Banner erteilt, soll die Karte auch
+        // ohne einen zweiten Klick auf den Platzhalter erscheinen.
+        document.addEventListener("putz-extern", (e) => {
+          if (e.detail && e.detail.erlaubt) nachladen();
         });
         mapEl.replaceWith(halt);
       }
