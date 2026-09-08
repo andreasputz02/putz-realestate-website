@@ -1990,19 +1990,8 @@ body.modal-open { overflow: hidden; }
   justify-content: center;
   overflow: hidden;
 }
-/* Wasserzeichen in der Grossansicht: unten rechts, zurueckhaltend.
-   Vorher stand dort mittig ein Kamerasymbol mitten im Foto. */
+/* Die Grossansicht zeigt das Foto ohne Zeichen. */
 .lightbox-stage { position: relative; }
-.lightbox-stage .wasserzeichen {
-  position: absolute;
-  right: 3.2%;
-  bottom: 4.4%;
-  width: clamp(38px, 7.5%, 76px);
-  height: auto;
-  opacity: 0.34;
-  pointer-events: none;
-  display: block;
-}
 
 .lightbox-close,
 .lightbox-arrow {

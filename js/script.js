@@ -75,10 +75,25 @@ if ("IntersectionObserver" in window) {
     { threshold: 0.14, rootMargin: "0px 0px -60px 0px" }
   );
 
+  // Steht ein Element beim Aufnehmen schon im Blickfeld — oder ist der
+  // Besucher bereits daran vorbeigescrollt —, wird es sofort gezeigt.
+  // Der Beobachter allein genuegt dafuer nicht: er meldet sich nur bei
+  // einer Aenderung, und wer die Seite neu laedt und dabei die alte
+  // Scrollstellung zurueckbekommt, saehe die Karten sonst nie.
+  const zeigen = (el) => {
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > -window.innerHeight) {
+      el.classList.add("in-view");
+      io.unobserve(el);
+    }
+  };
+
   const aufnehmen = (wurzel) => {
     if (wurzel.nodeType !== 1) return;
-    if (wurzel.hasAttribute("data-reveal")) io.observe(wurzel);
-    wurzel.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+    const alle = wurzel.hasAttribute("data-reveal")
+      ? [wurzel, ...wurzel.querySelectorAll("[data-reveal]")]
+      : [...wurzel.querySelectorAll("[data-reveal]")];
+    alle.forEach((el) => { io.observe(el); zeigen(el); });
   };
 
   aufnehmen(document.body);
