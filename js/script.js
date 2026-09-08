@@ -836,15 +836,13 @@ document.querySelectorAll(".video-abspielen").forEach((knopf) => {
     banner.setAttribute("role", "dialog");
     banner.setAttribute("aria-label", "Externe Inhalte");
     banner.innerHTML =
-      '<h2>Karten und Videos von anderen Anbietern</h2>' +
-      '<p>Diese Website setzt selbst keine Cookies. Für die Karten unserer Standorte, ' +
-      'die Umgebungskarte bei den Objekten und eingebundene Videos werden aber Inhalte ' +
-      'von Google und OpenFreeMap geladen — dabei erfährt der jeweilige Anbieter deine ' +
-      'IP-Adresse. Das passiert nur, wenn du es erlaubst. ' +
-      '<a href="datenschutz">Mehr dazu im Datenschutz</a>.</p>' +
+      '<h2>Wir verwenden Cookies</h2>' +
+      '<p>Wir verwenden Cookies und ähnliche Technologien, um Karten und Videos ' +
+      'anzuzeigen und deine Auswahl zu speichern. ' +
+      '<a href="datenschutz#externe-inhalte">Mehr erfahren</a></p>' +
       '<div class="einwilligung-knoepfe">' +
-      '<button type="button" class="btn btn-outline" data-extern-ja>Externe Inhalte erlauben</button>' +
-      '<button type="button" class="btn btn-outline" data-extern-nein>Nicht laden</button>' +
+      '<button type="button" class="btn btn-outline" data-extern-ja>Alle akzeptieren</button>' +
+      '<button type="button" class="btn btn-outline" data-extern-nein>Nur Notwendiges</button>' +
       '</div>';
     document.body.appendChild(banner);
 
