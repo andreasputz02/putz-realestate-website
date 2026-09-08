@@ -438,45 +438,65 @@ ${masse(listing)}
       // 500 Metern um die Adresse. Ohne Koordinaten bleibt es bei der
       // einfachen Google-Karte, die nur nach dem Ort suchen kann.
       const mapEl = detailRoot.querySelector('[data-field="map"]');
-      if (mapEl && listing.lat && listing.lng && window.maplibregl) {
-        const ziel = document.createElement("div");
-        ziel.className = mapEl.className + " map-umkreis";
-        mapEl.replaceWith(ziel);
+      // Beide Wege fuehren zu einem fremden Anbieter: die Umgebungskarte zu
+      // OpenFreeMap, der Rueckfall zu Google. Dabei faellt die Adresse des
+      // Besuchers an, deshalb erst nach Zustimmung.
+      const karteAufbauen = () => {
+        if (mapEl && listing.lat && listing.lng && window.maplibregl) {
+          const ziel = document.createElement("div");
+          ziel.className = mapEl.className + " map-umkreis";
+          mapEl.replaceWith(ziel);
 
-        const flaeche = kreisFlaeche(listing.lat, listing.lng, UMKREIS_METER);
+          const flaeche = kreisFlaeche(listing.lat, listing.lng, UMKREIS_METER);
 
-        const karte = new window.maplibregl.Map({
-          container: ziel,
-          style: "https://tiles.openfreemap.org/styles/dark",
-          center: [listing.lng, listing.lat],
-          zoom: 13.4,
-          scrollZoom: false,   // sonst bleibt man beim Scrollen in der Karte haengen
-          attributionControl: false,
-        });
-
-        // Den von OpenFreeMap geforderten Nachweis liefert die Kachelquelle
-        // selbst mit — nur die kompakte Darstellung wird hier gewaehlt.
-        karte.addControl(new window.maplibregl.AttributionControl({ compact: true }));
-        karte.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), "top-left");
-
-        karte.on("load", () => {
-          karte.addSource("umkreis", { type: "geojson", data: flaeche });
-          karte.addLayer({
-            id: "umkreis-flaeche",
-            type: "fill",
-            source: "umkreis",
-            paint: { "fill-color": "#fbe48b", "fill-opacity": 0.13 },
+          const karte = new window.maplibregl.Map({
+            container: ziel,
+            style: "https://tiles.openfreemap.org/styles/dark",
+            center: [listing.lng, listing.lat],
+            zoom: 13.4,
+            scrollZoom: false,   // sonst bleibt man beim Scrollen in der Karte haengen
+            attributionControl: false,
           });
-          karte.addLayer({
-            id: "umkreis-rand",
-            type: "line",
-            source: "umkreis",
-            paint: { "line-color": "#fbe48b", "line-width": 2 },
+
+          // Den von OpenFreeMap geforderten Nachweis liefert die Kachelquelle
+          // selbst mit — nur die kompakte Darstellung wird hier gewaehlt.
+          karte.addControl(new window.maplibregl.AttributionControl({ compact: true }));
+          karte.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), "top-left");
+
+          karte.on("load", () => {
+            karte.addSource("umkreis", { type: "geojson", data: flaeche });
+            karte.addLayer({
+              id: "umkreis-flaeche",
+              type: "fill",
+              source: "umkreis",
+              paint: { "fill-color": "#fbe48b", "fill-opacity": 0.13 },
+            });
+            karte.addLayer({
+              id: "umkreis-rand",
+              type: "line",
+              source: "umkreis",
+              paint: { "line-color": "#fbe48b", "line-width": 2 },
+            });
+            karte.fitBounds(kreisGrenzen(flaeche), { padding: 26, duration: 0 });
           });
-          karte.fitBounds(kreisGrenzen(flaeche), { padding: 26, duration: 0 });
+        } else if (mapEl && listing.mapQuery) {
+          mapEl.src = `https://www.google.com/maps?q=${encodeURIComponent(listing.mapQuery)}&output=embed`;
+        }
+      };
+
+      if (!window.putzExtern || window.putzExtern.erlaubt()) {
+        karteAufbauen();
+      } else if (mapEl) {
+        const halt = document.createElement("div");
+        halt.className = mapEl.className + " extern-platzhalter";
+        halt.innerHTML =
+          "<span>Umgebungskarte \u2014 wird erst auf Klick von einem anderen Anbieter geladen.</span>" +
+          '<button type="button" class="btn btn-outline">Karte laden</button>';
+        halt.querySelector("button").addEventListener("click", () => {
+          halt.replaceWith(mapEl);
+          karteAufbauen();
         });
-      } else if (mapEl && listing.mapQuery) {
-        mapEl.src = `https://www.google.com/maps?q=${encodeURIComponent(listing.mapQuery)}&output=embed`;
+        mapEl.replaceWith(halt);
       }
 
       const videoWrap = detailRoot.querySelector('[data-field="video-wrap"]');
@@ -490,7 +510,11 @@ ${masse(listing)}
           // hochkanten Rahmen, sonst blieben links und rechts Balken.
           if (listing.video.hochformat) player.classList.add("is-portrait");
           const rahmen = document.createElement("iframe");
-          rahmen.src = listing.video.einbettung;
+          // Das Video liegt bei YouTube oder Vimeo — auch dort faellt die
+          // Adresse des Besuchers an, deshalb erst nach Zustimmung.
+          rahmen.dataset.externSrc = listing.video.einbettung;
+          rahmen.dataset.externName = "Video-Rundgang";
+          if (window.putzExtern) window.putzExtern.pruefen(rahmen.parentElement || document);
           rahmen.title = "Video-Rundgang";
           rahmen.loading = "lazy";
           rahmen.allow = "accelerometer; encrypted-media; picture-in-picture; fullscreen";

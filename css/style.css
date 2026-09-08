@@ -4511,3 +4511,80 @@ body {
   border-radius: 50%;
   display: block;
 }
+
+/* ============================================================
+   Einwilligung für externe Inhalte
+
+   Die Seite selbst setzt keine Cookies und legt nichts im Browser
+   ab. Zustimmungspflichtig sind allein die eingebetteten Inhalte
+   fremder Anbieter — die Kartenausschnitte der Standorte, die
+   Umgebungskarte auf den Objektseiten und Videos aus Justimmo.
+   Diese laden erst nach ausdruecklicher Erlaubnis.
+
+   Die Entscheidung selbst liegt im localStorage. Das ist fuer die
+   Funktion notwendig — ohne sie muesste bei jedem Aufruf erneut
+   gefragt werden.
+   ============================================================ */
+.einwilligung {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 400;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 26px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--gold);
+  background: rgba(11, 11, 12, 0.96);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+  color: var(--cream);
+}
+.einwilligung h2 {
+  font-size: 17px;
+  margin: 0 0 8px;
+  color: var(--white);
+}
+.einwilligung p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0 0 18px;
+}
+.einwilligung a { color: var(--gold-light); text-decoration: underline; }
+
+/* Beide Knoepfe gleich gewichtet — eine hervorgehobene Zustimmung
+   neben einer versteckten Ablehnung waere keine freie Wahl. */
+.einwilligung-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.einwilligung-knoepfe .btn {
+  flex: 1 1 190px;
+  justify-content: center;
+  font-size: 14px;
+  padding: 13px 18px;
+}
+
+/* Platzhalter anstelle einer noch nicht geladenen Einbettung. */
+.extern-platzhalter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: 26px 22px;
+  background: var(--black-soft);
+  border: 1px solid var(--line-dark);
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.extern-platzhalter .btn { font-size: 13px; padding: 11px 20px; }
+
+@media (max-width: 520px) {
+  .einwilligung { padding: 20px; left: 12px; right: 12px; bottom: 12px; }
+  .einwilligung-knoepfe .btn { flex: 1 1 100%; }
+}

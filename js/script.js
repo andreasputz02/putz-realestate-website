@@ -772,3 +772,126 @@ document.querySelectorAll(".video-abspielen").forEach((knopf) => {
     knopf.hidden = false;
   });
 });
+
+/* ============================================================
+   Einwilligung für externe Inhalte
+
+   Die Seite selbst setzt keine Cookies. Erlaubnispflichtig sind nur
+   Inhalte fremder Anbieter, die beim Laden die Adresse des Besuchers
+   übertragen: die Kartenausschnitte der Standorte (Google), die
+   Umgebungskarte auf den Objektseiten (OpenFreeMap) und Videos.
+
+   Solche Einbettungen stehen im Quelltext mit data-extern-src statt
+   src. Erst nach der Zustimmung wird daraus ein echtes src.
+
+   Andere Skripte fragen über window.putzExtern.erlaubt() nach und
+   horchen auf das Ereignis "putz-extern", wenn sich die Antwort
+   ändert.
+   ============================================================ */
+(function () {
+  const SCHLUESSEL = "putz-externe-inhalte";
+
+  const lesen = () => {
+    try { return localStorage.getItem(SCHLUESSEL); } catch (e) { return null; }
+  };
+  const schreiben = (wert) => {
+    try { localStorage.setItem(SCHLUESSEL, wert); } catch (e) { /* private Fenster */ }
+  };
+
+  const erlaubt = () => lesen() === "ja";
+
+  // Aus data-extern-src wird src — für alles, was noch wartet.
+  function einbettungenLaden(wurzel) {
+    (wurzel || document).querySelectorAll("[data-extern-src]").forEach((el) => {
+      el.src = el.dataset.externSrc;
+      el.removeAttribute("data-extern-src");
+      const platz = el.parentElement && el.parentElement.querySelector(".extern-platzhalter");
+      if (platz) platz.remove();
+      el.hidden = false;
+    });
+  }
+
+  function setzen(wert) {
+    schreiben(wert);
+    if (wert === "ja") einbettungenLaden();
+    document.dispatchEvent(new CustomEvent("putz-extern", { detail: { erlaubt: wert === "ja" } }));
+  }
+
+  window.putzExtern = {
+    erlaubt,
+    setzen,
+    laden: einbettungenLaden,
+    fragen: () => bannerZeigen(true),
+    // Fuer Inhalte, die erst spaeter entstehen — etwa das Video auf der
+    // Objektseite: entweder gleich laden oder einen Platzhalter davor.
+    pruefen: (wurzel) => (erlaubt() ? einbettungenLaden(wurzel) : platzhalterSetzen(wurzel)),
+  };
+
+  let banner = null;
+
+  function bannerZeigen(erneut) {
+    if (banner) { banner.hidden = false; return; }
+    banner = document.createElement("div");
+    banner.className = "einwilligung";
+    banner.setAttribute("role", "dialog");
+    banner.setAttribute("aria-label", "Externe Inhalte");
+    banner.innerHTML =
+      '<h2>Karten und Videos von anderen Anbietern</h2>' +
+      '<p>Diese Website setzt selbst keine Cookies. Für die Karten unserer Standorte, ' +
+      'die Umgebungskarte bei den Objekten und eingebundene Videos werden aber Inhalte ' +
+      'von Google und OpenFreeMap geladen — dabei erfährt der jeweilige Anbieter deine ' +
+      'IP-Adresse. Das passiert nur, wenn du es erlaubst. ' +
+      '<a href="datenschutz">Mehr dazu im Datenschutz</a>.</p>' +
+      '<div class="einwilligung-knoepfe">' +
+      '<button type="button" class="btn btn-outline" data-extern-ja>Externe Inhalte erlauben</button>' +
+      '<button type="button" class="btn btn-outline" data-extern-nein>Nicht laden</button>' +
+      '</div>';
+    document.body.appendChild(banner);
+
+    banner.querySelector("[data-extern-ja]").addEventListener("click", () => {
+      setzen("ja"); banner.remove(); banner = null;
+    });
+    banner.querySelector("[data-extern-nein]").addEventListener("click", () => {
+      setzen("nein"); banner.remove(); banner = null;
+    });
+  }
+
+  // Für jede wartende Einbettung einen Platzhalter mit eigenem Knopf:
+  // Wer allgemein abgelehnt hat, soll eine einzelne Karte trotzdem
+  // bewusst öffnen können.
+  function platzhalterSetzen(wurzel) {
+    (wurzel || document).querySelectorAll("[data-extern-src]").forEach((el) => {
+      if (el.parentElement.querySelector(".extern-platzhalter")) return;
+      el.hidden = true;
+      const p = document.createElement("div");
+      p.className = "extern-platzhalter";
+      p.style.height = el.getAttribute("height") ? el.getAttribute("height") + "px" : "";
+      p.innerHTML =
+        '<span>' + (el.dataset.externName || "Externer Inhalt") +
+        ' — wird erst auf Klick von einem anderen Anbieter geladen.</span>' +
+        '<button type="button" class="btn btn-outline">Jetzt laden</button>';
+      p.querySelector("button").addEventListener("click", () => {
+        el.src = el.dataset.externSrc;
+        el.removeAttribute("data-extern-src");
+        el.hidden = false;
+        p.remove();
+      });
+      el.parentElement.insertBefore(p, el);
+    });
+  }
+
+  if (erlaubt()) {
+    einbettungenLaden();
+  } else {
+    platzhalterSetzen();
+    if (lesen() === null) bannerZeigen(false);
+  }
+
+  // Fußzeilen-Link zum Ändern der Entscheidung
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("[data-einwilligung-aendern]");
+    if (!a) return;
+    e.preventDefault();
+    bannerZeigen(true);
+  });
+})();
