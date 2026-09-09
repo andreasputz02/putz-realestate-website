@@ -4588,3 +4588,11 @@ body {
   .einwilligung { padding: 20px; left: 12px; right: 12px; bottom: 12px; }
   .einwilligung-knoepfe .btn { flex: 1 1 100%; }
 }
+
+/* Platzhalter im Videorahmen füllt dessen Fläche — sonst säße er als
+   schmaler Streifen in einem 16:9-Kasten. */
+.video-feature-player .extern-platzhalter {
+  position: absolute;
+  inset: 0;
+  height: auto;
+}

@@ -521,7 +521,6 @@ ${masse(listing)}
           // Adresse des Besuchers an, deshalb erst nach Zustimmung.
           rahmen.dataset.externSrc = listing.video.einbettung;
           rahmen.dataset.externName = "Video-Rundgang";
-          if (window.putzExtern) window.putzExtern.pruefen(rahmen.parentElement || document);
           rahmen.title = "Video-Rundgang";
           rahmen.loading = "lazy";
           rahmen.allow = "accelerometer; encrypted-media; picture-in-picture; fullscreen";
@@ -530,6 +529,9 @@ ${masse(listing)}
           // verweigert sonst mit "Fehler 153".
           rahmen.referrerPolicy = "strict-origin-when-cross-origin";
           player.replaceChildren(rahmen);
+          // Erst jetzt pruefen: vorher haengt der Rahmen noch nicht in der
+          // Seite, und weder das Laden noch der Platzhalter faende ihn.
+          if (window.putzExtern) window.putzExtern.pruefen(player);
         } else {
           // Datei liegt bei uns oder bei Justimmo — direkt abspielen.
           const videoEl = videoWrap.querySelector("video");
