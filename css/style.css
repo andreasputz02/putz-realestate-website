@@ -4918,8 +4918,31 @@ body {
   .assistent-ort { grid-template-columns: minmax(0, 0.45fr) minmax(0, 1fr); }
 }
 
-/* Ein einzelnes verkauftes Objekt steht nicht verloren links im Raster */
-.verkauft-einzeln .verkauft-raster { max-width: 420px; grid-template-columns: minmax(0, 1fr); }
+/* Ortsseiten: ein, zwei oder drei verkaufte Objekte fuellen immer die ganze
+   Breite — keine leeren Spalten, die nach "mehr haben wir nicht" aussehen. */
+.verkauft-anzahl-3 .verkauft-raster { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.verkauft-anzahl-2 .verkauft-raster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.verkauft-anzahl-2 .verkauft-bild { aspect-ratio: 16 / 9; }
+.verkauft-anzahl-1 .verkauft-raster { grid-template-columns: minmax(0, 1fr); }
+.verkauft-anzahl-1 .verkauft-karte {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  align-items: center;
+}
+.verkauft-anzahl-1 .verkauft-bild { aspect-ratio: 16 / 9; height: 100%; }
+.verkauft-anzahl-1 .verkauft-text { padding: 36px 40px; }
+.verkauft-anzahl-1 .verkauft-text h3 { font-size: clamp(20px, 2vw, 26px); margin-bottom: 10px; }
+.verkauft-anzahl-1 .verkauft-ort { font-size: 17px; }
+.verkauft-anzahl-1 .verkauft-bezirk { font-size: 14px; }
+@media (max-width: 760px) {
+  .verkauft-anzahl-3 .verkauft-raster { grid-template-columns: minmax(0, 1fr); }
+  .verkauft-anzahl-3 .verkauft-bild { aspect-ratio: 16 / 9; }
+  .verkauft-anzahl-1 .verkauft-karte { grid-template-columns: minmax(0, 1fr); }
+  .verkauft-anzahl-1 .verkauft-text { padding: 18px 20px 22px; }
+}
+@media (max-width: 480px) {
+  .verkauft-anzahl-2 .verkauft-raster { grid-template-columns: minmax(0, 1fr); }
+}
 
 /* Eigentuemerfragen, die im Makler-Abschnitt nacheinander erscheinen */
 .makler-fragen { margin: -18px 0 42px; }
