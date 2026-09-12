@@ -4804,3 +4804,36 @@ body {
   font-size: clamp(36px, 4.4vw, 58px);
   overflow-wrap: normal;
 }
+
+/* Preisgrafiken aus den Tabellen von Statistik Austria, als SVG direkt in
+   der Seite — scharf auf jedem Bildschirm, ohne zusaetzliche Anfrage. */
+.preis-grafiken { align-items: start; }
+.preis-grafik-bild { padding: 18px 14px 4px; }
+.preis-grafik svg { display: block; width: 100%; height: auto; overflow: visible; font-family: var(--font-body); }
+.preis-grafik svg .gitter { stroke: rgba(255, 255, 255, 0.08); stroke-width: 1; }
+.preis-grafik svg .achse { fill: rgba(255, 255, 255, 0.5); font-size: 14px; }
+.preis-grafik svg .linie { fill: none; stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
+.preis-grafik svg .wert { fill: var(--gold-light); font-size: 16px; font-weight: 700; }
+.preis-grafik svg .wert-klein { fill: rgba(255, 255, 255, 0.75); font-size: 13px; }
+.preis-grafik svg .balken { fill: rgba(255, 255, 255, 0.2); }
+.preis-grafik svg .balken.hervor { fill: var(--gold); }
+.preis-legende {
+  list-style: none;
+  margin: 2px 20px 12px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+}
+.preis-legende span {
+  display: inline-block;
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+  margin-right: 7px;
+  vertical-align: middle;
+}
+.preis-hinweis { margin-top: 22px; font-size: 13px; line-height: 1.65; color: rgba(255, 255, 255, 0.5); max-width: 92ch; }
+.preis-hinweis a { color: var(--gold-light); text-decoration: underline; }
