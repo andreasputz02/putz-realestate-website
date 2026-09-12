@@ -111,8 +111,14 @@ if (!$erzwingen && $brauchbar && $alter < JI_FRISCH_SEKUNDEN) {
 // Speicher ist da, aber nicht mehr taufrisch: erst ausliefern, dann
 // im Hintergrund erneuern. Nur ein Lauf gleichzeitig — die Sperrdatei
 // haelt die uebrigen Aufrufe zurueck, ohne den Speicher zu verjuengen.
+// Jeder vorhandene Stand wird sofort ausgeliefert, egal wie alt. Frueher
+// holte die Seite nach 15 Minuten ohne Besucher synchron bei Justimmo —
+// dann wartete der naechste Besucher bis zu 15 Sekunden auf die Objekte,
+// weil fuer jedes Video zusaetzlich YouTube abgefragt wurde. Ein alter
+// Stand fuer einen Augenblick ist besser als eine leere Seite; die
+// Erneuerung laeuft ohnehin sofort im Hintergrund an.
 $imHintergrund = false;
-if (!$erzwingen && $brauchbar && $alter < $cacheSekunden) {
+if (!$erzwingen && $brauchbar) {
     $sperrAlter = is_file(JI_SPERR_DATEI) ? time() - filemtime(JI_SPERR_DATEI) : PHP_INT_MAX;
 
     if ($sperrAlter > JI_SPERRE_SEKUNDEN) {

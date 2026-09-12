@@ -200,6 +200,22 @@ function ji_videoSuche(SimpleXMLElement $o): string
  *
  * Im Zweifel Querformat — das ist der haeufigere Fall.
  */
+/**
+ * Wie ji_istShort, aber mit Gedaechtnis. Ob ein Video hochkant ist, aendert
+ * sich nie — trotzdem fragte jede Erneuerung fuer jedes Video erneut bei
+ * YouTube nach. Bei zehn Videos kostete das bis zu 15 Sekunden.
+ */
+function ji_istShortGemerkt(string $kennung): bool
+{
+    $datei = __DIR__ . '/data/youtube-format.json';
+    $gemerkt = is_file($datei) ? (json_decode((string)file_get_contents($datei), true) ?: []) : [];
+    if (array_key_exists($kennung, $gemerkt)) return (bool)$gemerkt[$kennung];
+    $wert = ji_istShort($kennung);
+    $gemerkt[$kennung] = $wert;
+    @file_put_contents($datei, json_encode($gemerkt), LOCK_EX);
+    return $wert;
+}
+
 function ji_istShort(string $kennung): bool
 {
     $ch = curl_init('https://www.youtube.com/shorts/' . $kennung);
@@ -235,7 +251,7 @@ function ji_video(string $url, string $deckblatt): ?array
         || preg_match('#youtube\.com/(?:embed|shorts)/([A-Za-z0-9_-]{6,})#i', $url, $t)) {
         return [
             'einbettung' => 'https://www.youtube-nocookie.com/embed/' . $t[1],
-            'hochformat' => ji_istShort($t[1]),
+            'hochformat' => ji_istShortGemerkt($t[1]),
         ];
     }
 
