@@ -4920,3 +4920,40 @@ body {
 
 /* Ein einzelnes verkauftes Objekt steht nicht verloren links im Raster */
 .verkauft-einzeln .verkauft-raster { max-width: 420px; grid-template-columns: minmax(0, 1fr); }
+
+/* Eigentuemerfragen, die im Makler-Abschnitt nacheinander erscheinen */
+.makler-fragen { margin: -18px 0 42px; }
+.makler-fragen-titel {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 10px;
+}
+.makler-fragen-liste { list-style: none; margin: 0; padding: 0; }
+.makler-fragen-liste li {
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--gold-light);
+}
+.makler-fragen.laeuft .makler-fragen-liste { display: grid; }
+.makler-fragen.laeuft .makler-fragen-liste li {
+  grid-area: 1 / 1;
+  font-size: clamp(21px, 2.6vw, 30px);
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+  pointer-events: none;
+}
+.makler-fragen.laeuft .makler-fragen-liste li.ist-aktiv { opacity: 1; transform: none; pointer-events: auto; }
+
+/* Unter den drei verkauften Objekten */
+.verkauft-weitere {
+  margin-top: 22px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.6);
+}

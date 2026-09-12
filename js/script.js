@@ -965,3 +965,26 @@ document.querySelectorAll(".video-abspielen").forEach((knopf) => {
     zeigen(0, false);
   });
 })();
+
+// ---------- Eigentuemerfragen im Makler-Abschnitt ----------
+// Eine Frage nach der anderen, alle 5 Sekunden. Beim Ueberfahren haelt der
+// Wechsel an; ist das Fenster im Hintergrund, laeuft er nicht weiter. Bei
+// reduzierter Bewegung stehen alle Fragen ruhig untereinander.
+(function () {
+  document.querySelectorAll("[data-fragen-karussell]").forEach((box) => {
+    const fragen = [...box.querySelectorAll("li")];
+    if (fragen.length < 2) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    box.classList.add("laeuft");
+    let i = 0, angehalten = false;
+    fragen.forEach((f, k) => f.classList.toggle("ist-aktiv", k === 0));
+    box.addEventListener("mouseenter", () => { angehalten = true; });
+    box.addEventListener("mouseleave", () => { angehalten = false; });
+    setInterval(() => {
+      if (angehalten || document.hidden) return;
+      fragen[i].classList.remove("ist-aktiv");
+      i = (i + 1) % fragen.length;
+      fragen[i].classList.add("ist-aktiv");
+    }, 5000);
+  });
+})();
