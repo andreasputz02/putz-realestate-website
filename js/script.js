@@ -897,3 +897,71 @@ document.querySelectorAll(".video-abspielen").forEach((knopf) => {
     bannerZeigen(true);
   });
 })();
+
+/* ============================================================
+   Bewertungs-Assistent auf den Ortsseiten
+
+   Ein einziges Formular in vier Schritten: Art der Immobilie,
+   Eckdaten, Lage, Kontakt. Abgeschickt wird es wie jedes andere
+   Formular ueber send-mail.php (data-contact-form weiter oben).
+   Felder, die zur gewaehlten Art nicht passen — etwa die Grundflaeche
+   bei einer Wohnung —, werden deaktiviert und damit weder geprueft
+   noch mitgeschickt. Ohne Skript stehen alle Schritte untereinander.
+   ============================================================ */
+(function () {
+  document.querySelectorAll("form[data-assistent]").forEach((form) => {
+    const schritte = [...form.querySelectorAll("[data-schritt]")];
+    if (!schritte.length) return;
+    const anzeige = form.querySelector("[data-schritt-anzeige]");
+    const balken = form.querySelector("[data-schritt-balken]");
+    let aktuell = 0;
+    form.classList.add("ist-aktiv");
+
+    function zeigen(i, vomNutzer) {
+      aktuell = Math.max(0, Math.min(i, schritte.length - 1));
+      schritte.forEach((s, k) => { s.hidden = k !== aktuell; });
+      if (anzeige) anzeige.textContent = "Schritt " + (aktuell + 1) + " von " + schritte.length;
+      if (balken) balken.style.width = ((aktuell + 1) / schritte.length) * 100 + "%";
+      if (!vomNutzer) return;
+      // Beim Weiterblaettern oben am Formular bleiben und den Fokus mitnehmen.
+      const oben = form.getBoundingClientRect().top;
+      if (oben < 80) window.scrollBy({ top: oben - 100, behavior: "smooth" });
+      const ziel = schritte[aktuell].querySelector("input:not([disabled]):not([type=radio]), legend");
+      if (ziel) { if (ziel.tagName === "LEGEND") ziel.setAttribute("tabindex", "-1"); ziel.focus({ preventScroll: true }); }
+    }
+
+    function artAnpassen(art) {
+      form.querySelectorAll("[data-nur-fuer]").forEach((feld) => {
+        const passt = feld.dataset.nurFuer.split(" ").includes(art);
+        feld.hidden = !passt;
+        feld.querySelectorAll("input, select").forEach((el) => { el.disabled = !passt; });
+      });
+    }
+
+    function gueltig(i) {
+      for (const el of schritte[i].querySelectorAll("input, select, textarea")) {
+        if (el.disabled) continue;
+        if (!el.checkValidity()) { el.reportValidity(); return false; }
+      }
+      return true;
+    }
+
+    form.querySelectorAll("input[data-art-wahl]").forEach((radio) => {
+      radio.addEventListener("change", () => artAnpassen(radio.value));
+      // Klick oder Tippen waehlt und blaettert weiter; Pfeiltasten waehlen nur.
+      radio.addEventListener("click", () => { artAnpassen(radio.value); zeigen(1, true); });
+    });
+    form.querySelectorAll("[data-weiter]").forEach((b) =>
+      b.addEventListener("click", () => { if (gueltig(aktuell)) zeigen(aktuell + 1, true); }));
+    form.querySelectorAll("[data-zurueck]").forEach((b) =>
+      b.addEventListener("click", () => zeigen(aktuell - 1, true)));
+    // Nach erfolgreichem Absenden setzt der Formularversand zurueck — dann
+    // wieder bei Schritt 1 beginnen, die Erfolgsmeldung bleibt stehen.
+    form.addEventListener("reset", () => setTimeout(() => {
+      form.querySelectorAll("[data-nur-fuer]").forEach((f) => { f.hidden = false; f.querySelectorAll("input").forEach((el) => { el.disabled = false; }); });
+      zeigen(0, false);
+    }, 0));
+
+    zeigen(0, false);
+  });
+})();

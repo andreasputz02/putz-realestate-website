@@ -4837,3 +4837,86 @@ body {
 }
 .preis-hinweis { margin-top: 22px; font-size: 13px; line-height: 1.65; color: rgba(255, 255, 255, 0.5); max-width: 92ch; }
 .preis-hinweis a { color: var(--gold-light); text-decoration: underline; }
+
+/* ============================================================
+   Ortsseiten: Drohnenflug im Aufmacher fuer alle Seiten —
+   Wien mit der Wien-Aufnahme, Niederoesterreich mit dem Weinviertel
+   ============================================================ */
+.ort-hero-video--wien { background-image: url("../assets/img/wien-drohne-poster.jpg"); }
+.ort-hero-video--weinviertel { background-image: url("../assets/img/weinviertel-drohne-poster.jpg"); }
+
+/* ============================================================
+   Bewertungs-Assistent
+   ============================================================ */
+.bewertungs-assistent { max-width: 780px; margin: 0 auto; }
+.bewertungs-assistent fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.bewertungs-assistent .assistent-schritt[hidden],
+.bewertungs-assistent [data-nur-fuer][hidden] { display: none !important; }
+.bewertungs-assistent legend {
+  display: block;
+  padding: 0;
+  margin: 0 0 22px;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 600;
+  color: var(--white);
+}
+.bewertungs-assistent legend:focus { outline: none; }
+.assistent-kopf {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 12px;
+}
+.assistent-fortschritt { height: 3px; background: rgba(255, 255, 255, 0.08); border-radius: 2px; overflow: hidden; margin-bottom: 30px; }
+.assistent-fortschritt span { display: block; height: 100%; width: 25%; background: var(--gold); transition: width 0.45s var(--ease); }
+
+.art-wahl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.art-karte { position: relative; display: block; cursor: pointer; }
+.art-karte input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.art-karte span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 30px 12px 26px;
+  border: 1.5px solid var(--line-dark);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--white);
+  transition: border-color 0.25s var(--ease), background 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.art-karte svg { width: 38px; height: 38px; fill: none; stroke: var(--gold); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.art-karte:hover span { border-color: rgba(251, 228, 139, 0.55); transform: translateY(-2px); }
+.art-karte input:checked + span { border-color: var(--gold); background: rgba(251, 228, 139, 0.07); }
+.art-karte input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+.assistent-felder { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.assistent-ort { grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr); }
+.assistent-knoepfe { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 26px; }
+.assistent-knoepfe .btn { min-width: 132px; justify-content: center; }
+.assistent-hinweis { margin-top: 16px; font-size: 12.5px; line-height: 1.6; color: rgba(255, 255, 255, 0.45); }
+.assistent-hinweis a { color: var(--gold-light); text-decoration: underline; }
+
+/* Ohne Skript: alle Schritte untereinander, ohne Blaetterknoepfe */
+.bewertungs-assistent:not(.ist-aktiv) .assistent-schritt + .assistent-schritt { margin-top: 30px; }
+.bewertungs-assistent:not(.ist-aktiv) [data-weiter],
+.bewertungs-assistent:not(.ist-aktiv) [data-zurueck],
+.bewertungs-assistent:not(.ist-aktiv) .assistent-kopf,
+.bewertungs-assistent:not(.ist-aktiv) .assistent-fortschritt { display: none; }
+
+@media (max-width: 640px) {
+  .art-wahl { grid-template-columns: minmax(0, 1fr); }
+  .art-karte span { flex-direction: row; justify-content: flex-start; padding: 18px 20px; }
+  .art-karte svg { width: 30px; height: 30px; }
+  .assistent-felder { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .assistent-ort { grid-template-columns: minmax(0, 0.45fr) minmax(0, 1fr); }
+}
+
+/* Ein einzelnes verkauftes Objekt steht nicht verloren links im Raster */
+.verkauft-einzeln .verkauft-raster { max-width: 420px; grid-template-columns: minmax(0, 1fr); }
