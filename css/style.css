@@ -4596,3 +4596,36 @@ body {
   inset: 0;
   height: auto;
 }
+
+/* Kopfleiste: "Kostenlose Bewertung" als schlichter Menuepunkt ohne
+   Pillenrahmen, in Gold, damit der Punkt trotzdem auffaellt. */
+.nav-pille,
+.nav-pille:hover,
+.nav-pille:focus-visible,
+.nav-pille.ist-aktiv {
+  border: 0;
+  background: transparent;
+  padding: 11px 8px;
+  border-radius: 0;
+}
+.nav-pille { color: var(--gold); }
+.nav-pille:hover,
+.nav-pille:focus-visible,
+.nav-pille.ist-aktiv { color: var(--gold-light); }
+
+/* Aufmacher der Startseite: "Unsere Immobilien" in Weiss, "Kontakt
+   aufnehmen" bleibt gold — so sind die zwei Wege auf einen Blick
+   unterscheidbar. */
+.hero-actions.nur-rand .btn-outline {
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.85);
+}
+.hero-actions.nur-rand .btn-outline:hover {
+  color: var(--white);
+  border-color: var(--white);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Standortkarten: der Platzhalter hat dasselbe 16:9 wie die Karte, damit
+   beim Zustimmen nichts verrutscht. */
+.location-card .extern-platzhalter { aspect-ratio: 16 / 9; height: auto !important; }

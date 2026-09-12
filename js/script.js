@@ -860,10 +860,14 @@ document.querySelectorAll(".video-abspielen").forEach((knopf) => {
   function platzhalterSetzen(wurzel) {
     (wurzel || document).querySelectorAll("[data-extern-src]").forEach((el) => {
       if (el.parentElement.querySelector(".extern-platzhalter")) return;
+      // Hoehe vor dem Ausblenden messen: der Platzhalter soll genau so viel
+      // Platz einnehmen wie spaeter die Karte. Sonst springt beim Zustimmen
+      // die ganze Seite nach unten — das wirkt wie ein Neuladen.
+      const hoehe = el.offsetHeight;
       el.hidden = true;
       const p = document.createElement("div");
       p.className = "extern-platzhalter";
-      p.style.height = el.getAttribute("height") ? el.getAttribute("height") + "px" : "";
+      if (hoehe) p.style.height = hoehe + "px";
       p.innerHTML =
         '<span>' + (el.dataset.externName || "Externer Inhalt") +
         ' — wird erst auf Klick von einem anderen Anbieter geladen.</span>' +
