@@ -4629,3 +4629,39 @@ body {
 /* Standortkarten: der Platzhalter hat dasselbe 16:9 wie die Karte, damit
    beim Zustimmen nichts verrutscht. */
 .location-card .extern-platzhalter { aspect-ratio: 16 / 9; height: auto !important; }
+
+/* ------------------------------------------------------------
+   Fusszeile aus einem Guss
+
+   Auf Startseite und Verkaufsseite folgte auf die Fusszeile mit
+   Trennlinie ein zweiter Block mit eigener Linie und Ueberschrift —
+   das las sich wie zwei Fusszeilen uebereinander. Der Regionenblock
+   schliesst jetzt ohne Trennung an, und die einzige Linie steht wie
+   ueberall direkt ueber der untersten Zeile.
+   ------------------------------------------------------------ */
+.footer-top:has(+ .footer-regionen) {
+  border-bottom: 0;
+  padding-bottom: 40px;
+}
+.footer-regionen {
+  border-top: 0;
+  margin-top: 0;
+  padding: 0 0 56px;
+  border-bottom: 1px solid var(--line-dark);
+}
+.footer-regionen > h4 {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 20px;
+}
+.footer-regionen-gruppe h5 {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 12px;
+}
+.footer-regionen-gruppe a { font-size: 14px; }
