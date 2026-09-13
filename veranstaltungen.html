@@ -247,96 +247,19 @@
       <div class="event-list">
 
         <div class="event-card" data-reveal>
-          <div class="event-date">
-            <span class="event-day">01</span>
-            <span class="event-month">Okt 2026</span>
+          <div class="event-date" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" style="width:30px; height:30px; stroke:var(--gold-light);"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
           </div>
           <div class="event-body">
-            <h3>Erbe — Was du wissen solltest</h3>
-            <div class="event-meta">
-              <span class="event-meta-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
-                Vortragender: <a href="https://samaan.legal/ueber-uns/" target="_blank" rel="noopener">RA Dr. Johannes Samaan</a>
-              </span>
-              <span class="event-meta-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
-                Standort Wien
-              </span>
-              <span class="event-meta-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
-                19:30 Uhr
-              </span>
-              <span class="event-meta-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                20 freie Plätze
-              </span>
-              <span class="event-meta-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9 8h4a3 3 0 0 1 0 6H9M8 11h5M8 13h5"/></svg>
-                Kostenlos
-              </span>
-            </div>
-            <p style="color:rgba(255,255,255,0.68); font-size:14.5px; line-height:1.7; margin-bottom:22px; max-width:60ch;">Was passiert mit einer Immobilie im Erbfall? RA Dr. Johannes Samaan gibt einen praxisnahen Überblick über Erbrecht, Pflichtteile und die häufigsten Fallstricke bei geerbten Immobilien — inklusive Zeit für deine persönlichen Fragen.</p>
-            <button type="button" class="btn btn-gold btn-sm" data-modal-open="event-erbe-2026">
-              Jetzt anmelden
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </button>
+            <h3>Bald gibt es Infos zur nächsten Veranstaltung<span class="marke-punkt">.</span></h3>
+            <p style="color:rgba(255,255,255,0.68); font-size:14.5px; line-height:1.7; margin-bottom:0; max-width:60ch;">Wir planen gerade die nächste Veranstaltung. Sobald Thema und Termin feststehen, findest du hier alle Details und kannst dich direkt anmelden.</p>
           </div>
         </div>
 
       </div>
-      <p class="field-note" style="margin-top:40px; max-width:60ch;">Weitere Veranstaltungen werden hier laufend ergänzt.</p>
     </div>
   </section>
 </main>
-
-<div class="modal-overlay" data-modal="event-erbe-2026" hidden>
-  <div class="modal-panel">
-    <button class="modal-close" type="button" data-modal-close aria-label="Schließen">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-    <h3 style="font-size:22px; margin-top:10px; margin-bottom:8px; font-weight:600;">Erbe — Was du wissen solltest</h3>
-    <p class="field-note" style="margin-bottom:24px;">01.10.2026 · 19:30 Uhr · Standort Wien · Kostenlos, begrenzte Plätze.</p>
-    <form data-contact-form>
-      <input type="hidden" name="form_name" value="Veranstaltung – Anmeldung: Erbe (01.10.2026)">
-      <div class="hp-field" aria-hidden="true"><label for="ev-website">Website</label><input type="text" id="ev-website" name="website" tabindex="-1" autocomplete="off"></div>
-      <div class="form-row">
-        <div class="field">
-          <label for="ev-vorname">Vorname</label>
-          <input type="text" id="ev-vorname" name="vorname" required>
-        </div>
-        <div class="field">
-          <label for="ev-nachname">Nachname</label>
-          <input type="text" id="ev-nachname" name="nachname" required>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="field">
-          <label for="ev-email">E-Mail</label>
-          <input type="email" id="ev-email" name="email" required>
-        </div>
-        <div class="field">
-          <label for="ev-telefon">Telefon</label>
-          <input type="tel" id="ev-telefon" name="telefon">
-        </div>
-      </div>
-      <div class="field">
-        <label for="ev-personen">Anzahl Personen</label>
-        <select id="ev-personen" name="personen">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-        </select>
-      </div>
-      <button type="submit" class="btn btn-gold btn-block">
-        Anmeldung senden
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </button>
-      <p class="field-note">Deine Anmeldung geht direkt an office@putzrealestate.at. Mit dem Absenden stimmst du der Verarbeitung deiner Daten gemäß unserer <a href="datenschutz" style="text-decoration:underline;">Datenschutzerklärung</a> zu.</p>
-      <div class="form-status"></div>
-    </form>
-  </div>
-</div>
 
 <footer class="site-footer">
   <div class="container">
