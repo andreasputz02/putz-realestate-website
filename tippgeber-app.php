@@ -247,7 +247,7 @@ function geld(float $b): string { return '€ ' . number_format($b, 0, ',', '.')
 
   <p class="tg-fuss">
     Fragen? <a href="mailto:office@putzrealestate.at">office@putzrealestate.at</a>
-    · <a href="tel:+4366643500662">0664 3500662</a>
+    · <a href="tel:+436643500662">0664 3500662</a>
   </p>
 </main>
 
