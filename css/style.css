@@ -584,13 +584,23 @@ body.nav-open { overflow: hidden; }
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: url("../assets/img/hero-haus.jpg") center 60% / cover no-repeat;
-  animation: heroPan 30s ease-in-out infinite alternate;
+  /* Erstes Bild des Drohnenflugs: steht da, bevor das Video laedt, und
+     bleibt bei reduzierter Bewegung allein stehen. */
+  background: var(--black) url("../assets/img/hero-drohnen-poster.jpg") center / cover no-repeat;
 }
 
-@keyframes heroPan {
-  0% { background-position: center 60%; }
-  100% { background-position: 52% 55%; }
+/* Drohnenflug im Wechsel: 5 s Wien, 5 s Weinviertel — als eine Schleife
+   geschnitten, damit nur eine Datei laedt und nichts synchronisiert werden muss. */
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-video { display: none; }
 }
 
 .hero-bg::before {
