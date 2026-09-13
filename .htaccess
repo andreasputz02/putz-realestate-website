@@ -62,6 +62,9 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # Die News-Seite gibt es nicht mehr: alte Links und Suchtreffer -> Startseite
+  RewriteRule ^news(\.html)?/?$ / [R=301,L]
+
   # /index.html und /index -> /
   RewriteCond %{THE_REQUEST} \s/+index(\.html)?[\s?] [NC]
   RewriteRule ^ / [R=301,L]
