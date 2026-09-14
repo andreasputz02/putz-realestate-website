@@ -773,6 +773,22 @@ document.querySelectorAll(".video-abspielen").forEach((knopf) => {
   });
 });
 
+// Kurz bevor ein Kundenvideo ins Bild kommt, schon den Dateikopf holen
+// (wenige hundert KB). Beim Klick muss dann nicht erst gewartet werden,
+// bis der Browser weiss, wie lang das Video ist und wo es beginnt.
+if ("IntersectionObserver" in window) {
+  const vorladen = new IntersectionObserver((eintraege) => {
+    eintraege.forEach(({ isIntersecting, target }) => {
+      if (!isIntersecting) return;
+      vorladen.unobserve(target);
+      if (target.preload !== "none" || !target.paused) return;
+      target.preload = "metadata";
+      target.load();
+    });
+  }, { rootMargin: "400px 0px" });
+  document.querySelectorAll('.video-feature-player video[preload="none"]').forEach((v) => vorladen.observe(v));
+}
+
 /* ============================================================
    Einwilligung für externe Inhalte
 

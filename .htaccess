@@ -110,6 +110,14 @@
   <FilesMatch "\.html$">
     Header always set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
+
+  # Videos: ein Jahr speichern, im Browser und im CDN. Ohne diese Zeile
+  # schickte der Server gar keine Speicherdauer mit — jeder Besuch lud die
+  # Videos neu, und das CDN hielt sie fast nie vor. Jeder Videolink traegt
+  # eine Versionsnummer (?v=…); ein ersetztes Video bekommt eine neue.
+  <FilesMatch "\.(mp4|webm)$">
+    Header always set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
 </IfModule>
 
 # CSS, JS, Bilder duerfen lange gespeichert bleiben — die tragen
