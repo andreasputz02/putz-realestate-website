@@ -106,6 +106,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://putz-realestate.at/regionen</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://putz-realestate.at/immobilien-verkaufen-weinviertel</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>

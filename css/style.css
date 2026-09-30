@@ -5007,3 +5007,73 @@ body {
   color: var(--white);
 }
 .ort-hero-split .ort-slogan + .lede { margin-top: 18px; }
+
+/* ============================================================
+   Regionenblock (Startseite, /verkaufen, /regionen, Ortsseiten)
+
+   Alle Ortsseiten nach Gebiet gruppiert. Ohne ihn waren die
+   meisten Ortsseiten von keiner anderen Seite aus verlinkt.
+   Die Gebietsueberschrift fuehrt zur Gebietsseite, die Orte
+   stehen als Kacheln darunter. Die eigene Seite ist markiert,
+   aber kein Link.
+   ============================================================ */
+.regionen-raster {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+.regionen-gruppe {
+  border: 1px solid var(--line-dark);
+  border-radius: var(--radius-md);
+  padding: 26px 26px 28px;
+  background: var(--black-soft);
+  min-width: 0;
+}
+.regionen-gruppe h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--white);
+  margin: 0 0 16px;
+}
+.regionen-gruppe h3 a { color: inherit; transition: color 0.3s var(--ease); }
+.regionen-gruppe h3 a::after { content: " →"; color: var(--gold); }
+.regionen-gruppe h3 a:hover { color: var(--gold-light); }
+.regionen-gruppe p {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.62);
+  margin: -6px 0 18px;
+}
+.regionen-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.regionen-liste a,
+.regionen-liste .regionen-hier {
+  display: inline-block;
+  font-size: 14px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line-dark);
+  color: rgba(255, 255, 255, 0.8);
+  transition: border-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+.regionen-liste a:hover,
+.regionen-liste a:focus-visible { border-color: var(--gold); color: var(--gold-light); }
+.regionen-liste .regionen-hier { border-color: var(--gold); color: var(--gold); }
+.regionen-mehr { margin-top: 26px; }
+.regionen-mehr a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: var(--gold);
+}
+.regionen-mehr svg { width: 18px; height: 18px; }
+@media (max-width: 900px) {
+  .regionen-raster { grid-template-columns: 1fr; }
+}
