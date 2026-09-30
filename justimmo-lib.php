@@ -30,6 +30,11 @@ const JI_VORRANG_NUMMERN = [
     // z. B. '2439/54', '2439/61',
 ];
 
+// Objektnummern beginnen bei uns mit der Nummer des Abgebers: unsere
+// eigenen Objekte mit 2439, die von Partnern mit einer anderen. Alles,
+// was mit dieser Nummer anfaengt, steht auf der Website vorne.
+const JI_VORRANG_PRAEFIX = '2439';
+
 // ------------------------------------------------------------
 //  Abruf bei Justimmo
 // ------------------------------------------------------------
@@ -323,6 +328,7 @@ function ji_abgeber(SimpleXMLElement $o): string
 function ji_hatVorrang(SimpleXMLElement $o, string $abgeber, string $nummer): bool
 {
     if (in_array($nummer, JI_VORRANG_NUMMERN, true)) return true;
+    if (JI_VORRANG_PRAEFIX !== '' && strncasecmp($nummer, JI_VORRANG_PRAEFIX, strlen(JI_VORRANG_PRAEFIX)) === 0) return true;
     if (JI_VORRANG_ABGEBER === '') return false;
     if (stripos($abgeber, JI_VORRANG_ABGEBER) !== false) return true;
     return stripos((string)$o->asXML(), JI_VORRANG_ABGEBER) !== false;
