@@ -978,6 +978,12 @@ body.nav-open { overflow: hidden; }
   padding: 7px 14px;
   border-radius: 100px;
 }
+/* Verkauft: der Vermerk steht in Gold statt in dezentem Grau */
+.listing-media .tag.tag-verkauft {
+  background: var(--gold);
+  color: var(--black);
+}
+
 .listing-media .price-tag {
   position: absolute;
   bottom: 16px;

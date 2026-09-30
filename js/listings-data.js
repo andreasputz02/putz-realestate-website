@@ -6,4 +6,28 @@
 // Diese Liste ist derzeit leer — sie bleibt bestehen, damit die Seite
 // auch dann funktioniert, wenn Justimmo einmal nicht antwortet, und
 // damit Objekte ohne Justimmo-Eintrag hier ergaenzt werden koennen.
-window.LISTINGS = [];
+window.LISTINGS = [
+  {
+    // Verkauft — bleibt als Beleg auf der Website stehen. Das Kennzeichen
+    // "verkauft" setzt den Vermerk auf dem Bild und den Preis auf "Verkauft".
+    id: "wohnung-hugogasse-1110",
+    verkauft: true,
+    type: "kauf",
+    objektart: "Wohnung",
+    title: "Wohnung in der Hugogasse",
+    location: "Hugogasse 8/6, 1110 Wien",
+    plz: "1110",
+    mapQuery: "Hugogasse 8, 1110 Wien",
+    price: "Verkauft",
+    area: "",
+    grundArea: "",
+    rooms: "",
+    baths: "",
+    gradient: "linear-gradient(135deg,#2c2822,#0f0e0c)",
+    images: ["assets/img/verkauft/wohnung-1110-hugogasse.jpg"],
+    description: [
+      "Diese Wohnung in der Hugogasse haben wir erfolgreich verkauft.",
+      "Du hast etwas Ähnliches in Simmering und denkst über einen Verkauf nach? Melde dich — wir sagen dir ehrlich, was deine Wohnung derzeit wert ist."
+    ]
+  }
+];
