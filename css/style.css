@@ -4860,6 +4860,8 @@ body {
    ============================================================ */
 .ort-hero-video--wien { background-image: url("../assets/img/wien-drohne-poster.jpg"); }
 .ort-hero-video--weinviertel { background-image: url("../assets/img/weinviertel-drohne-poster.jpg"); }
+/* Burgenland: noch ohne Drohnenflug — das verkaufte Haus in Neufeld als Standbild */
+.ort-hero-video--burgenland { background-image: url("../assets/img/verkauft/haus-neufeld.jpg"); }
 
 /* ============================================================
    Bewertungs-Assistent
