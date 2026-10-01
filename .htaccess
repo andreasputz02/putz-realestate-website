@@ -31,6 +31,15 @@
 
 ErrorDocument 404 /404.html
 
+# Rohfotos und Arbeitsdateien, die frueher im Hauptordner mit hochgeladen
+# wurden. Sie sind aus dem Repository genommen, aber die Auslieferung von
+# Hostinger loescht keine Dateien am Server — deshalb hier gesperrt.
+# Antwort wie bei jeder unbekannten Adresse: 404 mit der eigenen Fehlerseite.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^(1190-danach\.jpg|1190-davor\.webp|AP-ernst\.jpg|AP-lachend\.JPG|Andi-Fussball\.jpg|Logo-P\.jpg|Logo_2\.png|Stetten-pro\.JPG|stetten-amt\.jpg|JPG-Wallriss/.*|pruef-[^/]*)$ - [R=404,L,NC]
+</IfModule>
+
 
 # ============================================================
 #  Die Seite ist oeffentlich erreichbar.
