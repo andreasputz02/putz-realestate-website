@@ -4828,6 +4828,9 @@ body {
 .ort-hero-video--weinviertel { background-image: url("../assets/img/weinviertel-drohne-poster.jpg"); }
 /* Burgenland: noch ohne Drohnenflug — das verkaufte Haus in Neufeld als Standbild */
 .ort-hero-video--burgenland { background-image: url("../assets/img/verkauft/haus-neufeld.jpg"); }
+/* Orte mit eigenem Foto statt Drohnenflug */
+.ort-hero-video--krems { background-image: url("../assets/img/orte/krems.jpg"); }
+.ort-hero-video--klosterneuburg { background-image: url("../assets/img/orte/klosterneuburg.jpg"); }
 
 /* ============================================================
    Bewertungs-Assistent
