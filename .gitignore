@@ -50,3 +50,17 @@ pruef-zoom.html
 .werkzeuge/
 pruef-ort.html
 pruef-mistelbach.html
+
+# Rohfotos und Arbeitsdateien im Hauptordner — waren live abrufbar
+# (AP-ernst.jpg mit 5 MB), ohne dass eine Seite sie verwendet. Sie
+# bleiben lokal liegen, gehoeren aber nicht auf den Webspace.
+/1190-danach.jpg
+/1190-davor.webp
+/AP-ernst.jpg
+/AP-lachend.JPG
+/Andi-Fussball.jpg
+/JPG-Wallriss/
+/Logo-P.jpg
+/Logo_2.png
+/Stetten-pro.JPG
+/stetten-amt.jpg

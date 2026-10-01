@@ -5053,3 +5053,14 @@ body {
 @media (max-width: 700px) {
   .regionen-raster { grid-template-columns: 1fr; }
 }
+
+/* Goldene Kopfzeile als Teil der Hauptueberschrift: sieht aus wie die
+   Zeile darueber (gleiche Hoehe, 20 px Abstand), gibt der H1 aber den
+   Suchbegriff ("Kostenlose Immobilienbewertung - Kenne deinen Wert"). */
+h1 > .eyebrow {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  line-height: normal;
+  margin-bottom: 20px;
+}

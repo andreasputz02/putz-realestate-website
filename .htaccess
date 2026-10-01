@@ -21,6 +21,18 @@
 
 
 # ============================================================
+#  EIGENE FEHLERSEITE
+#
+#  Unbekannte Adressen zeigen statt der Standardseite von Hostinger
+#  404.html im Design der Website, mit Wegen zurueck (Bewertung,
+#  Immobilien, Regionen). Der Statuscode bleibt 404, Google nimmt die
+#  Adresse also nicht auf; die Seite traegt zusaetzlich noindex.
+# ============================================================
+
+ErrorDocument 404 /404.html
+
+
+# ============================================================
 #  Die Seite ist oeffentlich erreichbar.
 #
 #  Zum Offlinenehmen diesen Block hier wieder einsetzen — er muss
