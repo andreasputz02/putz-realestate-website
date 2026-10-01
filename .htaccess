@@ -31,6 +31,14 @@
 
 ErrorDocument 404 /404.html
 
+# Kurzlink fuer Bewertungen: putz-realestate.at/bewerten oeffnet direkt das
+# Bewertungsformular des Google-Profils Wien. Zum Verschicken nach jeder
+# Uebergabe (WhatsApp, E-Mail). 302, damit das Ziel spaeter wechseln darf.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^bewerten/?$ https://g.page/r/CcHym5cJTThREAE/review [R=302,L]
+</IfModule>
+
 # Rohfotos und Arbeitsdateien, die frueher im Hauptordner mit hochgeladen
 # wurden. Sie sind aus dem Repository genommen, aber die Auslieferung von
 # Hostinger loescht keine Dateien am Server — deshalb hier gesperrt.
