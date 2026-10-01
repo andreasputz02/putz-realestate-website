@@ -751,6 +751,33 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
   }, { passive: true });
 })();
 
+// ---------- Hintergrundvideos: erst Standbild, Video nach dem Laden ----------
+// Die Drohnenfluege im Aufmacher (Startseite, Ortsseiten) luden frueher
+// sofort ganz mit — 2,7 MB am Handy, 5 MB am Computer — und standen damit
+// dem Aufbau der Seite im Weg. Jetzt steht zuerst das Standbild; das Video
+// startet erst, wenn die Seite fertig geladen ist und der Browser Luft hat.
+// Bei Datensparmodus, sehr langsamer Verbindung oder reduzierter Bewegung
+// bleibt es beim Standbild.
+(function () {
+  const videos = document.querySelectorAll("video[data-hintergrund-video]");
+  if (!videos.length) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const netz = navigator.connection;
+  if (netz && (netz.saveData || /(^|-)2g$/.test(netz.effectiveType || ""))) return;
+
+  const starten = () => videos.forEach((v) => {
+    v.muted = true;
+    v.preload = "auto";
+    v.play().catch(() => {}); // z. B. im Energiesparmodus — dann bleibt das Standbild
+  });
+  const spaeter = () => ("requestIdleCallback" in window
+    ? window.requestIdleCallback(starten, { timeout: 2000 })
+    : setTimeout(starten, 300));
+
+  if (document.readyState === "complete") spaeter();
+  else window.addEventListener("load", spaeter, { once: true });
+})();
+
 // ---------- Kundenvideos: erst Standbild, dann Steuerleiste ----------
 // Mit dem Attribut "controls" zeigt der Browser im Standbild dauerhaft
 // eine dunkle Leiste ueber dem unteren Bildrand. Deshalb startet das

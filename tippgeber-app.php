@@ -95,7 +95,7 @@ function geld(float $b): string { return '€ ' . number_format($b, 0, ',', '.')
 <body class="page-dark tg-app-body">
 
 <header class="tg-kopf">
-  <a href="/" class="tg-kopf-logo"><img src="assets/img/logo.png" alt="PUTZ Real Estate"></a>
+  <a href="/" class="tg-kopf-logo"><img src="assets/img/logo.webp" alt="PUTZ Real Estate"></a>
   <a href="?abmelden=1" class="tg-abmelden">Abmelden</a>
 </header>
 

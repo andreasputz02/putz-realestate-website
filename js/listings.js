@@ -2,10 +2,42 @@
 (function () {
   // Kacheln ohne Foto tragen das Hauszeichen statt einer Kamera.
   const zeichen =
-    '<img class="wasserzeichen" src="assets/img/wasserzeichen-p.png" alt="" aria-hidden="true">';
+    '<img class="wasserzeichen" src="assets/img/wasserzeichen-p.webp" alt="" aria-hidden="true">';
 
   // Radius des Umkreises auf der Objektseite, in Metern.
   const UMKREIS_METER = 500;
+
+  // Laedt die Kartenbibliothek samt Stylesheet einmalig nach.
+  let maplibreVersprechen = null;
+  function maplibreHolen() {
+    if (window.maplibregl) return Promise.resolve(window.maplibregl);
+    if (!maplibreVersprechen) {
+      maplibreVersprechen = new Promise((fertig, fehler) => {
+        const css = document.createElement("link");
+        css.rel = "stylesheet";
+        css.href = "css/maplibre-gl.css?v=1";
+        document.head.appendChild(css);
+        const js = document.createElement("script");
+        js.src = "js/maplibre/maplibre-gl.js?v=1";
+        js.onload = () => fertig(window.maplibregl);
+        js.onerror = fehler;
+        document.head.appendChild(js);
+      });
+    }
+    return maplibreVersprechen;
+  }
+
+  // Wird fertig, sobald das Element weniger als 600 px vom sichtbaren
+  // Bereich entfernt ist.
+  function kurzVorSichtbar(el) {
+    return new Promise((fertig) => {
+      if (!("IntersectionObserver" in window)) return fertig();
+      const io = new IntersectionObserver((eintraege) => {
+        if (eintraege.some((e) => e.isIntersecting)) { io.disconnect(); fertig(); }
+      }, { rootMargin: "600px 0px" });
+      io.observe(el);
+    });
+  }
 
   /**
    * MapLibre kennt keinen Kreis mit Angabe in Metern — anders als Leaflet.
@@ -445,42 +477,52 @@ ${masse(listing)}
       // OpenFreeMap, der Rueckfall zu Google. Dabei faellt die Adresse des
       // Besuchers an, deshalb erst nach Zustimmung.
       const karteAufbauen = () => {
-        if (mapEl && listing.lat && listing.lng && window.maplibregl) {
-          const ziel = document.createElement("div");
-          ziel.className = mapEl.className + " map-umkreis";
-          mapEl.replaceWith(ziel);
+        if (mapEl && listing.lat && listing.lng) {
+          // Die Kartenbibliothek (rund 800 KB) kommt erst, wenn die Karte
+          // fast im Bild ist. Frueher stand sie als normales Skript im Kopf
+          // und hielt den Aufbau jeder Objektseite auf.
+          kurzVorSichtbar(mapEl).then(maplibreHolen).then(() => {
+            const ziel = document.createElement("div");
+            ziel.className = mapEl.className + " map-umkreis";
+            mapEl.replaceWith(ziel);
 
-          const flaeche = kreisFlaeche(listing.lat, listing.lng, UMKREIS_METER);
+            const flaeche = kreisFlaeche(listing.lat, listing.lng, UMKREIS_METER);
 
-          const karte = new window.maplibregl.Map({
-            container: ziel,
-            style: "https://tiles.openfreemap.org/styles/dark",
-            center: [listing.lng, listing.lat],
-            zoom: 13.4,
-            scrollZoom: false,   // sonst bleibt man beim Scrollen in der Karte haengen
-            attributionControl: false,
-          });
-
-          // Den von OpenFreeMap geforderten Nachweis liefert die Kachelquelle
-          // selbst mit — nur die kompakte Darstellung wird hier gewaehlt.
-          karte.addControl(new window.maplibregl.AttributionControl({ compact: true }));
-          karte.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), "top-left");
-
-          karte.on("load", () => {
-            karte.addSource("umkreis", { type: "geojson", data: flaeche });
-            karte.addLayer({
-              id: "umkreis-flaeche",
-              type: "fill",
-              source: "umkreis",
-              paint: { "fill-color": "#fbe48b", "fill-opacity": 0.13 },
+            const karte = new window.maplibregl.Map({
+              container: ziel,
+              style: "https://tiles.openfreemap.org/styles/dark",
+              center: [listing.lng, listing.lat],
+              zoom: 13.4,
+              scrollZoom: false,   // sonst bleibt man beim Scrollen in der Karte haengen
+              attributionControl: false,
             });
-            karte.addLayer({
-              id: "umkreis-rand",
-              type: "line",
-              source: "umkreis",
-              paint: { "line-color": "#fbe48b", "line-width": 2 },
+
+            // Den von OpenFreeMap geforderten Nachweis liefert die Kachelquelle
+            // selbst mit — nur die kompakte Darstellung wird hier gewaehlt.
+            karte.addControl(new window.maplibregl.AttributionControl({ compact: true }));
+            karte.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), "top-left");
+
+            karte.on("load", () => {
+              karte.addSource("umkreis", { type: "geojson", data: flaeche });
+              karte.addLayer({
+                id: "umkreis-flaeche",
+                type: "fill",
+                source: "umkreis",
+                paint: { "fill-color": "#fbe48b", "fill-opacity": 0.13 },
+              });
+              karte.addLayer({
+                id: "umkreis-rand",
+                type: "line",
+                source: "umkreis",
+                paint: { "line-color": "#fbe48b", "line-width": 2 },
+              });
+              karte.fitBounds(kreisGrenzen(flaeche), { padding: 26, duration: 0 });
             });
-            karte.fitBounds(kreisGrenzen(flaeche), { padding: 26, duration: 0 });
+          }).catch(() => {
+            // Bibliothek nicht ladbar: wenigstens die einfache Karte zeigen.
+            if (listing.mapQuery && mapEl.isConnected) {
+              mapEl.src = `https://www.google.com/maps?q=${encodeURIComponent(listing.mapQuery)}&output=embed`;
+            }
           });
         } else if (mapEl && listing.mapQuery) {
           mapEl.src = `https://www.google.com/maps?q=${encodeURIComponent(listing.mapQuery)}&output=embed`;

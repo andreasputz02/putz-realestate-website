@@ -156,7 +156,7 @@ if (!empty($_SESSION['tippgeber_id']) && !isset($_GET['token'])) {
 <main class="tg-anmeldung">
   <div class="tg-karte">
     <a href="/" class="tg-logo">
-      <img src="assets/img/logo.png" alt="PUTZ Real Estate">
+      <img src="assets/img/logo.webp" alt="PUTZ Real Estate">
     </a>
 
     <h1>Tippgeber-Bereich</h1>

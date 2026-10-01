@@ -586,7 +586,7 @@ body.nav-open { overflow: hidden; }
   z-index: 0;
   /* Erstes Bild des Drohnenflugs: steht da, bevor das Video laedt, und
      bleibt bei reduzierter Bewegung allein stehen. */
-  background: var(--black) url("../assets/img/hero-drohnen-poster.jpg") center / cover no-repeat;
+  background: var(--black) url("../assets/img/hero-drohnen-poster.webp") center / cover no-repeat;
 }
 
 /* Drohnenflug im Wechsel: 5 s Wien, 5 s Weinviertel — als eine Schleife
@@ -4703,7 +4703,7 @@ body {
    liegt schon als Hintergrund darunter — es steht da, bevor das Video
    laedt, und bleibt bei reduzierter Bewegung allein stehen. */
 .ort-hero-video {
-  background: var(--black) url("../assets/img/wien-drohne-poster.jpg") center / cover no-repeat;
+  background: var(--black) url("../assets/img/wien-drohne-poster.webp") center / cover no-repeat;
 }
 .ort-hero-video::before { display: none; }
 .ort-hero-hintergrund {
@@ -4824,13 +4824,13 @@ body {
    Ortsseiten: Drohnenflug im Aufmacher fuer alle Seiten —
    Wien mit der Wien-Aufnahme, Niederoesterreich mit dem Weinviertel
    ============================================================ */
-.ort-hero-video--wien { background-image: url("../assets/img/wien-drohne-poster.jpg"); }
-.ort-hero-video--weinviertel { background-image: url("../assets/img/weinviertel-drohne-poster.jpg"); }
+.ort-hero-video--wien { background-image: url("../assets/img/wien-drohne-poster.webp"); }
+.ort-hero-video--weinviertel { background-image: url("../assets/img/weinviertel-drohne-poster.webp"); }
 /* Burgenland: noch ohne Drohnenflug — das verkaufte Haus in Neufeld als Standbild */
-.ort-hero-video--burgenland { background-image: url("../assets/img/verkauft/haus-neufeld.jpg"); }
+.ort-hero-video--burgenland { background-image: url("../assets/img/verkauft/haus-neufeld.webp"); }
 /* Orte mit eigenem Foto statt Drohnenflug */
-.ort-hero-video--krems { background-image: url("../assets/img/orte/krems.jpg"); }
-.ort-hero-video--klosterneuburg { background-image: url("../assets/img/orte/klosterneuburg.jpg"); }
+.ort-hero-video--krems { background-image: url("../assets/img/orte/krems.webp"); }
+.ort-hero-video--klosterneuburg { background-image: url("../assets/img/orte/klosterneuburg.webp"); }
 
 /* ============================================================
    Bewertungs-Assistent

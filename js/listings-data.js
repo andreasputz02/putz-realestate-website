@@ -24,7 +24,7 @@ window.LISTINGS = [
     rooms: "",
     baths: "",
     gradient: "linear-gradient(135deg,#2c2822,#0f0e0c)",
-    images: ["assets/img/verkauft/wohnung-1110-hugogasse.jpg"],
+    images: ["assets/img/verkauft/wohnung-1110-hugogasse.webp"],
     description: [
       "Diese Wohnung in der Hugogasse haben wir erfolgreich verkauft.",
       "Du hast etwas Ähnliches in Simmering und denkst über einen Verkauf nach? Melde dich — wir sagen dir ehrlich, was deine Wohnung derzeit wert ist."
