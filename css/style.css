@@ -5151,3 +5151,17 @@ h1 > .eyebrow {
 /* Hinweis auf das Partnernetzwerk (Anwalt, Notar, Steuerberater) */
 .ratgeber-netzwerk { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.09); }
 .ratgeber-hinweis .ratgeber-netzwerk a { color: var(--gold); text-decoration: underline; }
+
+/* Ratgeber: Frage an das Partnernetzwerk */
+.ratgeber-frage { background: var(--black-soft); border: 1px solid rgba(251, 228, 139, 0.35); border-radius: var(--radius-md); padding: 30px 30px 26px; margin-top: 44px; }
+.ratgeber-frage h2 { margin-top: 0; }
+.ratgeber-formular { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+.ratgeber-formular .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ratgeber-formular .field { display: flex; flex-direction: column; gap: 6px; }
+.ratgeber-formular label { font-size: 13.5px; color: rgba(255, 255, 255, 0.7); }
+.ratgeber-formular input, .ratgeber-formular textarea { width: 100%; font: inherit; font-size: 15px; color: var(--white); background: var(--black); border: 1px solid var(--line-dark); border-radius: var(--radius-sm); padding: 12px 14px; }
+.ratgeber-formular input:focus, .ratgeber-formular textarea:focus { outline: none; border-color: var(--gold); }
+.ratgeber-formular textarea { resize: vertical; min-height: 120px; }
+.ratgeber-formular .btn { align-self: flex-start; }
+.ratgeber-formular .fragen-hinweis { margin: 0; }
+@media (max-width: 600px) { .ratgeber-formular .form-row { grid-template-columns: 1fr; } .ratgeber-frage { padding: 24px 20px; } }
