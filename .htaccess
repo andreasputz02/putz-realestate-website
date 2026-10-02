@@ -107,6 +107,11 @@ ErrorDocument 404 /404.html
   # /immobilie ohne Objekt war eine leere Vorlage -> zur Uebersicht
   RewriteRule ^immobilie(?:\.html)?/?$ /immobilien [R=301,L]
 
+  # Ortsseiten: ortsseite.php liefert die fertige HTML-Datei aus und setzt
+  # die aktuellen Objekte der Gegend ein. Nur fuer Seiten, die es gibt.
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(immobilien-verkaufen-[a-z0-9-]+)$ ortsseite.php?s=$1 [L]
+
   # Sitemap der Objekte, aus denselben Daten erzeugt
   RewriteRule ^sitemap-immobilien\.xml$ sitemap-immobilien.php [L]
 
