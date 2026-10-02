@@ -94,6 +94,13 @@ ErrorDocument 404 /404.html
   # Die News-Seite gibt es nicht mehr: alte Links und Suchtreffer -> Startseite
   RewriteRule ^news(\.html)?/?$ / [R=301,L]
 
+  # Objektseiten mit eigener Adresse: /immobilie/<kennung> baut objekt.php
+  # auf dem Server fertig auf (Titel, Text, Bilder, Daten fuer Google).
+  RewriteRule ^immobilie/([a-z0-9-]+)/?$ objekt.php?slug=$1 [L,QSA]
+
+  # Sitemap der Objekte, aus denselben Daten erzeugt
+  RewriteRule ^sitemap-immobilien\.xml$ sitemap-immobilien.php [L]
+
   # /index.html und /index -> /
   RewriteCond %{THE_REQUEST} \s/+index(\.html)?[\s?] [NC]
   RewriteRule ^ / [R=301,L]

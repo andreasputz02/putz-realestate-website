@@ -389,7 +389,10 @@ ${masse(listing)}
 
   const detailRoot = document.querySelector("[data-property-detail]");
   if (detailRoot) {
-    const id = new URLSearchParams(window.location.search).get("id");
+    // Neue Adresse /immobilie/<kennung> (vom Server fertig ausgeliefert),
+    // alte Adresse /immobilie?id=<kennung> als Rueckfall.
+    const ausPfad = window.location.pathname.match(/^\/immobilie\/([a-z0-9-]+)\/?$/);
+    const id = new URLSearchParams(window.location.search).get("id") || (ausPfad && ausPfad[1]);
     const listing = window.LISTINGS.find((l) => l.id === id);
 
     if (!listing) {
