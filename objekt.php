@@ -163,6 +163,15 @@ $fuelle('rooms', $e($o['rooms'] ?? '–'));
 $fuelle('baths', $e($o['baths'] ?? '–'));
 $fuelle('baths-label', ($o['baths'] ?? '') === '1' ? 'Bad' : 'Bäder');
 $fuelle('price', $e($o['price'] ?? '–'));
+// Weg zur passenden Ortsseite — Objekt und Ort stuetzen sich gegenseitig.
+// Steht unter der Beschreibung; listings.js ersetzt nur deren Inhalt.
+$ortsseite = obj_ortsseite($o);
+if ($ortsseite) {
+    $ersetze('<div class="property-description" data-field="description"></div>',
+        '<div class="property-description" data-field="description"></div>' . "\n"
+        . '<p class="objekt-ort-link"><a href="' . $e($ortsseite[0]) . '">Immobilienmarkt, Preise und verkaufte Objekte: '
+        . $e($ortsseite[1]) . ' →</a></p>');
+}
 $fuelle('description', $beschreibungHtml);
 if ($bilder) {
     // Fotos schon im HTML, damit Suchmaschinen und Besucher ohne Skript sie
@@ -172,14 +181,6 @@ if ($bilder) {
         $fotos .= '<img src="' . $e($b) . '" alt="' . $e($titel . ' – Foto ' . ($i + 1)) . '"' . ($i ? ' loading="lazy"' : '') . '>';
     }
     $fuelle('gallery', $fotos);
-}
-
-// Weg zur passenden Ortsseite — Objekt und Ort stuetzen sich gegenseitig.
-$ortsseite = obj_ortsseite($o);
-if ($ortsseite) {
-    $ersetze('<div class="property-description" data-field="description">',
-        '<p class="objekt-ort-link"><a href="' . $e($ortsseite[0]) . '">Immobilienmarkt, Preise und verkaufte Objekte: '
-        . $e($ortsseite[1]) . ' →</a></p>' . "\n" . '<div class="property-description" data-field="description">');
 }
 
 echo $html;

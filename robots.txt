@@ -15,3 +15,4 @@ Disallow: /send-mail.php
 Disallow: /justimmo.php
 
 Sitemap: https://putz-realestate.at/sitemap.xml
+Sitemap: https://putz-realestate.at/sitemap-immobilien.xml

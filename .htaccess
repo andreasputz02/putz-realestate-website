@@ -98,6 +98,13 @@ ErrorDocument 404 /404.html
   # auf dem Server fertig auf (Titel, Text, Bilder, Daten fuer Google).
   RewriteRule ^immobilie/([a-z0-9-]+)/?$ objekt.php?slug=$1 [L,QSA]
 
+  # Alte Objektadressen /immobilie?id=<kennung> (auch mit .html) dauerhaft auf
+  # die neue Adresse; das "?" am Ende wirft die alte Anfrage weg.
+  RewriteCond %{QUERY_STRING} (?:^|&)id=([a-z0-9-]+)
+  RewriteRule ^immobilie(?:\.html)?$ /immobilie/%1? [R=301,L]
+  # /immobilie ohne Objekt war eine leere Vorlage -> zur Uebersicht
+  RewriteRule ^immobilie(?:\.html)?/?$ /immobilien [R=301,L]
+
   # Sitemap der Objekte, aus denselben Daten erzeugt
   RewriteRule ^sitemap-immobilien\.xml$ sitemap-immobilien.php [L]
 

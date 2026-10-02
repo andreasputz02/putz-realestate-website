@@ -108,7 +108,7 @@
       : `<div class="scene" style="background:${listing.gradient}"></div>`;
 
     return `
-      <a class="listing-card${verkauft ? " ist-verkauft" : ""}" data-reveal data-listing-type="${listing.type}" href="immobilie?id=${listing.id}">
+      <a class="listing-card${verkauft ? " ist-verkauft" : ""}" data-reveal data-listing-type="${listing.type}" href="immobilie/${listing.id}">
         <div class="listing-media">
           ${deckblatt}
           <span class="tag${verkauft ? " tag-verkauft" : ""}">${verkauft ? "Erfolgreich verkauft" : listing.type === "miete" ? "Miete" : "Kauf"}</span>
@@ -265,7 +265,7 @@ ${masse(listing)}
     // Objekte gerade aus Justimmo dazukommen.
     const karten = [...gitter.children].map((karte) => ({
       el: karte,
-      objekt: objekte.find((o) => karte.getAttribute("href") === `immobilie?id=${o.id}`),
+      objekt: objekte.find((o) => karte.getAttribute("href") === `immobilie/${o.id}`),
     })).filter((k) => k.objekt);
 
     // Objektarten aus dem Bestand — keine feste Liste, sonst stünden
@@ -407,7 +407,8 @@ ${masse(listing)}
       const body = document.querySelector("[data-property-body]");
       if (body) body.innerHTML = notFoundMarkup();
     } else {
-      document.title = `${listing.title} — PUTZ Real Estate`;
+      // Auf der neuen Adresse setzt der Server den Titel schon (mit "verkauft").
+      if (!ausPfad) document.title = `${listing.title} — PUTZ Real Estate`;
 
       const setText = (field, value) => {
         const el = detailRoot.querySelector(`[data-field="${field}"]`);
