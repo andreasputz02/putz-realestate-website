@@ -5075,3 +5075,22 @@ h1 > .eyebrow {
 .google-bewertungen a:hover { color: var(--gold-light); }
 .google-bewertungen .sterne { color: var(--gold); letter-spacing: 2px; }
 .google-bewertungen strong { color: var(--white); }
+
+/* Baugrund je Gemeinde (Statistik Austria) unter den Preisgrafiken.
+   Mehrspaltig, damit auch 40 Gemeinden kompakt bleiben; der Ort der
+   Seite ist gold hervorgehoben. */
+.preis-gemeinden { margin-top: 44px; }
+.preis-gemeinden h3 { font-size: 20px; color: var(--white); margin: 0 0 6px; }
+.preis-gemeinden p { font-size: 13.5px; color: rgba(255, 255, 255, 0.5); margin: 0 0 18px; }
+.preis-gemeinden ul {
+  list-style: none; margin: 0; padding: 0;
+  columns: 3 240px; column-gap: 40px;
+}
+.preis-gemeinden li {
+  display: flex; justify-content: space-between; gap: 14px;
+  break-inside: avoid; padding: 7px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  font-size: 14px; color: rgba(255, 255, 255, 0.72);
+}
+.preis-gemeinden li span:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; color: rgba(255, 255, 255, 0.9); }
+.preis-gemeinden li.ist-hier, .preis-gemeinden li.ist-hier span:last-child { color: var(--gold); font-weight: 600; }
