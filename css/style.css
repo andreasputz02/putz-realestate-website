@@ -5027,6 +5027,10 @@ body {
   color: rgba(255, 255, 255, 0.62);
   margin: -6px 0 18px;
 }
+/* Startseite: Wien als ein Satz statt 23 Bezirks-Kacheln. */
+.regionen-gruppe p.regionen-satz { margin: -6px 0 0; font-size: 15px; color: rgba(255, 255, 255, 0.75); }
+.regionen-satz a { color: var(--white); font-weight: 600; border-bottom: 1px solid var(--gold); }
+.regionen-satz a:hover { color: var(--gold-light); }
 .regionen-liste {
   list-style: none;
   margin: 0;
