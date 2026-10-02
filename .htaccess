@@ -37,6 +37,8 @@ ErrorDocument 404 /404.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteRule ^bewerten/?$ https://g.page/r/CcHym5cJTThREAE/review [R=302,L]
+  # Dasselbe fuer das Profil Wolkersdorf (Kunden aus dem Weinviertel)
+  RewriteRule ^bewerten-weinviertel/?$ https://search.google.com/local/writereview?placeid=ChIJc3a7fqobbUcRsyYVkl8IhuI [R=302,L]
 </IfModule>
 
 # Rohfotos und Arbeitsdateien, die frueher im Hauptordner mit hochgeladen
