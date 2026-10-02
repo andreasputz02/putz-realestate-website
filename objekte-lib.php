@@ -70,38 +70,67 @@ function obj_absolut(string $pfad): string
     return preg_match('~^https?://~', $pfad) ? $pfad : OBJ_BASIS . ltrim($pfad, '/');
 }
 
-/**
- * Passende Ortsseite zum Objekt, damit Objekt und Ort sich gegenseitig
- * stuetzen. "2123 Unterolberndorf, Mistelbach" -> immobilien-verkaufen-mistelbach,
- * "1190 Wien, Döbling" -> immobilien-verkaufen-wien-doebling.
- * Liefert [Adresse, Anzeigename] oder null.
- */
-function obj_ortsseite(array $o): ?array
+function obj_slug(string $s): string
 {
-    $slug = function (string $s): string {
-        $s = mb_strtolower($s, 'UTF-8');
-        $s = strtr($s, ['ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss']);
-        return trim(preg_replace('/[^a-z0-9]+/', '-', $s), '-');
-    };
-    $lage = (string)($o['location'] ?? '');
-    $plz  = (string)($o['plz'] ?? '');
+    $s = mb_strtolower($s, 'UTF-8');
+    $s = strtr($s, ['ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss']);
+    return trim(preg_replace('/[^a-z0-9]+/', '-', $s), '-');
+}
+
+/**
+ * Alle Ortsseiten, auf die ein Objekt gehoert, die genaueste zuerst:
+ * Wiener Bezirk, NOe-/Burgenland-Bezirk, Ort, dann die Uebersichten.
+ * Liefert [[Seitenkennung ohne "immobilien-verkaufen-", Anzeigename], ...],
+ * nur Seiten, die es gibt.
+ */
+function obj_ortsseiten(array $o): array
+{
+    $lage  = (string)($o['location'] ?? '');
+    $plz   = (string)($o['plz'] ?? '');
     $teile = array_map('trim', explode(',', $lage));
     $bezirk = count($teile) > 1 ? end($teile) : '';
-    $kandidaten = [];
-    if (preg_match('/^1(\d\d)0$/', $plz) && $bezirk !== '') {
-        $kandidaten[] = ['wien-' . $slug($bezirk), $bezirk];
-    }
-    if ($bezirk !== '') $kandidaten[] = [$slug($bezirk), 'Bezirk ' . $bezirk];
-    // Ort selbst ("2120 Wolkersdorf im Weinviertel" -> wolkersdorf)
     $ort = trim(preg_replace('/^\d{4}\s*/', '', $teile[0] ?? ''));
-    if ($ort !== '') {
-        $kandidaten[] = [$slug($ort), $ort];
-        $kandidaten[] = [$slug(explode(' ', $ort)[0]), $ort];
+    $wien = preg_match('/^1\d\d0$/', $plz) === 1;
+
+    $k = [];
+    if ($wien && $bezirk !== '') $k[] = ['wien-' . obj_slug($bezirk), $bezirk];
+    if (!$wien && $bezirk !== '') $k[] = [obj_slug($bezirk), 'Bezirk ' . $bezirk];
+    if ($ort !== '' && !$wien) {
+        $k[] = [obj_slug($ort), $ort];
+        $k[] = [obj_slug(explode(' ', $ort)[0]), $ort];
     }
-    foreach ($kandidaten as [$s, $name]) {
-        if ($s !== '' && is_file(__DIR__ . '/immobilien-verkaufen-' . $s . '.html')) {
-            return ['immobilien-verkaufen-' . $s, $name];
+    // Uebersichten und Teilgebiete
+    if ($wien) {
+        if (obj_slug($bezirk) === 'donaustadt') { $k[] = ['aspern-essling', 'Aspern & Essling']; $k[] = ['seestadt', 'Seestadt']; }
+        $k[] = ['wien', 'Wien'];
+    }
+    if (in_array($bezirk, ['Mistelbach', 'Korneuburg', 'Gänserndorf', 'Hollabrunn'], true)) $k[] = ['weinviertel', 'Weinviertel'];
+    if (str_starts_with($plz, '7')) $k[] = ['burgenland', 'Burgenland'];
+
+    $erg = [];
+    foreach ($k as [$s, $name]) {
+        if ($s !== '' && !isset($erg[$s]) && is_file(__DIR__ . '/immobilien-verkaufen-' . $s . '.html')) $erg[$s] = [$s, $name];
+    }
+    return array_values($erg);
+}
+
+/** Genaueste Ortsseite zum Objekt: [Adresse, Anzeigename] oder null. */
+function obj_ortsseite(array $o): ?array
+{
+    $alle = obj_ortsseiten($o);
+    return $alle ? ['immobilien-verkaufen-' . $alle[0][0], $alle[0][1]] : null;
+}
+
+/** Aktuelle (nicht verkaufte) Objekte fuer eine Ortsseite. */
+function obj_fuerOrt(string $seite, int $hoechstens = 6): array
+{
+    $erg = [];
+    foreach (obj_alle() as $o) {
+        if (!empty($o['verkauft'])) continue;
+        foreach (obj_ortsseiten($o) as [$s]) {
+            if ($s === $seite) { $erg[] = $o; break; }
         }
+        if (count($erg) >= $hoechstens) break;
     }
-    return null;
+    return $erg;
 }
