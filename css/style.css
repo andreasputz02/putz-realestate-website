@@ -5099,3 +5099,48 @@ h1 > .eyebrow {
 .objekt-ort-link { margin: 30px 0 0; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.09); font-size: 15px; }
 .objekt-ort-link a { color: var(--gold); font-weight: 500; }
 .objekt-ort-link a:hover { color: var(--gold-light); text-decoration: underline; }
+
+/* ============================================================
+   Ratgeber: Lesespalte links, Inhalt + Bewertung rechts (am Handy
+   darunter). Text bewusst schmal gehalten, damit er sich gut liest.
+   ============================================================ */
+.ratgeber-raster { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 56px; align-items: start; }
+.ratgeber-text { max-width: 720px; min-width: 0; }
+.ratgeber-text h2 { font-size: clamp(22px, 2.4vw, 28px); color: var(--white); margin: 0 0 16px; }
+.ratgeber-text h3 { font-size: 18px; color: var(--white); margin: 26px 0 10px; }
+.ratgeber-text p, .ratgeber-text li { font-size: 16px; line-height: 1.75; color: rgba(255, 255, 255, 0.74); }
+.ratgeber-text p { margin: 0 0 16px; }
+.ratgeber-text ul, .ratgeber-text ol { margin: 0 0 18px; padding-left: 22px; }
+.ratgeber-text li { margin-bottom: 8px; }
+.ratgeber-text li::marker { color: var(--gold); }
+.ratgeber-text strong { color: var(--white); font-weight: 600; }
+.ratgeber-text a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+.ratgeber-abschnitt { padding-top: 34px; margin-top: 34px; border-top: 1px solid var(--line-dark); scroll-margin-top: 110px; }
+.ratgeber-blick { background: var(--black-soft); border: 1px solid rgba(251, 228, 139, 0.35); border-radius: var(--radius-md); padding: 26px 28px 10px; }
+.ratgeber-blick h2 { font-size: 18px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; }
+.ratgeber-hinweis { margin-top: 44px; padding: 22px 24px; border-left: 3px solid var(--gold); background: var(--black-soft); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.ratgeber-hinweis p, .ratgeber-hinweis li { font-size: 14px; }
+.ratgeber-stand { margin-top: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.5); }
+.ratgeber-seite { position: sticky; top: 110px; display: flex; flex-direction: column; gap: 20px; }
+.ratgeber-toc, .ratgeber-cta, .ratgeber-weitere { background: var(--black-soft); border: 1px solid var(--line-dark); border-radius: var(--radius-md); padding: 22px 22px; }
+.ratgeber-toc > p, .ratgeber-weitere > p { font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255, 255, 255, 0.5); margin: 0 0 12px; }
+.ratgeber-toc ol, .ratgeber-weitere ul { margin: 0; padding-left: 18px; }
+.ratgeber-toc li, .ratgeber-weitere li { font-size: 14px; line-height: 1.5; margin-bottom: 8px; color: rgba(255, 255, 255, 0.5); }
+.ratgeber-toc a, .ratgeber-weitere a { color: rgba(255, 255, 255, 0.82); }
+.ratgeber-toc a:hover, .ratgeber-weitere a:hover { color: var(--gold-light); }
+.ratgeber-cta { display: flex; flex-direction: column; gap: 12px; border-color: rgba(251, 228, 139, 0.35); }
+.ratgeber-cta p { margin: 0; font-size: 14px; color: rgba(255, 255, 255, 0.65); }
+.ratgeber-cta .ratgeber-cta-titel { font-size: 18px; font-weight: 600; color: var(--white); }
+.ratgeber-cta .btn { justify-content: center; }
+.ratgeber-karten { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.ratgeber-karte { display: flex; flex-direction: column; gap: 12px; padding: 30px 28px; background: var(--black-soft); border: 1px solid var(--line-dark); border-radius: var(--radius-md); transition: border-color 0.3s var(--ease); }
+.ratgeber-karte:hover { border-color: var(--gold); }
+.ratgeber-karte h2 { font-size: 22px; color: var(--white); margin: 0; }
+.ratgeber-karte p { font-size: 14.5px; line-height: 1.7; color: rgba(255, 255, 255, 0.65); margin: 0; flex: 1; }
+.ratgeber-karte span { display: inline-flex; align-items: center; gap: 8px; color: var(--gold); font-weight: 500; }
+.ratgeber-karte svg { width: 18px; height: 18px; }
+@media (max-width: 980px) {
+  .ratgeber-raster { grid-template-columns: 1fr; gap: 36px; }
+  .ratgeber-seite { position: static; }
+  .ratgeber-karten { grid-template-columns: 1fr; }
+}

@@ -4,14 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b0b0c">
-<title>Unsere Immobilien — PUTZ Real Estate</title>
-<meta name="description" content="Aktuelle Immobilien von PUTZ Real Estate in Wien, im Speckgürtel und im Weinviertel: Wohnungen, Häuser und Grundstücke, filterbar nach Preis und Ort.">
+<meta name="description" content="Ratgeber für Eigentümer in Österreich: Ablauf und Unterlagen beim Hausverkauf, Immobilienertragsteuer, Haus geerbt. Verständlich erklärt, mit amtlichen Quellen.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PUTZ Real Estate">
 <meta property="og:locale" content="de_AT">
-<meta property="og:title" content="Unsere Immobilien — PUTZ Real Estate">
-<meta property="og:description" content="Aktuelle Immobilien von PUTZ Real Estate in Wien, im Speckgürtel und im Weinviertel: Wohnungen, Häuser und Grundstücke, filterbar nach Preis und Ort.">
-<meta property="og:url" content="https://putz-realestate.at/immobilien">
+<meta property="og:title" content="Ratgeber Immobilienverkauf: Ablauf, Steuern, Erbe | PUTZ">
+<meta property="og:description" content="Ratgeber für Eigentümer in Österreich: Ablauf und Unterlagen beim Hausverkauf, Immobilienertragsteuer, Haus geerbt. Verständlich erklärt, mit amtlichen Quellen.">
+<meta property="og:url" content="https://putz-realestate.at/ratgeber">
 <meta property="og:image" content="https://putz-realestate.at/assets/img/vorschau/standard.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -31,15 +30,16 @@
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "Unsere Immobilien",
-      "item": "https://putz-realestate.at/immobilien"
+      "name": "Ratgeber",
+      "item": "https://putz-realestate.at/ratgeber"
     }
   ]
 }
 </script>
+<title>Ratgeber Immobilienverkauf: Ablauf, Steuern, Erbe | PUTZ</title>
 <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/webicon-192.png">
 <link rel="apple-touch-icon" href="/assets/img/webicon-192.png">
-<link rel="canonical" href="https://putz-realestate.at/immobilien">
+<link rel="canonical" href="https://putz-realestate.at/ratgeber">
 <link rel="stylesheet" href="css/fonts.css?v=4">
 <link rel="stylesheet" href="css/style.css?v=216">
 <script type="application/ld+json">
@@ -244,6 +244,29 @@
   ]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "url": "https://putz-realestate.at/ratgeber",
+  "name": "Ratgeber für Verkäufer",
+  "inLanguage": "de-AT",
+  "isPartOf": {
+    "@id": "https://putz-realestate.at/#website"
+  },
+  "hasPart": [
+    {
+      "@id": "https://putz-realestate.at/ratgeber-ablauf-hausverkauf#artikel"
+    },
+    {
+      "@id": "https://putz-realestate.at/ratgeber-haus-geerbt#artikel"
+    },
+    {
+      "@id": "https://putz-realestate.at/ratgeber-immoest#artikel"
+    }
+  ]
+}
+</script>
 </head>
 <body class="page-dark">
 
@@ -255,7 +278,7 @@
     <nav class="main-nav">
       <ul>
         <li class="has-dropdown">
-          <a href="immobilien" class="active">Unsere Immobilien
+          <a href="immobilien">Unsere Immobilien
             <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </a>
           <div class="dropdown">
@@ -278,7 +301,7 @@
           </div>
         </li>
         <li><a href="referenzen">Referenzen</a></li>
-        <li><a href="ratgeber">Ratgeber</a></li>
+        <li><a href="ratgeber" class="active">Ratgeber</a></li>
         <li class="has-dropdown">
           <a href="/#ueber-uns">Über Uns
             <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -303,170 +326,68 @@
 </header>
 
 <main>
-  <section class="page-hero">
+  <section class="page-hero" style="padding-bottom:50px;">
     <div class="container">
-      <!-- Ohne Schlusspunkt: den setzt die Regel für .page-hero h1 in Gold. -->
-      <h1><span class="eyebrow no-dot">Wohnungen, Häuser und Grundstücke in Wien und Niederösterreich</span> Achtung, kann Kauflust auslösen</h1>
-      <div class="breadcrumb"><a href="/">Start</a> / Unsere Immobilien</div>
+      <h1 style="font-size:clamp(32px,4vw,48px);"><span class="eyebrow no-dot">Ratgeber</span> Immobilie verkaufen: Wissen für Eigentümer</h1>
+      <p class="lede">Ablauf, Unterlagen, Steuern, Erbe: Antworten auf die Fragen, die sich Eigentümer vor dem Verkauf stellen. Verständlich erklärt und mit amtlichen Quellen belegt.</p>
+      <div class="breadcrumb"><a href="/">Start</a> / Ratgeber</div>
     </div>
   </section>
 
-  <section class="section section-dark">
+  <section class="section section-dark" style="padding-top:40px;">
     <div class="container">
-      <!-- Suchmaske. Die Auswahl der Objektarten füllt js/listings.js
-           aus den tatsächlich vorhandenen Objekten — eine feste Liste
-           würde Arten anbieten, zu denen es nichts gibt. -->
-      <form class="objekt-filter" data-objekt-filter>
-        <div class="filter-gitter">
-          <div class="filter-feld">
-            <label for="f-art">Kaufen oder mieten</label>
-            <select id="f-art" name="art">
-              <option value="">Alle</option>
-              <option value="kauf">Kaufen</option>
-              <option value="miete">Mieten</option>
-            </select>
-          </div>
-
-          <div class="filter-feld">
-            <label for="f-objektart">Objektart</label>
-            <select id="f-objektart" name="objektart">
-              <option value="">Alle</option>
-            </select>
-          </div>
-
-          <div class="filter-feld">
-            <label for="f-ort">Ort oder PLZ</label>
-            <input type="text" id="f-ort" name="ort" placeholder="z. B. 1180 oder Wien">
-          </div>
-
-          <div class="filter-feld">
-            <label>Kaufpreis / Miete</label>
-            <div class="filter-paar">
-              <input type="text" inputmode="numeric" name="preisVon" placeholder="von €" aria-label="Preis von">
-              <input type="text" inputmode="numeric" name="preisBis" placeholder="bis €" aria-label="Preis bis">
-            </div>
-          </div>
-
-          <div class="filter-feld">
-            <label>Fläche</label>
-            <div class="filter-paar">
-              <input type="text" inputmode="numeric" name="flaecheVon" placeholder="von m²" aria-label="Fläche von">
-              <input type="text" inputmode="numeric" name="flaecheBis" placeholder="bis m²" aria-label="Fläche bis">
-            </div>
-          </div>
-
-          <div class="filter-feld">
-            <label for="f-zimmer">Zimmer ab</label>
-            <input type="text" inputmode="numeric" id="f-zimmer" name="zimmer" placeholder="z. B. 3">
-          </div>
-        </div>
-
-        <div class="filter-fuss">
-          <button type="submit" class="btn btn-gold">
-            Objekte suchen
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-          <button type="reset" class="filter-zuruecksetzen" hidden>Filter zurücksetzen</button>
-          <p class="filter-ergebnis" data-filter-ergebnis aria-live="polite"></p>
-        </div>
-      </form>
-
-      <div class="listing-grid" data-listings></div>
-      <p class="filter-leer" data-filter-leer hidden>
-        Zu dieser Suche haben wir gerade nichts im Angebot.
-        <a href="#" data-filter-loeschen>Filter zurücksetzen</a>
-        — oder sag uns, was du suchst, dann halten wir Ausschau.
-      </p>
-
+      <div class="ratgeber-karten">
+        <a class="ratgeber-karte" href="ratgeber-ablauf-hausverkauf" data-reveal>
+          <h2>Haus verkaufen: Ablauf und Unterlagen</h2>
+          <p>Wie läuft ein Hausverkauf in Österreich ab? Alle Schritte vom Bewerten bis zur Übergabe, die nötigen Unterlagen als Checkliste und wer welche Kosten trägt.</p>
+          <span>Weiterlesen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="ratgeber-karte" href="ratgeber-haus-geerbt" data-reveal>
+          <h2>Haus geerbt: Was jetzt?</h2>
+          <p>Haus oder Wohnung geerbt? Verlassenschaft, Grunderwerbsteuer, Verkauf vor oder nach der Einantwortung, ImmoESt und Tipps für Erbengemeinschaften.</p>
+          <span>Weiterlesen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="ratgeber-karte" href="ratgeber-immoest" data-reveal>
+          <h2>Immobilienertragsteuer (ImmoESt) einfach erklärt</h2>
+          <p>Wann fällt beim Immobilienverkauf ImmoESt an? 30 % vom Gewinn, Hauptwohnsitz- und Herstellerbefreiung, Altvermögen mit 4,2 %, einfach erklärt mit Beispiel.</p>
+          <span>Weiterlesen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
     </div>
   </section>
 
-  <section class="section section-dark">
+  <!-- ===== Regionen ===== -->
+  <section class="section section-dark regionen-block" style="padding-top:0;">
     <div class="container">
-      <div class="cta-banner" data-reveal>
+      <div class="section-head" data-reveal>
         <div>
-          <h2 class="kein-punkt">Deine Traumimmobilie ist noch nicht dabei<span class="marke-punkt">?</span></h2>
-          <p>Wir halten für dich Ausschau — auch abseits der öffentlichen Inserate. Melde dich mit deinen Wünschen.</p>
-        </div>
-        <div class="cta-actions">
-          <button type="button" class="btn btn-gold" data-modal-open="suchagent">Suchagent anlegen</button>
+          <h2 class="h2-breit">Wir verkaufen in deiner Region</h2>
         </div>
       </div>
+      <div class="regionen-raster">
+        <div class="regionen-gruppe" data-reveal>
+          <h3><a href="immobilien-verkaufen-wien">Wien</a></h3>
+          <ul class="regionen-liste"><li><a href="immobilien-verkaufen-wien-innere-stadt">Innere Stadt</a></li><li><a href="immobilien-verkaufen-wien-leopoldstadt">Leopoldstadt</a></li><li><a href="immobilien-verkaufen-wien-landstrasse">Landstraße</a></li><li><a href="immobilien-verkaufen-wien-wieden">Wieden</a></li><li><a href="immobilien-verkaufen-wien-margareten">Margareten</a></li><li><a href="immobilien-verkaufen-wien-mariahilf">Mariahilf</a></li><li><a href="immobilien-verkaufen-wien-neubau">Neubau</a></li><li><a href="immobilien-verkaufen-wien-josefstadt">Josefstadt</a></li><li><a href="immobilien-verkaufen-wien-alsergrund">Alsergrund</a></li><li><a href="immobilien-verkaufen-wien-favoriten">Favoriten</a></li><li><a href="immobilien-verkaufen-wien-simmering">Simmering</a></li><li><a href="immobilien-verkaufen-wien-meidling">Meidling</a></li><li><a href="immobilien-verkaufen-wien-hietzing">Hietzing</a></li><li><a href="immobilien-verkaufen-wien-penzing">Penzing</a></li><li><a href="immobilien-verkaufen-wien-rudolfsheim-fuenfhaus">Rudolfsheim-Fünfhaus</a></li><li><a href="immobilien-verkaufen-wien-ottakring">Ottakring</a></li><li><a href="immobilien-verkaufen-wien-hernals">Hernals</a></li><li><a href="immobilien-verkaufen-wien-waehring">Währing</a></li><li><a href="immobilien-verkaufen-wien-doebling">Döbling</a></li><li><a href="immobilien-verkaufen-wien-brigittenau">Brigittenau</a></li><li><a href="immobilien-verkaufen-wien-floridsdorf">Floridsdorf</a></li><li><a href="immobilien-verkaufen-wien-donaustadt">Donaustadt</a></li><li><a href="immobilien-verkaufen-aspern-essling">Aspern &amp; Essling</a></li><li><a href="immobilien-verkaufen-seestadt">Seestadt</a></li><li><a href="immobilien-verkaufen-wien-liesing">Liesing</a></li></ul>
+        </div>
+        <div class="regionen-gruppe" data-reveal>
+          <h3><a href="immobilien-verkaufen-weinviertel">Weinviertel</a></h3>
+          <ul class="regionen-liste"><li><a href="immobilien-verkaufen-wolkersdorf">Wolkersdorf</a></li><li><a href="immobilien-verkaufen-mistelbach">Mistelbach</a></li><li><a href="immobilien-verkaufen-korneuburg">Korneuburg</a></li><li><a href="immobilien-verkaufen-gaenserndorf">Gänserndorf</a></li><li><a href="immobilien-verkaufen-hollabrunn">Hollabrunn</a></li><li><a href="immobilien-verkaufen-gross-enzersdorf">Groß-Enzersdorf</a></li></ul>
+        </div>
+        <div class="regionen-gruppe" data-reveal>
+          <h3>Niederösterreich</h3>
+          <ul class="regionen-liste"><li><a href="immobilien-verkaufen-tulln">Tulln</a></li><li><a href="immobilien-verkaufen-klosterneuburg">Klosterneuburg</a></li><li><a href="immobilien-verkaufen-krems">Krems</a></li><li><a href="immobilien-verkaufen-baden">Baden</a></li><li><a href="immobilien-verkaufen-moedling">Mödling</a></li><li><a href="immobilien-verkaufen-schwechat">Schwechat</a></li><li><a href="immobilien-verkaufen-bruck-an-der-leitha">Bruck an der Leitha</a></li></ul>
+        </div>
+        <div class="regionen-gruppe" data-reveal>
+          <h3><a href="immobilien-verkaufen-burgenland">Burgenland</a></h3>
+          <ul class="regionen-liste"><li><a href="immobilien-verkaufen-eisenstadt">Eisenstadt</a></li><li><a href="immobilien-verkaufen-eisenstadt-umgebung">Eisenstadt-Umgebung</a></li><li><a href="immobilien-verkaufen-neusiedl-am-see">Neusiedl am See</a></li><li><a href="immobilien-verkaufen-mattersburg">Mattersburg</a></li><li><a href="immobilien-verkaufen-oberwart">Oberwart</a></li></ul>
+        </div>
+      </div>
+      <p class="regionen-mehr" data-reveal><a href="regionen">Alle Regionen im Überblick <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p>
     </div>
   </section>
-</main>
+  <!-- ===== /Regionen ===== -->
 
-<div class="modal-overlay" data-modal="suchagent" hidden>
-  <div class="modal-panel">
-    <button class="modal-close" type="button" data-modal-close aria-label="Schließen">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-    <h3 style="font-size:22px; margin-top:10px; margin-bottom:8px; font-weight:600;">Sag uns, was du suchst</h3>
-    <p class="field-note" style="margin-bottom:24px;">Wir informieren dich persönlich, sobald eine passende Immobilie verfügbar ist — auch abseits der öffentlichen Inserate.</p>
-    <form data-contact-form>
-      <input type="hidden" name="form_name" value="Suchagent-Anfrage">
-      <div class="hp-field" aria-hidden="true"><label for="sa-website">Website</label><input type="text" id="sa-website" name="website" tabindex="-1" autocomplete="off"></div>
-      <div class="form-row">
-        <div class="field">
-          <label for="sa-vorname">Vorname</label>
-          <input type="text" id="sa-vorname" name="vorname" required>
-        </div>
-        <div class="field">
-          <label for="sa-nachname">Nachname</label>
-          <input type="text" id="sa-nachname" name="nachname" required>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="field">
-          <label for="sa-email">E-Mail</label>
-          <input type="email" id="sa-email" name="email" required>
-        </div>
-        <div class="field">
-          <label for="sa-telefon">Telefon</label>
-          <input type="tel" id="sa-telefon" name="telefon">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="field">
-          <label for="sa-art">Kauf oder Miete</label>
-          <select id="sa-art" name="art">
-            <option>Kauf</option>
-            <option>Miete</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="sa-typ">Immobilienart</label>
-          <select id="sa-typ" name="typ">
-            <option>Wohnung</option>
-            <option>Haus</option>
-            <option>Grundstück</option>
-            <option>Sonstiges</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="field">
-          <label for="sa-lage">Gewünschte Lage</label>
-          <input type="text" id="sa-lage" name="lage" placeholder="z.B. Wien, Weinviertel...">
-        </div>
-        <div class="field">
-          <label for="sa-preis">Preis bis</label>
-          <input type="text" id="sa-preis" name="preis" placeholder="z.B. 500.000 €">
-        </div>
-      </div>
-      <div class="field">
-        <label for="sa-details">Weitere Wünsche</label>
-        <textarea id="sa-details" name="details" placeholder="Zimmeranzahl, Fläche, Ausstattung, ..."></textarea>
-      </div>
-      <button type="submit" class="btn btn-gold btn-block">
-        Suchagent anlegen
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </button>
-      <p class="field-note">Mit dem Absenden stimmst du der Verarbeitung deiner Daten gemäß unserer <a href="datenschutz" style="text-decoration:underline;">Datenschutzerklärung</a> zu.</p>
-      <div class="form-status"></div>
-    </form>
-  </div>
-</div>
+</main>
 
 <footer class="site-footer">
   <div class="container">
@@ -475,11 +396,6 @@
         <a href="/" class="logo">
           <img src="assets/img/logo.webp" alt="PUTZ Real Estate Logo" class="logo-img">
         </a>
-        <div class="footer-social">
-          <a href="https://www.instagram.com/putzrealestate/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
-          <a href="https://www.youtube.com/@immoputz" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9.2 5 2.8-5 2.8z" fill="currentColor" stroke="none"/></svg></a>
-          <a href="https://wa.me/436643500662" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 5L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.876 9.876 0 0 0 12.04 2zm0 18.13h-.01c-1.5 0-2.98-.4-4.27-1.16l-.31-.18-3.11.82.83-3.03-.2-.31a8.18 8.18 0 0 1-1.26-4.36c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.21-8.15 8.21zm4.52-6.16c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.76-1.85-.2-.48-.41-.42-.56-.42-.14-.01-.31-.01-.48-.01s-.43.06-.66.31c-.23.25-.86.84-.86 2.05s.88 2.38 1 2.54c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.28z"/></svg></a>
-        </div>
       </div>
       <div class="footer-col">
         <h4>Navigation</h4>
@@ -575,9 +491,6 @@
        Schnittstelle brauchte; bei kaltem Zwischenspeicher sind das
        mehrere Sekunden. -->
   <script defer src="js/script.js?v=62"></script>
-  <script defer src="js/listings-data.js?v=9"></script>
-  <script defer src="justimmo.php?v=6"></script>
-  <script defer src="js/listings.js?v=33"></script>
 
 </body>
 </html>

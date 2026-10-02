@@ -416,7 +416,9 @@ ${masse(listing)}
       };
 
       setText("type", listing.verkauft === true ? "Erfolgreich verkauft" : listing.type === "miete" ? "Miete" : "Kauf");
-      setText("title", listing.title);
+      // Auf der neuen Adresse hat der Server die Ueberschrift schon gesetzt
+      // (samt goldenem Satzzeichen), sonst hier.
+      if (!ausPfad) setText("title", listing.title);
       setText("title-crumb", listing.title);
       setText("location", listing.location);
       // Grundstueck: Grundflaeche statt Wohnflaeche, und die

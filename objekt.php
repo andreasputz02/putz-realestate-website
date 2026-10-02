@@ -150,7 +150,14 @@ $ersetze('</head>', "<script type=\"application/ld+json\">\n" . $json($inserat) 
 
 // ---------- Inhalt ----------
 $fuelle('type', $verkauft ? 'Erfolgreich verkauft' : ($istMiete ? 'Miete' : 'Kauf'));
-$fuelle('title', $e($titel));
+// Endet der Titel auf ! oder ?, wird das Zeichen gold und der automatische
+// Punkt entfaellt ("Familien(t)raum ... Sparbach!" statt "...!.").
+if (preg_match('/^(.*?)([!?])\s*$/su', $titel, $m)) {
+    $ersetze('<h1 data-field="title">', '<h1 class="kein-punkt" data-field="title">');
+    $fuelle('title', $e($m[1]) . '<span class="marke-punkt">' . $m[2] . '</span>');
+} else {
+    $fuelle('title', $e($titel));
+}
 $fuelle('title-crumb', $e($titel));
 $fuelle('location', $e($lage));
 $fuelle('hero-price', $e($o['price'] ?? '–'));
