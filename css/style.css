@@ -5216,6 +5216,8 @@ h1 > .eyebrow {
 .praesenz-spur img.praesenz-abzeichen { height: 96px; }
 .praesenz-spur img.praesenz-farbe { height: 46px; filter: grayscale(1) brightness(1.6); transition: filter .3s; height: 56px; }
 .praesenz-spur li:hover img.praesenz-farbe { filter: none; }
+.praesenz-spur img.praesenz-hoch,
+.praesenz-spur img[src$="immosuchmaschine.svg"] { height: 52px; }
 .praesenz-club { display: block; color: #fff; font-size: 17px; letter-spacing: .02em; font-weight: 600; line-height: 1.3; white-space: nowrap; }
 .praesenz-club small { display: block; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 2px; }
 @keyframes praesenz-lauf { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -5226,6 +5228,9 @@ h1 > .eyebrow {
   .praesenz-spur img { height: 26px; }
   .praesenz-spur img.praesenz-abzeichen { height: 64px; }
   .praesenz-spur img.praesenz-farbe { height: 36px; }
+  .praesenz-spur img.praesenz-hoch,
+  .praesenz-spur img[src$="immosuchmaschine.svg"] { height: 38px; }
+  .praesenz-club { font-size: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .praesenz-spur { animation: none; }
