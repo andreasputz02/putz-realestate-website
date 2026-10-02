@@ -5147,3 +5147,7 @@ h1 > .eyebrow {
 
 .fragen-hinweis { margin-top: 22px; font-size: 13.5px; line-height: 1.6; color: rgba(255, 255, 255, 0.5); }
 .fragen-hinweis a { color: var(--gold); text-decoration: underline; }
+
+/* Hinweis auf das Partnernetzwerk (Anwalt, Notar, Steuerberater) */
+.ratgeber-netzwerk { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.09); }
+.ratgeber-hinweis .ratgeber-netzwerk a { color: var(--gold); text-decoration: underline; }
