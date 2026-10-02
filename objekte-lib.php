@@ -94,11 +94,11 @@ function obj_ortsseiten(array $o): array
 
     $k = [];
     if ($wien && $bezirk !== '') $k[] = ['wien-' . obj_slug($bezirk), $bezirk];
-    if (!$wien && $bezirk !== '') $k[] = [obj_slug($bezirk), 'Bezirk ' . $bezirk];
     if ($ort !== '' && !$wien) {
         $k[] = [obj_slug($ort), $ort];
         $k[] = [obj_slug(explode(' ', $ort)[0]), $ort];
     }
+    if (!$wien && $bezirk !== '') $k[] = [obj_slug($bezirk), 'Bezirk ' . $bezirk];
     // Uebersichten und Teilgebiete
     if ($wien) {
         if (obj_slug($bezirk) === 'donaustadt') { $k[] = ['aspern-essling', 'Aspern & Essling']; $k[] = ['seestadt', 'Seestadt']; }
