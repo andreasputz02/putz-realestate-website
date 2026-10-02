@@ -89,8 +89,7 @@ function geld(float $b): string { return '€ ' . number_format($b, 0, ',', '.')
 <title>Mein Tippgeber-Bereich — PUTZ Real Estate</title>
 <link rel="manifest" href="tippgeber-app.webmanifest">
 <link rel="apple-touch-icon" href="assets/img/app-symbol-192.png">
-<link rel="stylesheet" href="css/fonts.css?v=4">
-<link rel="stylesheet" href="css/style.css?v=221">
+<link rel="stylesheet" href="css/site.min.css?v=4bb45cb5">
 </head>
 <body class="page-dark tg-app-body">
 

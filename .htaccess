@@ -168,6 +168,23 @@ ErrorDocument 404 /404.html
   <FilesMatch "\.(mp4|webm)$">
     Header always set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
+
+  # Stylesheets, Skripte und Schriften tragen eine Versionsnummer (?v=...)
+  # bzw. aendern sich nie: ein Jahr speichern. Wiederkehrende Besucher laden
+  # sie dann gar nicht mehr. Ausnahme: der Service Worker der Tippgeber-App
+  # muss immer frisch sein, sonst kommen Updates nicht an.
+  <FilesMatch "\.(css|js|woff2)$">
+    Header always set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <Files "tippgeber-sw.js">
+    Header always set Cache-Control "no-cache, must-revalidate"
+  </Files>
+
+  # Fotos haben keine Versionsnummer: 30 Tage speichern. Wird ein Foto
+  # ersetzt, bekommt es am besten einen neuen Dateinamen.
+  <FilesMatch "\.(jpe?g|png|webp|svg|ico)$">
+    Header always set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
 </IfModule>
 
 # CSS, JS, Bilder duerfen lange gespeichert bleiben — die tragen
