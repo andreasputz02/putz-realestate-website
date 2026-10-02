@@ -5144,3 +5144,6 @@ h1 > .eyebrow {
   .ratgeber-seite { position: static; }
   .ratgeber-karten { grid-template-columns: 1fr; }
 }
+
+.fragen-hinweis { margin-top: 22px; font-size: 13.5px; line-height: 1.6; color: rgba(255, 255, 255, 0.5); }
+.fragen-hinweis a { color: var(--gold); text-decoration: underline; }
