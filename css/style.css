@@ -3329,6 +3329,29 @@ body.modal-open { overflow: hidden; }
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.5);
 }
+
+/* Bewertungsseite: die drei wichtigsten Unterlagen, ruhig gesetzt */
+.bw-unterlagen {
+  margin-top: 34px;
+  background: var(--black-soft);
+  border: 1px solid var(--line-dark);
+  border-radius: var(--radius-lg);
+  padding: 28px 30px;
+}
+.bw-unterlagen h3 { font-size: 17px; font-weight: 600; color: var(--white); margin-bottom: 18px; }
+.bw-unterlagen ul { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 0; padding: 0; }
+.bw-unterlagen li { display: flex; flex-direction: column; gap: 4px; padding-left: 16px; border-left: 2px solid var(--gold-dim); }
+.bw-unterlagen li strong { color: var(--white); font-size: 15px; font-weight: 600; }
+.bw-unterlagen li span { font-size: 13.5px; line-height: 1.55; color: rgba(255, 255, 255, 0.6); }
+.bw-unterlagen .field-note { margin-top: 18px; }
+/* Verweise im Fliesstext der Bewertungsseite sichtbar machen */
+.bw-intro a { color: var(--gold-light); text-decoration: underline; text-underline-offset: 3px; }
+/* Vier Arten (mit Gewerbe) in eine Zeile, sonst stuende eine Karte allein */
+@media (min-width: 701px) { .art-wahl:has(> :nth-child(4)) { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 700px) {
+  .bw-unterlagen { padding: 22px 20px; }
+  .bw-unterlagen ul { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+}
 .bw-siegel span { color: var(--gold); margin: 0 4px; }
 
 .bw-intro { max-width: 66ch; margin-bottom: 54px; }

@@ -257,7 +257,7 @@ if ($sent && $formName === 'Kostenlose Immobilienbewertung') {
 
     $confirmBody = "Hallo " . $vorname . ",\n\n"
         . "vielen Dank für deine Anfrage zur kostenlosen Immobilienbewertung bei PUTZ Real Estate! Wir haben deine Angaben erhalten "
-        . "und melden uns innerhalb von 48 Stunden mit einer ersten, unverbindlichen Werteinschätzung deiner Immobilie bei dir.\n\n"
+        . "und melden uns innerhalb von 24 Stunden mit einer ersten, unverbindlichen Werteinschätzung deiner Immobilie bei dir.\n\n"
         . "Herzliche Grüße\nDein PUTZ Real Estate Team";
 
     nachricht_senden($email, 'Deine Anfrage zur kostenlosen Immobilienbewertung ist bei uns angekommen', $confirmBody);
