@@ -5350,33 +5350,57 @@ h1 > .eyebrow {
 
 /* Umgebungs-Radar auf der Projektseite: Ringe nach Wurzel-Massstab, damit
    nahe Ziele nicht im Mittelpunkt kleben. Entfernungen aus OpenStreetMap. */
-.pm-radar { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 46px; align-items: center; }
+.pm-radar { display: grid; grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr); gap: 40px; align-items: center; }
 .pm-radar-text h2 { margin-bottom: 18px; }
 .pm-radar-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
 .pm-radar-liste li { position: relative; padding-left: 22px; color: rgba(255, 255, 255, 0.72); font-size: 15px; }
 .pm-radar-liste li::before { content: ""; position: absolute; left: 0; top: 8px; width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--gold-dim); }
 .pm-radar-quelle { margin-top: 20px; font-size: 12.5px; color: rgba(255, 255, 255, 0.42); }
 .pm-radar-feld { display: flex; justify-content: center; }
-.pm-radar-bild { width: 100%; max-width: 560px; height: auto; overflow: visible; }
+.pm-radar-bild { width: 100%; max-width: 840px; height: auto; overflow: visible; }
 .pm-radar-ring { fill: none; stroke: rgba(255, 255, 255, 0.13); stroke-width: 1; }
-.pm-radar-ringtext { fill: rgba(255, 255, 255, 0.32); font-size: 10.5px; letter-spacing: 0.06em; font-family: var(--font-display); }
+.pm-radar-ringtext { fill: rgba(255, 255, 255, 0.34); font-size: 12px; letter-spacing: 0.06em; font-family: var(--font-display); }
 .pm-radar-mitte { fill: var(--gold); }
 .pm-radar-mitte-aussen { fill: none; stroke: var(--gold-dim); stroke-width: 1.4; }
-.pm-radar-heim { fill: var(--white); font-family: var(--font-display); font-size: 14px; font-weight: 600; }
+.pm-radar-heim { fill: var(--white); font-family: var(--font-display); font-size: 16.5px; font-weight: 600; }
 .pm-radar-punkt line { stroke: rgba(255, 255, 255, 0.18); stroke-width: 1; stroke-dasharray: 3 5; }
 .pm-radar-punkt circle { fill: #fff; }
-.pm-radar-punkt text { fill: rgba(255, 255, 255, 0.92); font-family: var(--font-display); font-size: 12.5px; font-weight: 500; }
-.pm-radar-punkt .pm-radar-meter { fill: var(--gold-light); font-size: 11.5px; font-weight: 400; }
+.pm-radar-punkt text { fill: rgba(255, 255, 255, 0.92); font-family: var(--font-display); font-size: 14.5px; font-weight: 500; }
+.pm-radar-punkt .pm-radar-meter { fill: var(--gold-light); font-size: 13px; font-weight: 400; }
 .pm-agent { margin-bottom: 26px; }
 
 @media (max-width: 980px) {
   .pm-radar { grid-template-columns: minmax(0, 1fr); gap: 30px; }
-  .pm-radar-bild { max-width: 460px; }
+  .pm-radar-bild { max-width: 620px; }
 }
-@media (max-width: 560px) {
-  .pm-radar-punkt text { font-size: 14px; }
-  .pm-radar-punkt .pm-radar-meter { font-size: 13px; }
-  .pm-radar-ringtext { font-size: 12px; }
+/* Am Handy haetten die Beschriftungen im Bild keinen Platz: dort zeigt der
+   Radar nur die Punkte, die Namen stehen als Liste darunter. */
+.pm-radar-legende { display: none; }
+@media (max-width: 700px) {
+  .pm-radar-feld { flex-direction: column; align-items: stretch; gap: 18px; }
+  .pm-radar-bild { max-width: none; width: 152%; margin-left: -26%; }
+  .pm-radar-punkt text { display: none; }
+  .pm-radar-ringtext { font-size: 13px; }
+  .pm-radar-heim { font-size: 18px; }
+  .pm-radar-legende {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .pm-radar-legende li {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 11px 2px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14.5px;
+  }
+  .pm-radar-legende span { color: rgba(255, 255, 255, 0.78); }
+  .pm-radar-legende strong { color: var(--gold-light); font-weight: 500; white-space: nowrap; }
 }
 
 
@@ -5435,4 +5459,31 @@ h1 > .eyebrow {
 @media (max-width: 640px) {
   .bt-hero { padding: 130px 0 48px; }
   .bt-galerie, .bt-leistungen { grid-template-columns: minmax(0, 1fr); }
+}
+
+
+/* Der Radar sucht: ein Keil dreht sich, dazu laufen Ringe nach aussen.
+   Drehpunkt in Koordinaten der Zeichenflaeche (viewBox beginnt bei
+   -130/-10, die Mitte liegt also bei 390/270). */
+.pm-radar-scan { transform-box: view-box; transform-origin: 390px 270px; animation: pmRadarDreh 7s linear infinite; }
+.pm-radar-scan line { stroke: rgba(246, 216, 134, 0.55); stroke-width: 1.2; }
+@keyframes pmRadarDreh { to { transform: rotate(360deg); } }
+.pm-radar-puls {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1;
+  opacity: 0;
+  transform-box: view-box;
+  transform-origin: 390px 270px;
+  animation: pmRadarPuls 4.8s ease-out infinite;
+}
+@keyframes pmRadarPuls {
+  0% { transform: scale(0.08); opacity: 0.5; }
+  70% { opacity: 0.1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pm-radar-scan, .pm-radar-puls { animation: none; }
+  .pm-radar-puls { opacity: 0; }
+  .pm-radar-scan { opacity: 0.5; }
 }
