@@ -5462,28 +5462,23 @@ h1 > .eyebrow {
 }
 
 
-/* Der Radar sucht: ein Keil dreht sich, dazu laufen Ringe nach aussen.
-   Drehpunkt in Koordinaten der Zeichenflaeche (viewBox beginnt bei
-   -130/-10, die Mitte liegt also bei 390/270). */
-.pm-radar-scan { transform-box: view-box; transform-origin: 390px 270px; animation: pmRadarDreh 7s linear infinite; }
-.pm-radar-scan line { stroke: rgba(246, 216, 134, 0.55); stroke-width: 1.2; }
-@keyframes pmRadarDreh { to { transform: rotate(360deg); } }
+/* Der Radar schlaegt aus: alle zwei Sekunden laeuft ein Ring vom
+   Mittelpunkt nach aussen. Sonst bewegt sich nichts. Drehpunkt in
+   Koordinaten der Zeichenflaeche (viewBox beginnt bei -130/-10). */
 .pm-radar-puls {
   fill: none;
   stroke: var(--gold);
-  stroke-width: 1;
+  stroke-width: 1.5;
   opacity: 0;
   transform-box: view-box;
   transform-origin: 390px 270px;
-  animation: pmRadarPuls 4.8s ease-out infinite;
+  animation: pmRadarPuls 6s ease-out infinite;
 }
 @keyframes pmRadarPuls {
-  0% { transform: scale(0.08); opacity: 0.5; }
-  70% { opacity: 0.1; }
-  100% { transform: scale(1); opacity: 0; }
+  0% { opacity: 0.75; transform: scale(0.12); }
+  100% { opacity: 0; transform: scale(1); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .pm-radar-scan, .pm-radar-puls { animation: none; }
-  .pm-radar-puls { opacity: 0; }
-  .pm-radar-scan { opacity: 0.5; }
+  .pm-radar-puls { animation: none; opacity: 0; }
+}
 }
