@@ -626,9 +626,7 @@ ${masse(listing)}
   (function () {
     const feld = document.querySelector("[data-objekt-karte]");
     const gitter = document.querySelector("[data-listings]");
-    const schalter = document.querySelector("[data-ansicht-schalter]");
-    const ansichtFeld = document.querySelector("[data-ansicht-feld]");
-    if (!feld || !gitter || !schalter || !ansichtFeld || !window.LISTINGS) return;
+    if (!feld || !gitter || !window.LISTINGS) return;
 
     // Objekt und Kachel ueber die Adresse verbinden — dieselbe Zuordnung
     // wie in der Suchmaske.
@@ -638,7 +636,7 @@ ${masse(listing)}
     })).filter((e) => e.objekt && e.objekt.lat && e.objekt.lng);
 
     if (!eintraege.length) {
-      schalter.hidden = true;
+      feld.hidden = true;
       return;
     }
 
@@ -722,7 +720,10 @@ ${masse(listing)}
           return { nadel, kachel, objekt };
         });
 
-        karte.once("load", nadelnSetzen);
+        karte.once("load", () => { karte.resize(); nadelnSetzen(); });
+        // Die Karte steht in einem Raster, das seine Breite erst nach dem
+        // Aufbau kennt — ohne resize bliebe sie in der alten Groesse stehen.
+        if ("ResizeObserver" in window) new ResizeObserver(() => karte.resize()).observe(feld);
         nadelnSetzen();
         aufbauLaeuft = false;
       }).catch(() => { aufbauLaeuft = false; });
@@ -743,34 +744,11 @@ ${masse(listing)}
       feld.appendChild(halt);
     }
 
-    function ansicht(welche) {
-      ansichtFeld.classList.remove("ist-liste", "ist-karte", "ist-beides");
-      ansichtFeld.classList.add("ist-" + welche);
-      schalter.querySelectorAll("button").forEach((b) => {
-        const aktiv = b.dataset.ansicht === welche;
-        b.classList.toggle("ist-aktiv", aktiv);
-        b.setAttribute("aria-pressed", aktiv ? "true" : "false");
-      });
-      try { localStorage.setItem("putz-objekt-ansicht", welche); } catch (e) { /* privates Fenster */ }
-      if (welche === "liste") return;
-      karteAnfordern();
-      if (karte) {
-        karte.scrollZoom[welche === "karte" ? "enable" : "disable"]();
-        // Nach dem Umschalten hat der Behaelter eine andere Groesse.
-        requestAnimationFrame(() => { karte.resize(); nadelnSetzen(); });
-        setTimeout(() => { karte.resize(); nadelnSetzen(); }, 260);
-      }
-    }
-
-    schalter.addEventListener("click", (e) => {
-      const knopf = e.target.closest("[data-ansicht]");
-      if (knopf) ansicht(knopf.dataset.ansicht);
-    });
     document.addEventListener("putz-objekte-gefiltert", nadelnSetzen);
 
-    let gemerkt = null;
-    try { gemerkt = localStorage.getItem("putz-objekt-ansicht"); } catch (e) { /* egal */ }
-    if (gemerkt === "karte" || gemerkt === "beides") ansicht(gemerkt);
+    // Die Karte kommt, sobald sie fast im Bild ist — die Bibliothek ist
+    // gross, und oben steht erst die Suchmaske.
+    kurzVorSichtbar(feld).then(karteAnfordern);
   })();
 
 })();
