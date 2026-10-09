@@ -696,27 +696,46 @@ ${masse(listing)}
       if (karte || aufbauLaeuft) return;
       aufbauLaeuft = true;
       maplibreHolen().then(() => {
+        // Eigener Behaelter fuer die Karte: MapLibre schreibt dem Behaelter
+        // "position: relative" ins Stilattribut und wuerde damit das
+        // Klebenbleiben der Spalte aushebeln.
+        const ziel = document.createElement("div");
+        ziel.className = "objekt-karte-feld";
+        feld.appendChild(ziel);
         karte = new window.maplibregl.Map({
-          container: feld,
+          container: ziel,
           style: "https://tiles.openfreemap.org/styles/dark",
           center: [16.37, 48.21],
           zoom: 9,
-          scrollZoom: false,
           attributionControl: false,
         });
         karte.addControl(new window.maplibregl.AttributionControl({ compact: true }));
         karte.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), "top-left");
 
         nadeln = eintraege.map(({ kachel, objekt }) => {
+          const bild = (objekt.images || [])[0];
           const el = document.createElement("button");
           el.type = "button";
-          el.className = "karten-nadel" + (objekt.verkauft ? " ist-verkauft" : "");
-          el.textContent = objekt.verkauft ? "Verkauft" : preisKurz(objekt);
-          el.setAttribute("aria-label", objekt.title);
+          el.className = "karten-nadel" + (objekt.verkauft ? " ist-verkauft" : "") + (bild ? "" : " ohne-bild");
+          if (bild) el.style.backgroundImage = "url('" + bild + "')";
+          else el.textContent = objekt.verkauft ? "V" : preisKurz(objekt).replace(" Tsd.", "");
+          el.setAttribute("aria-label", objekt.title + (objekt.price ? ", " + objekt.price : ""));
+          el.setAttribute("title", objekt.title);
+
           const nadel = new window.maplibregl.Marker({ element: el })
             .setLngLat([objekt.lng, objekt.lat])
-            .setPopup(new window.maplibregl.Popup({ offset: 18, closeButton: false, maxWidth: "260px" }).setHTML(blase(objekt)))
+            .setPopup(new window.maplibregl.Popup({ offset: 24, closeButton: true, maxWidth: "280px", className: "karten-blase-rahmen" }).setHTML(blase(objekt)))
             .addTo(karte);
+
+          // Ein Klick hebt das Inserat in der Spalte hervor und springt hin.
+          el.addEventListener("click", () => {
+            nadeln.forEach(({ nadel: n }) => n.getElement().classList.remove("ist-aktiv"));
+            el.classList.add("ist-aktiv");
+            document.querySelectorAll(".listing-card.ist-hervorgehoben")
+              .forEach((k) => k.classList.remove("ist-hervorgehoben"));
+            kachel.classList.add("ist-hervorgehoben");
+            kachel.scrollIntoView({ behavior: "smooth", block: "center" });
+          });
           return { nadel, kachel, objekt };
         });
 

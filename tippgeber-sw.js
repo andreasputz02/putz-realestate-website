@@ -15,7 +15,7 @@ const CACHE = 'tippgeber-v1';
 
 // Nur Unveraenderliches — alles mit Versionsnummer im Namen.
 const AUSSEHEN = [
-  '/css/site.min.css?v=62be0008',
+  '/css/site.min.css?v=589d75cf',
   '/assets/img/logo.png',
   '/assets/img/app-symbol-192.png',
   '/assets/img/app-symbol-512.png',
