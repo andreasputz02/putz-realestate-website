@@ -40,7 +40,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/webicon-192.png">
 <link rel="apple-touch-icon" href="/assets/img/webicon-192.png">
 <link rel="canonical" href="https://putz-realestate.at/immobilien">
-<link rel="stylesheet" href="css/site.min.css?v=7287ccd6">
+<link rel="stylesheet" href="css/site.min.css?v=e803840c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -371,7 +371,16 @@
         </div>
       </form>
 
-      <div class="listing-grid" data-listings></div>
+      <div class="ansicht-schalter" data-ansicht-schalter role="group" aria-label="Ansicht wählen">
+        <button type="button" data-ansicht="liste" class="ist-aktiv" aria-pressed="true">Liste</button>
+        <button type="button" data-ansicht="beides" aria-pressed="false">Karte &amp; Liste</button>
+        <button type="button" data-ansicht="karte" aria-pressed="false">Karte</button>
+      </div>
+
+      <div class="objekt-ansicht ist-liste" data-ansicht-feld>
+        <div class="objekt-karte" data-objekt-karte></div>
+        <div class="listing-grid" data-listings></div>
+      </div>
       <p class="filter-leer" data-filter-leer hidden>
         Zu dieser Suche haben wir gerade nichts im Angebot.
         <a href="#" data-filter-loeschen>Filter zurücksetzen</a>
@@ -580,7 +589,7 @@
   <script defer src="js/script.js?v=62"></script>
   <script defer src="js/listings-data.js?v=9"></script>
   <script defer src="justimmo.php?v=6"></script>
-  <script defer src="js/listings.js?v=33"></script>
+  <script defer src="js/listings.js?v=35"></script>
 
 </body>
 </html>

@@ -5482,3 +5482,87 @@ h1 > .eyebrow {
   .pm-radar-puls { animation: none; opacity: 0; }
 }
 }
+
+
+/* ============================================================
+   UEBERSICHTSKARTE auf der Objektseite
+   ============================================================ */
+.ansicht-schalter {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 22px;
+  background: #131315;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 100px;
+}
+.ansicht-schalter button {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 9px 18px;
+  border-radius: 100px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.62);
+  transition: background 0.25s var(--ease), color 0.25s var(--ease);
+}
+.ansicht-schalter button:hover { color: var(--white); }
+.ansicht-schalter button.ist-aktiv { background: var(--gold); color: var(--black); font-weight: 600; }
+
+.objekt-ansicht { display: grid; gap: 22px; }
+.objekt-karte {
+  height: 460px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: #0f0f11;
+  position: relative;
+}
+.objekt-ansicht.ist-liste .objekt-karte { display: none; }
+.objekt-ansicht.ist-karte .listing-grid { display: none; }
+.objekt-ansicht.ist-karte .objekt-karte { height: min(74vh, 760px); }
+.objekt-karte .extern-platzhalter { position: absolute; inset: 0; }
+
+@media (min-width: 1000px) {
+  .objekt-ansicht.ist-beides { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); align-items: start; }
+  .objekt-ansicht.ist-beides .objekt-karte { position: sticky; top: 96px; height: calc(100vh - 150px); }
+  .objekt-ansicht.ist-beides .listing-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Preisnadel */
+.karten-nadel {
+  border: 1px solid rgba(11, 11, 12, 0.35);
+  background: var(--gold);
+  color: var(--black);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 100px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s var(--ease);
+}
+.karten-nadel:hover { transform: scale(1.1); z-index: 3; }
+.maplibregl-marker:has(.karten-nadel:hover) { z-index: 3; }
+.karten-nadel.ist-verkauft { background: #2a2a2e; color: var(--gold-light); }
+
+/* Karte zum Objekt, die beim Klick aufgeht */
+.maplibregl-popup-content { background: #131315; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 0; overflow: hidden; }
+.maplibregl-popup-tip { border-top-color: #131315 !important; border-bottom-color: #131315 !important; }
+.karten-blase { display: block; text-decoration: none; }
+.karten-blase-bild { display: block; height: 118px; background-size: cover; background-position: center; }
+.karten-blase-text { display: flex; flex-direction: column; gap: 3px; padding: 13px 15px 15px; }
+.karten-blase-text strong { color: var(--white); font-size: 14px; font-weight: 600; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.karten-blase-ort { color: var(--gold-light); font-size: 12.5px; }
+.karten-blase-daten { color: rgba(255, 255, 255, 0.6); font-size: 12.5px; }
+.karten-blase-mehr { margin-top: 6px; color: var(--gold); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+
+@media (max-width: 560px) {
+  .ansicht-schalter { width: 100%; justify-content: space-between; }
+  .ansicht-schalter button { flex: 1; padding: 9px 8px; font-size: 12.5px; }
+  .objekt-karte { height: 380px; }
+}

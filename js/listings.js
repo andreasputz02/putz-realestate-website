@@ -327,6 +327,9 @@ ${masse(listing)}
       }
       if (leerHinweis) leerHinweis.hidden = sichtbar > 0 || !aktiv;
       if (zuruecksetzen) zuruecksetzen.hidden = !aktiv;
+
+      // Die Uebersichtskarte haengt sich hier an und zeigt nur, was uebrig bleibt.
+      document.dispatchEvent(new CustomEvent("putz-objekte-gefiltert", { detail: { sichtbar } }));
     }
 
     formular.addEventListener("submit", (e) => {
@@ -611,4 +614,163 @@ ${masse(listing)}
       if (jiFeld) jiFeld.value = listing.objektId || "";
     }
   }
+
+  /* ============================================================
+     UEBERSICHTSKARTE auf der Objektseite
+
+     Alle Objekte mit Koordinaten als Preisnadel. Ein Klick oeffnet
+     eine kleine Karte mit Foto und fuehrt zum Objekt. Die Nadeln
+     folgen der Suchmaske: was ausgefiltert ist, verschwindet auch
+     auf der Karte.
+     ============================================================ */
+  (function () {
+    const feld = document.querySelector("[data-objekt-karte]");
+    const gitter = document.querySelector("[data-listings]");
+    const schalter = document.querySelector("[data-ansicht-schalter]");
+    const ansichtFeld = document.querySelector("[data-ansicht-feld]");
+    if (!feld || !gitter || !schalter || !ansichtFeld || !window.LISTINGS) return;
+
+    // Objekt und Kachel ueber die Adresse verbinden — dieselbe Zuordnung
+    // wie in der Suchmaske.
+    const eintraege = [...gitter.children].map((kachel) => ({
+      kachel,
+      objekt: window.LISTINGS.find((o) => kachel.getAttribute("href") === "immobilie/" + o.id),
+    })).filter((e) => e.objekt && e.objekt.lat && e.objekt.lng);
+
+    if (!eintraege.length) {
+      schalter.hidden = true;
+      return;
+    }
+
+    let karte = null, nadeln = [], aufbauLaeuft = false;
+
+    const preisKurz = (o) => {
+      if (!o.preisWert) return o.price || "Preis auf Anfrage";
+      // Mieten stehen voll da: "1 Tsd." waere fuer eine Monatsmiete unsinnig.
+      if (o.type === "miete" || o.preisWert < 100000) return (o.price || "").replace("€", "").trim() + " €";
+      if (o.preisWert >= 1000000) return (o.preisWert / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + " Mio";
+      return Math.round(o.preisWert / 1000) + " Tsd.";
+    };
+
+    const sicher = (t) => String(t == null ? "" : t).replace(/[&<>"]/g, (z) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[z]));
+
+    // Bei Grundstuecken zaehlt die Grundflaeche; "–" bleibt weg statt als
+    // leerer Strich zwischen zwei Punkten zu stehen.
+    function flaechenZeile(o) {
+      const istGrund = /grundst/i.test(o.objektart || "") || /grundst/i.test(o.title || "");
+      const flaeche = istGrund && o.grundArea ? o.grundArea : o.area;
+      return [flaeche, o.rooms && o.rooms !== "–" ? o.rooms + " Zi." : "", o.price]
+        .filter((t) => t && t !== "–").map(sicher).join(" · ");
+    }
+
+    function blase(o) {
+      const bild = (o.images || [])[0];
+      return (
+        '<a class="karten-blase" href="immobilie/' + encodeURIComponent(o.id) + '">' +
+        (bild ? '<span class="karten-blase-bild" style="background-image:url(\'' + sicher(bild) + '\')"></span>' : "") +
+        '<span class="karten-blase-text">' +
+        '<strong>' + sicher(o.title) + '</strong>' +
+        '<span class="karten-blase-ort">' + sicher(o.location || "") + '</span>' +
+        '<span class="karten-blase-daten">' + flaechenZeile(o) + '</span>' +
+        '<span class="karten-blase-mehr">Objekt ansehen</span>' +
+        '</span></a>'
+      );
+    }
+
+    function nadelnSetzen() {
+      if (!karte) return;
+      const sichtbare = [];
+      nadeln.forEach(({ nadel, kachel, objekt }) => {
+        const zeigen = !kachel.hidden;
+        nadel.getElement().hidden = !zeigen;
+        if (zeigen) sichtbare.push(objekt);
+      });
+      if (sichtbare.length) {
+        const grenzen = sichtbare.reduce(
+          (g, o) => g.extend([o.lng, o.lat]),
+          new window.maplibregl.LngLatBounds([sichtbare[0].lng, sichtbare[0].lat], [sichtbare[0].lng, sichtbare[0].lat])
+        );
+        karte.fitBounds(grenzen, { padding: 60, maxZoom: 14, duration: 400 });
+      }
+    }
+
+    function karteBauen() {
+      if (karte || aufbauLaeuft) return;
+      aufbauLaeuft = true;
+      maplibreHolen().then(() => {
+        karte = new window.maplibregl.Map({
+          container: feld,
+          style: "https://tiles.openfreemap.org/styles/dark",
+          center: [16.37, 48.21],
+          zoom: 9,
+          scrollZoom: false,
+          attributionControl: false,
+        });
+        karte.addControl(new window.maplibregl.AttributionControl({ compact: true }));
+        karte.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), "top-left");
+
+        nadeln = eintraege.map(({ kachel, objekt }) => {
+          const el = document.createElement("button");
+          el.type = "button";
+          el.className = "karten-nadel" + (objekt.verkauft ? " ist-verkauft" : "");
+          el.textContent = objekt.verkauft ? "Verkauft" : preisKurz(objekt);
+          el.setAttribute("aria-label", objekt.title);
+          const nadel = new window.maplibregl.Marker({ element: el })
+            .setLngLat([objekt.lng, objekt.lat])
+            .setPopup(new window.maplibregl.Popup({ offset: 18, closeButton: false, maxWidth: "260px" }).setHTML(blase(objekt)))
+            .addTo(karte);
+          return { nadel, kachel, objekt };
+        });
+
+        karte.once("load", nadelnSetzen);
+        nadelnSetzen();
+        aufbauLaeuft = false;
+      }).catch(() => { aufbauLaeuft = false; });
+    }
+
+    // Fremder Anbieter: die Karte kommt erst nach Zustimmung.
+    function karteAnfordern() {
+      if (!window.putzExtern || window.putzExtern.erlaubt()) return karteBauen();
+      if (feld.querySelector(".extern-platzhalter")) return;
+      const halt = document.createElement("div");
+      halt.className = "extern-platzhalter";
+      halt.innerHTML =
+        "<span>Karte \u2014 wird erst auf Klick von einem anderen Anbieter geladen.</span>" +
+        '<button type="button" class="btn btn-outline">Karte laden</button>';
+      const laden = () => { halt.remove(); karteBauen(); };
+      halt.querySelector("button").addEventListener("click", laden);
+      document.addEventListener("putz-extern", (e) => { if (e.detail && e.detail.erlaubt && halt.isConnected) laden(); });
+      feld.appendChild(halt);
+    }
+
+    function ansicht(welche) {
+      ansichtFeld.classList.remove("ist-liste", "ist-karte", "ist-beides");
+      ansichtFeld.classList.add("ist-" + welche);
+      schalter.querySelectorAll("button").forEach((b) => {
+        const aktiv = b.dataset.ansicht === welche;
+        b.classList.toggle("ist-aktiv", aktiv);
+        b.setAttribute("aria-pressed", aktiv ? "true" : "false");
+      });
+      try { localStorage.setItem("putz-objekt-ansicht", welche); } catch (e) { /* privates Fenster */ }
+      if (welche === "liste") return;
+      karteAnfordern();
+      if (karte) {
+        karte.scrollZoom[welche === "karte" ? "enable" : "disable"]();
+        // Nach dem Umschalten hat der Behaelter eine andere Groesse.
+        requestAnimationFrame(() => { karte.resize(); nadelnSetzen(); });
+        setTimeout(() => { karte.resize(); nadelnSetzen(); }, 260);
+      }
+    }
+
+    schalter.addEventListener("click", (e) => {
+      const knopf = e.target.closest("[data-ansicht]");
+      if (knopf) ansicht(knopf.dataset.ansicht);
+    });
+    document.addEventListener("putz-objekte-gefiltert", nadelnSetzen);
+
+    let gemerkt = null;
+    try { gemerkt = localStorage.getItem("putz-objekt-ansicht"); } catch (e) { /* egal */ }
+    if (gemerkt === "karte" || gemerkt === "beides") ansicht(gemerkt);
+  })();
+
 })();
