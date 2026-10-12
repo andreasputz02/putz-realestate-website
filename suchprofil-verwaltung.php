@@ -70,6 +70,7 @@ header('Content-Type: text/html; charset=utf-8');
   form { margin-top: 34px; background: #16161a; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 18px; }
   textarea { width: 100%; min-height: 120px; background: #0f0f11; color: inherit; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 10px; font: inherit; }
   button { margin-top: 12px; background: #f6d886; color: #0b0b0c; border: 0; border-radius: 100px; padding: 10px 20px; font: 600 14px system-ui; cursor: pointer; }
+  a { color: #f6d886; }
   .hinweis { background: rgba(246, 216, 134, 0.12); border-left: 3px solid #f6d886; padding: 10px 14px; border-radius: 6px; margin-top: 16px; }
 </style>
 </head>
@@ -89,7 +90,7 @@ header('Content-Type: text/html; charset=utf-8');
 
   <table>
     <thead>
-      <tr><th>Name</th><th>E-Mail</th><th>Suche</th><th>Status</th><th>Letzte Mail</th></tr>
+      <tr><th>Name</th><th>E-Mail</th><th>Suche</th><th>Status</th><th>Letzte Mail</th><th>Links</th></tr>
     </thead>
     <tbody>
     <?php foreach ($profile as $p): ?>
@@ -104,9 +105,13 @@ header('Content-Type: text/html; charset=utf-8');
           <br><span class="leise"><?= h(substr((string)$p['erstellt'], 0, 10)) ?></span>
         </td>
         <td class="leise"><?= h(substr((string)$p['letzte_mail'], 0, 10)) ?></td>
+        <td class="leise">
+          <a href="/suchprofil?t=<?= h($p['token']) ?>&a=ja">bestätigen</a><br>
+          <a href="/suchprofil?t=<?= h($p['token']) ?>&a=stop">abmelden</a>
+        </td>
       </tr>
     <?php endforeach; ?>
-    <?php if (!$profile): ?><tr><td colspan="5" class="leise">Noch keine Suchprofile.</td></tr><?php endif; ?>
+    <?php if (!$profile): ?><tr><td colspan="6" class="leise">Noch keine Suchprofile.</td></tr><?php endif; ?>
     </tbody>
   </table>
 
