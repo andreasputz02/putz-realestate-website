@@ -20,7 +20,7 @@ if (($_GET['schluessel'] ?? $_POST['schluessel'] ?? '') !== SP_SCHLUESSEL) {
 
 $meldung = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['adressen'])) {
-    $angelegt = $schon = $fehler = 0;
+    $angelegt = $schon = $fehler = $abgelehnt = 0;
     foreach (preg_split('/\r?\n/', (string)$_POST['adressen']) as $zeile) {
         $zeile = trim($zeile);
         if ($zeile === '') continue;
@@ -34,10 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['adressen'])) {
         $profil = sp_aufnehmen($daten);
         if (!$profil) { $fehler++; continue; }
         if (!empty($profil['bestaetigt'])) { $schon++; continue; }
-        sp_bestaetigung_senden($profil);
-        $angelegt++;
+        // Rueckgabe zeigt, ob der Mailserver die Nachricht ueberhaupt
+        // angenommen hat. Kommt sie trotzdem nicht an, liegt es am
+        // Empfaenger (Spamfilter), nicht an uns.
+        if (sp_bestaetigung_senden($profil)) $angelegt++; else $abgelehnt++;
     }
-    $meldung = "$angelegt Einladung(en) verschickt, $schon schon bestätigt, $fehler ungültig.";
+    $meldung = "$angelegt Einladung(en) verschickt, $abgelehnt vom Mailserver abgelehnt, "
+             . "$schon schon bestätigt, $fehler ungültige Adresse(n).";
 }
 
 $profile = sp_db()->query('SELECT * FROM profile ORDER BY erstellt DESC')->fetchAll(PDO::FETCH_ASSOC);
