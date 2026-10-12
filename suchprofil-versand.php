@@ -40,6 +40,8 @@ $profile = $db->query('SELECT * FROM profile WHERE bestaetigt IS NOT NULL AND ab
               ->fetchAll(PDO::FETCH_ASSOC);
 
 echo 'Objekte: ' . count($objekte) . ', aktive Suchprofile: ' . count($profile) . "\n";
+// Hilft beim Einrichten des Cronjobs: der genaue Befehl steht damit im Probelauf.
+if (!$ueberKommandozeile) echo 'Befehl fuer den Cronjob: ' . (is_file('/usr/bin/php') ? '/usr/bin/php ' : 'php ') . __FILE__ . "\n";
 
 $mails = 0;
 foreach ($profile as $p) {
