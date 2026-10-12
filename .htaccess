@@ -115,6 +115,9 @@ ErrorDocument 404 /404.html
   # Sitemap der Objekte, aus denselben Daten erzeugt
   RewriteRule ^sitemap-immobilien\.xml$ sitemap-immobilien.php [L]
 
+  # Bestaetigen und Abmelden eines Suchprofils
+  RewriteRule ^suchprofil/?$ suchprofil.php [L,QSA]
+
   # /index.html und /index -> /
   RewriteCond %{THE_REQUEST} \s/+index(\.html)?[\s?] [NC]
   RewriteRule ^ / [R=301,L]

@@ -539,15 +539,31 @@
             <input type="text" id="sa-preis" name="preis" placeholder="z.B. 500.000 €">
           </div>
         </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="sa-zimmer">Zimmer ab</label>
+            <select id="sa-zimmer" name="zimmer">
+              <option value="">egal</option>
+              <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sa-groesse">Fläche ab (m²)</label>
+            <select id="sa-groesse" name="groesse">
+              <option value="">egal</option>
+              <option>40</option><option>60</option><option>80</option><option>100</option><option>150</option><option>200</option>
+            </select>
+          </div>
+        </div>
         <div class="field">
           <label for="sa-details">Weitere Wünsche</label>
-          <textarea id="sa-details" name="details" placeholder="Zimmeranzahl, Fläche, Ausstattung, ..."></textarea>
+          <textarea id="sa-details" name="details" placeholder="Ausstattung, Lage im Haus, Freiflächen ..."></textarea>
         </div>
         <button type="submit" class="btn btn-gold btn-block">
           Suchagent anlegen
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
-        <p class="field-note">Mit dem Absenden stimmst du der Verarbeitung deiner Daten gemäß unserer <a href="datenschutz" style="text-decoration:underline;">Datenschutzerklärung</a> zu.</p>
+        <p class="field-note">Du bekommst gleich eine Mail mit einem Bestätigungslink. Erst danach schicken wir dir neue passende Objekte — höchstens eine Mail pro Tag, abmelden mit einem Klick. Mehr dazu in der <a href="datenschutz" style="text-decoration:underline;">Datenschutzerklärung</a>.</p>
         <div class="form-status"></div>
       </form>
     </div>

@@ -24,7 +24,9 @@
 
 if (!defined('MAIL_ABSENDER')) {
     // Muss zur Domain gehoeren, fuer die der Server senden darf.
-    define('MAIL_ABSENDER', 'noreply@putz-realestate.at');
+    // office statt noreply — auf der Domain der Website, weil nur fuer die
+    // der Server senden darf (SPF). Antworten gehen an das echte Postfach.
+    define('MAIL_ABSENDER', 'office@putz-realestate.at');
     define('MAIL_ABSENDER_NAME', 'PUTZ Real Estate');
     // Antworten sollen im echten Postfach landen.
     define('MAIL_ANTWORT', 'office@putzrealestate.at');

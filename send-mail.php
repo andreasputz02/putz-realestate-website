@@ -368,6 +368,25 @@ if ($sent && $formName === 'Immobilien-Anfrage') {
     }
 }
 
+// ------------------------------------------------------------
+//  Suchprofil anlegen und bestaetigen lassen
+//
+//  Aus "Suchagent anlegen" und der Seite /suchkunde entsteht ein
+//  Datensatz, der taeglich mit den neuen Objekten abgeglichen wird.
+//  Verschickt wird aber erst, wenn der Link in der Bestaetigungsmail
+//  angeklickt wurde. In try/catch: die Anfrage an uns darf nie an der
+//  Datenbank scheitern.
+// ------------------------------------------------------------
+if ($sent && preg_match('/suchagent|suchkunde/i', $formName)) {
+    try {
+        require_once __DIR__ . '/suchprofil-lib.php';
+        $profil = sp_aufnehmen($_POST);
+        if ($profil && empty($profil['bestaetigt'])) sp_bestaetigung_senden($profil);
+    } catch (Throwable $e) {
+        error_log('Suchprofil nicht gespeichert: ' . $e->getMessage());
+    }
+}
+
 if ($sent) {
     echo json_encode(['ok' => true]);
 } else {
