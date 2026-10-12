@@ -75,6 +75,13 @@ header('Content-Type: text/html; charset=utf-8');
   <h1>Suchprofile</h1>
   <p class="leise"><?= count($profile) ?> insgesamt, <?= (int)$anzahl ?> aktiv (bestätigt und nicht abgemeldet).</p>
 
+  <?php
+    $laufDatei = __DIR__ . '/data/suchprofil-lauf.txt';
+    $letzte = is_file($laufDatei) ? trim((string)@file_get_contents($laufDatei)) : '';
+    $letzterLauf = $letzte !== '' ? trim(substr($letzte, strrpos($letzte, "\n") !== false ? strrpos($letzte, "\n") + 1 : 0)) : '';
+  ?>
+  <p class="leise">Letzter Versandlauf: <?= $letzterLauf !== '' ? h($letzterLauf) : 'noch keiner — läuft der Cronjob schon?' ?></p>
+
   <?php if ($meldung !== ''): ?><div class="hinweis"><?= h($meldung) ?></div><?php endif; ?>
 
   <table>

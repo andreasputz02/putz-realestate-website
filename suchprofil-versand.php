@@ -115,4 +115,11 @@ foreach ($profile as $p) {
     echo 'Gesendet an ' . $p['email'] . ': ' . $wieviele . " Objekt(e)\n";
 }
 
+if (!$probe) {
+    // Letzten Lauf festhalten — daran sieht man in der Uebersicht, ob der
+    // Cronjob wirklich jeden Tag greift.
+    @file_put_contents(__DIR__ . '/data/suchprofil-lauf.txt',
+        date('c') . ' | ' . ($ueberKommandozeile ? 'Cronjob' : 'Browser') . ' | '
+        . count($profile) . ' Profile, ' . $mails . " Mail(s)\n", FILE_APPEND);
+}
 echo ($probe ? "Probelauf beendet.\n" : 'Fertig. Verschickte Mails: ' . $mails . "\n");
