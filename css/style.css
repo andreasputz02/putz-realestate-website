@@ -586,7 +586,7 @@ body.nav-open { overflow: hidden; }
   z-index: 0;
   /* Erstes Bild des Drohnenflugs: steht da, bevor das Video laedt, und
      bleibt bei reduzierter Bewegung allein stehen. */
-  background: var(--black) url("../assets/img/hero-drohnen-poster.webp") center / cover no-repeat;
+  background: var(--black) url("../assets/img/hero-header-poster.jpg") center / cover no-repeat;
 }
 
 /* Drohnenflug im Wechsel: 5 s Wien, 5 s Weinviertel — als eine Schleife
