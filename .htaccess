@@ -96,6 +96,10 @@ ErrorDocument 404 /404.html
   # Die News-Seite gibt es nicht mehr: alte Links und Suchtreffer -> Startseite
   RewriteRule ^news(\.html)?/?$ / [R=301,L]
 
+  # "Insider werden" gibt es nicht mehr — alte Links fuehren zum Suchkunden,
+  # das ist der Nachfolger: dort traegt man seine Suche ein.
+  RewriteRule ^insider(\.html)?/?$ /suchkunde [R=301,L]
+
   # Objektseiten mit eigener Adresse: /immobilie/<kennung> baut objekt.php
   # auf dem Server fertig auf (Titel, Text, Bilder, Daten fuer Google).
   RewriteRule ^immobilie/([a-z0-9-]+)/?$ objekt.php?slug=$1 [L,QSA]

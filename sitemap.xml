@@ -166,12 +166,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://putz-realestate.at/insider</loc>
-    <lastmod>2026-10-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://putz-realestate.at/veranstaltungen</loc>
     <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
