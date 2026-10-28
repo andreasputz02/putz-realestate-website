@@ -1077,12 +1077,14 @@ body.nav-open { overflow: hidden; }
 /* Fuer das Teamfoto spaeter: Klasse "ist-foto" ergaenzen, dann fuellt
    das Bild die Kachel randlos. */
 .company-logo-card.ist-foto { padding: 0; }
-.company-logo-card.ist-foto img { width: 100%; height: 100%; object-fit: cover; }
+.company-logo-card.ist-foto img,
+.company-logo-card.ist-foto video { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* Ueber uns: Bürofoto oben in voller Breite, Text darunter. */
 .profile-gestapelt { grid-template-columns: 1fr; gap: 44px; }
 .profile-gestapelt .buero-foto { aspect-ratio: 2 / 1; }
 .profile-gestapelt .buero-foto img { object-position: 50% 58%; }
+.profile-gestapelt .buero-foto video { object-position: 50% 50%; }
 .profile-gestapelt > div:last-child { max-width: 860px; }
 @media (max-width: 700px) {
   .profile-gestapelt { gap: 28px; }

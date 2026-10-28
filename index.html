@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="/assets/img/webicon-192.png">
 <link rel="canonical" href="https://putz-realestate.at/">
 <link rel="preload" as="image" href="assets/img/hero-header-poster.jpg?v=2" fetchpriority="high">
-<link rel="stylesheet" href="css/site.min.css?v=7e099f96">
+<link rel="stylesheet" href="css/site.min.css?v=b399d7d1">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -559,7 +559,14 @@
     <div class="container profile-layout profile-gestapelt">
       <!-- Foto unseres Bueros oben, Text darunter. -->
       <div class="company-logo-card ist-foto buero-foto" data-reveal>
-        <img src="assets/img/buero-1600.webp" srcset="assets/img/buero-900.webp 900w, assets/img/buero-1600.webp 1600w" sizes="(max-width: 1240px) 100vw, 1180px" width="1600" height="1200" loading="lazy" decoding="async" alt="Unser Büro: Besprechungstisch, Arbeitsplätze und Lounge-Ecke mit PUTZ-Logo an der Glaswand">
+        <!-- Der Imagefilm laeuft hier ohne Ton in Schleife. Das Buerofoto
+             bleibt als Standbild: Es steht da, bis das Video laeuft, und
+             bleibt allein stehen, wenn jemand Bewegung reduziert hat. -->
+        <video class="buero-video" muted loop playsinline preload="none" data-hintergrund-video
+               poster="assets/img/buero-1600.webp" aria-label="Einblick in unser Büro und unsere Arbeit">
+          <source src="assets/video/hero-header-mobil.mp4?v=2" type="video/mp4" media="(max-width: 760px)">
+          <source src="assets/video/hero-header.mp4?v=2" type="video/mp4">
+        </video>
       </div>
       <div data-reveal>
         <h2 class="mit-marke" style="font-size:clamp(28px,3.4vw,42px); margin-top:14px;">Wir sind PUTZ Real Estate</h2>
