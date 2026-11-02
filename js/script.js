@@ -752,30 +752,58 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
 })();
 
 // ---------- Hintergrundvideos: erst Standbild, Video nach dem Laden ----------
-// Die Drohnenfluege im Aufmacher (Startseite, Ortsseiten) luden frueher
-// sofort ganz mit — 2,7 MB am Handy, 5 MB am Computer — und standen damit
-// dem Aufbau der Seite im Weg. Jetzt steht zuerst das Standbild; das Video
-// startet erst, wenn die Seite fertig geladen ist und der Browser Luft hat.
+// Die Filme im Aufmacher (Startseite, Ortsseiten) luden frueher sofort ganz
+// mit und standen dem Aufbau der Seite im Weg. Jetzt steht zuerst das
+// Standbild; das Video startet, sobald die Seite fertig ist.
+//
+// Am Handy klappte das oft nicht: Safari und Chrome lassen das Abspielen
+// ohne Zutun nur unter Bedingungen zu, und im Energiesparmodus gar nicht.
+// Deshalb wird es mehrfach versucht — wenn die Seite fertig ist, wenn das
+// Video ins Bild kommt, wenn der Besucher das erste Mal tippt oder scrollt
+// und wenn er zum Tab zurueckkehrt. Klappt es gar nicht, bleibt das
+// Standbild stehen, und die Seite sieht trotzdem richtig aus.
+//
 // Bei Datensparmodus, sehr langsamer Verbindung oder reduzierter Bewegung
-// bleibt es beim Standbild.
+// wird nichts geladen.
 (function () {
-  const videos = document.querySelectorAll("video[data-hintergrund-video]");
+  const videos = [...document.querySelectorAll("video[data-hintergrund-video]")];
   if (!videos.length) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const netz = navigator.connection;
   if (netz && (netz.saveData || /(^|-)2g$/.test(netz.effectiveType || ""))) return;
 
-  const starten = () => videos.forEach((v) => {
-    v.muted = true;
-    v.preload = "auto";
-    v.play().catch(() => {}); // z. B. im Energiesparmodus — dann bleibt das Standbild
-  });
+  const anstossen = (v) => {
+    if (!v.isConnected || (!v.paused && !v.ended)) return;
+    v.muted = true;                 // ohne Ton — sonst verweigert jeder Browser
+    v.setAttribute("muted", "");
+    if (v.preload !== "auto") v.preload = "auto";
+    const versuch = v.play();
+    if (versuch && versuch.catch) versuch.catch(() => {});
+  };
+  const starten = () => videos.forEach(anstossen);
+
   const spaeter = () => ("requestIdleCallback" in window
     ? window.requestIdleCallback(starten, { timeout: 2000 })
     : setTimeout(starten, 300));
 
   if (document.readyState === "complete") spaeter();
   else window.addEventListener("load", spaeter, { once: true });
+
+  // Zweiter Anlauf, sobald das Video wirklich im Bild ist.
+  if ("IntersectionObserver" in window) {
+    const beobachter = new IntersectionObserver((eintraege) => {
+      eintraege.forEach((e) => { if (e.isIntersecting) anstossen(e.target); });
+    }, { rootMargin: "200px 0px" });
+    videos.forEach((v) => beobachter.observe(v));
+  }
+
+  // Dritter Anlauf bei der ersten Berührung — das zaehlt als Zutun des
+  // Besuchers, danach erlaubt auch Safari das Abspielen.
+  ["pointerdown", "touchstart", "scroll", "keydown"].forEach((art) =>
+    window.addEventListener(art, starten, { once: true, passive: true }));
+
+  // Kommt jemand aus einem anderen Tab zurueck, stehen die Videos sonst still.
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) starten(); });
 })();
 
 // ---------- Kundenvideos: erst Standbild, dann Steuerleiste ----------
