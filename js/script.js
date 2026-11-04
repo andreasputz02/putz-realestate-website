@@ -813,11 +813,25 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
     if (versuch && versuch.catch) versuch.catch(() => standbild(v, true));
   };
 
-  // Genau ein Film laeuft: der erste, der gerade im Bild ist.
+  // Weit weg heisst: mehr als einen halben Bildschirm ueber oder unter dem
+  // Fenster. Nur dann halten wir ein Video an, ohne dass ein anderes dran ist.
+  const weitWeg = (v) => {
+    const r = v.getBoundingClientRect();
+    if (!r.width || !r.height) return false;
+    const fenster = window.innerHeight || document.documentElement.clientHeight;
+    return r.bottom < -fenster * 0.5 || r.top > fenster * 1.5;
+  };
+
+  // Genau ein Film laeuft: der erste, der gerade im Bild ist. Laesst sich
+  // gerade keiner messen — etwa weil der Seitenaufbau noch laeuft —, halten
+  // wir nichts an. Sonst wuerde ein gerade gestartetes Video wieder stehen,
+  // und manche Browser lassen es danach nicht mehr von allein anlaufen.
   const nachziehen = () => {
+    videos.forEach((v) => { if (weitWeg(v)) anhalten(v); });
     const dran = videos.find(imBild);
+    if (!dran) return;
     videos.forEach((v) => { if (v !== dran) anhalten(v); });
-    if (dran) anstossen(dran);
+    anstossen(dran);
   };
 
   videos.forEach((v) => {

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0b0c">
+<meta name="robots" content="noindex, nofollow">
+<title>Videotest</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin:0; background:#0b0b0c; color:#fff; font:16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding:22px 18px 60px; }
+  h1 { font-size:22px; margin:0 0 6px; }
+  p.unter { color:rgba(255,255,255,.6); margin:0 0 22px; font-size:14px; }
+  video { width:100%; max-width:520px; border-radius:12px; background:#000; display:block; }
+  .urteil { margin:20px 0; padding:16px 18px; border-radius:12px; font-weight:600; font-size:17px; }
+  .gut { background:rgba(60,180,100,.16); border:1px solid rgba(60,180,100,.5); }
+  .schlecht { background:rgba(230,120,60,.16); border:1px solid rgba(230,120,60,.55); }
+  .warte { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2); }
+  table { width:100%; max-width:520px; border-collapse:collapse; font-size:14.5px; }
+  td { padding:9px 0; border-bottom:1px solid rgba(255,255,255,.1); vertical-align:top; }
+  td:first-child { color:rgba(255,255,255,.6); width:52%; padding-right:12px; }
+  button { margin-top:18px; padding:13px 20px; border-radius:10px; border:0; background:#fbe48b; color:#111; font-size:16px; font-weight:600; }
+  code { font-size:12.5px; color:rgba(255,255,255,.75); word-break:break-all; }
+</style>
+</head>
+<body>
+
+<h1>Videotest</h1>
+<p class="unter">Diese Seite prüft, ob dein Browser Hintergrundvideos von allein startet. Einfach öffnen, 5 Sekunden warten, Bildschirmfoto schicken. Nicht scrollen und nichts antippen, bevor das Ergebnis steht.</p>
+
+<video id="film" muted autoplay loop playsinline preload="metadata" poster="assets/img/hero-header-poster.jpg?v=2">
+  <source src="assets/video/hero-header-mobil.mp4?v=2" type="video/mp4">
+</video>
+
+<div class="urteil warte" id="urteil">Test läuft …</div>
+
+<table id="werte"></table>
+
+<button id="handstart" type="button">Mit Antippen starten</button>
+
+<script>
+(function () {
+  var film = document.getElementById("film");
+  var urteil = document.getElementById("urteil");
+  var tabelle = document.getElementById("werte");
+  var netz = navigator.connection || {};
+  var fehler = "—";
+  var beruehrt = false;
+
+  ["pointerdown", "touchstart", "keydown", "scroll"].forEach(function (art) {
+    window.addEventListener(art, function () { beruehrt = true; }, { once: true, passive: true });
+  });
+
+  // Eigener Startversuch per Skript, getrennt vom autoplay-Attribut.
+  var versuch = film.play();
+  if (versuch && versuch.catch) versuch.catch(function (e) { fehler = (e && e.name ? e.name : "Fehler") + ": " + (e && e.message ? e.message : ""); });
+
+  function zeile(name, wert) {
+    var tr = document.createElement("tr");
+    var a = document.createElement("td"); a.textContent = name;
+    var b = document.createElement("td"); b.innerHTML = wert;
+    tr.appendChild(a); tr.appendChild(b); tabelle.appendChild(tr);
+  }
+
+  setTimeout(function () {
+    var laeuft = !film.paused && film.currentTime > 0.15;
+    urteil.className = "urteil " + (laeuft ? "gut" : "schlecht");
+    urteil.textContent = laeuft
+      ? "Autostart funktioniert auf diesem Gerät."
+      : (beruehrt ? "Kein Autostart — aber der Bildschirm wurde berührt, bitte noch einmal laden und nichts antippen."
+                  : "Dein Browser verweigert den Autostart.");
+
+    zeile("Läuft von allein", laeuft ? "ja" : "<b>nein</b>");
+    zeile("Laufzeit nach 5 s", film.currentTime.toFixed(2) + " s");
+    zeile("Skriptstart abgelehnt mit", fehler);
+    zeile("Ladezustand", film.readyState + " von 4");
+    zeile("Datensparmodus", netz.saveData === true ? "<b>ja</b>" : (netz.saveData === false ? "nein" : "unbekannt"));
+    zeile("Verbindung", netz.effectiveType || "unbekannt");
+    zeile("Reduzierte Bewegung", window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "<b>ja</b>" : "nein");
+    zeile("Bildschirm", window.innerWidth + " × " + window.innerHeight + " Punkte");
+    zeile("Bildschirm berührt", beruehrt ? "ja" : "nein");
+    zeile("Browserkennung", "<code>" + navigator.userAgent + "</code>");
+  }, 5000);
+
+  document.getElementById("handstart").addEventListener("click", function () {
+    var p = film.play();
+    if (p && p.then) p.then(function () { urteil.textContent += " Mit Antippen läuft es."; });
+  });
+})();
+</script>
+
+</body>
+</html>
