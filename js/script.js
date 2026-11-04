@@ -756,12 +756,16 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
 // mit und standen dem Aufbau der Seite im Weg. Jetzt steht zuerst das
 // Standbild; das Video startet, sobald die Seite fertig ist.
 //
-// Am Handy klappte das oft nicht: Safari und Chrome lassen das Abspielen
-// ohne Zutun nur unter Bedingungen zu, und im Energiesparmodus gar nicht.
-// Deshalb wird es mehrfach versucht — wenn die Seite fertig ist, wenn das
-// Video ins Bild kommt, wenn der Besucher das erste Mal tippt oder scrollt
-// und wenn er zum Tab zurueckkehrt. Klappt es gar nicht, bleibt das
-// Standbild stehen, und die Seite sieht trotzdem richtig aus.
+// Zwei Dinge machen das am Handy schwierig:
+//
+// 1. Safari und Chrome lassen das Abspielen ohne Zutun nur unter Bedingungen
+//    zu, im Energiesparmodus gar nicht. Deshalb wird es mehrfach versucht,
+//    und wenn es nicht klappt, blenden wir das Video aus — darunter liegt
+//    ueberall dasselbe Standbild. Sonst legt der Browser seine eigene
+//    Abspieltaste darueber.
+// 2. Ein Handy kann meist nur einen Film fluessig dekodieren. Laufen zwei
+//    gleichzeitig, bleibt einer stehen. Deshalb laeuft immer nur das
+//    oberste Video, das gerade im Bild ist; alle anderen stehen still.
 //
 // Bei Datensparmodus, sehr langsamer Verbindung oder reduzierter Bewegung
 // wird nichts geladen.
@@ -769,54 +773,101 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
   const videos = [...document.querySelectorAll("video[data-hintergrund-video]")];
   if (!videos.length) return;
 
-  // Manche Browser lassen Autostart grundsaetzlich nicht zu: Chrome auf dem
-  // iPhone, der Energiesparmodus, der Datensparmodus. Sie legen dann ihre
-  // eigene Abspieltaste ueber das Bild. Deshalb blenden wir ein stehendes
-  // Video aus — darunter liegt ueberall dasselbe Standbild. Laeuft es doch
-  // los, kommt es weich zurueck.
-  const standbild = (v) => v.classList.toggle("kein-autostart", v.paused);
-  videos.forEach((v) => {
-    v.addEventListener("play", () => v.classList.remove("kein-autostart"));
-    v.addEventListener("pause", () => setTimeout(() => standbild(v), 400));
-  });
-  setTimeout(() => videos.forEach(standbild), 1600);
+  // Ein ruhendes Video wird ausgeblendet, das Standbild bleibt stehen.
+  const standbild = (v, ruht) => v.classList.toggle("kein-autostart", ruht);
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  // Von Anfang an ausgeblendet: Sichtbar wird ein Video erst, wenn es
+  // wirklich laeuft. Sonst zeigt der Browser in der Zwischenzeit seine
+  // eigene Abspieltaste auf dem Standbild.
+  videos.forEach((v) => standbild(v, true));
+
   const netz = navigator.connection;
-  if (netz && (netz.saveData || /(^|-)2g$/.test(netz.effectiveType || ""))) return;
+  const sparen = !!(netz && (netz.saveData || /(^|-)2g$/.test(netz.effectiveType || "")));
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || sparen) {
+    videos.forEach((v) => { try { v.pause(); } catch (e) {} standbild(v, true); });
+    return;
+  }
+
+  // Ist das Video im Bild? Wird bei jeder Pruefung frisch gemessen, damit
+  // nichts stehen bleibt, falls ein Browser den Beobachter verschluckt.
+  const imBild = (v) => {
+    const r = v.getBoundingClientRect();
+    if (!r.width || !r.height) return false;
+    const fenster = window.innerHeight || document.documentElement.clientHeight;
+    const drin = Math.min(r.bottom, fenster) - Math.max(r.top, 0);
+    return drin > Math.min(r.height, fenster) * 0.15;
+  };
+
+  const anhalten = (v) => {
+    if (!v.paused) { try { v.pause(); } catch (e) {} }
+    standbild(v, true);
+  };
 
   const anstossen = (v) => {
-    if (!v.isConnected || (!v.paused && !v.ended)) return;
+    if (!v.isConnected) return;
     v.muted = true;                 // ohne Ton — sonst verweigert jeder Browser
     v.setAttribute("muted", "");
     if (v.preload !== "auto") v.preload = "auto";
+    if (!v.paused && !v.ended) return;
     const versuch = v.play();
-    if (versuch && versuch.catch) versuch.catch(() => {});
+    if (versuch && versuch.catch) versuch.catch(() => standbild(v, true));
   };
-  const starten = () => videos.forEach(anstossen);
+
+  // Genau ein Film laeuft: der erste, der gerade im Bild ist.
+  const nachziehen = () => {
+    const dran = videos.find(imBild);
+    videos.forEach((v) => { if (v !== dran) anhalten(v); });
+    if (dran) anstossen(dran);
+  };
+
+  videos.forEach((v) => {
+    v.addEventListener("playing", () => standbild(v, false));
+    v.addEventListener("pause", () => standbild(v, true));
+  });
+
+  if ("IntersectionObserver" in window) {
+    const beobachter = new IntersectionObserver(() => nachziehen(), { threshold: [0, 0.15, 0.5] });
+    videos.forEach((v) => beobachter.observe(v));
+  }
+
+  // Beim Scrollen hoechstens einmal pro Bild nachsehen.
+  let geplant = false;
+  window.addEventListener("scroll", () => {
+    if (geplant) return;
+    geplant = true;
+    requestAnimationFrame(() => { geplant = false; nachziehen(); });
+  }, { passive: true });
 
   const spaeter = () => ("requestIdleCallback" in window
-    ? window.requestIdleCallback(starten, { timeout: 2000 })
-    : setTimeout(starten, 300));
+    ? window.requestIdleCallback(nachziehen, { timeout: 2000 })
+    : setTimeout(nachziehen, 300));
 
   if (document.readyState === "complete") spaeter();
   else window.addEventListener("load", spaeter, { once: true });
 
-  // Zweiter Anlauf, sobald das Video wirklich im Bild ist.
-  if ("IntersectionObserver" in window) {
-    const beobachter = new IntersectionObserver((eintraege) => {
-      eintraege.forEach((e) => { if (e.isIntersecting) anstossen(e.target); });
-    }, { rootMargin: "200px 0px" });
-    videos.forEach((v) => beobachter.observe(v));
-  }
+  // Die erste Beruehrung zaehlt als Zutun des Besuchers — danach erlaubt
+  // auch Safari das Abspielen.
+  ["pointerdown", "touchstart", "keydown"].forEach((art) =>
+    window.addEventListener(art, nachziehen, { once: true, passive: true }));
 
-  // Dritter Anlauf bei der ersten Berührung — das zaehlt als Zutun des
-  // Besuchers, danach erlaubt auch Safari das Abspielen.
-  ["pointerdown", "touchstart", "scroll", "keydown"].forEach((art) =>
-    window.addEventListener(art, starten, { once: true, passive: true }));
+  // Kommt jemand aus einem anderen Tab zurueck, steht das Video sonst still.
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) nachziehen(); });
 
-  // Kommt jemand aus einem anderen Tab zurueck, stehen die Videos sonst still.
-  document.addEventListener("visibilitychange", () => { if (!document.hidden) starten(); });
+  // Waechter: Ein haengendes Video meldet sich nicht als pausiert, es bleibt
+  // einfach stehen. Deshalb wird alle anderthalb Sekunden geprueft, ob die
+  // Laufzeit wirklich weiterlaeuft.
+  const stand = new WeakMap();
+  setInterval(() => {
+    if (document.hidden) return;
+    videos.forEach((v) => {
+      const laeuft = !v.paused && !v.ended;
+      const vorher = stand.get(v);
+      stand.set(v, v.currentTime);
+      const haengt = laeuft && vorher !== undefined && Math.abs(v.currentTime - vorher) < 0.01;
+      standbild(v, !laeuft || haengt);
+    });
+    nachziehen();   // faengt jeden Fall ab, den die Beobachter verpasst haben
+  }, 1500);
 })();
 
 // ---------- Kundenvideos: erst Standbild, dann Steuerleiste ----------
