@@ -608,7 +608,11 @@ body.nav-open { overflow: hidden; }
    sonst eine eigene Abspieltaste ueber das Bild — die stoeren wir weg, damit
    dort im Zweifel einfach das Standbild steht. Tippen darf das Video weder
    anhalten noch die Systemsteuerung oeffnen.  */
-video[data-hintergrund-video] { pointer-events: none; }
+video[data-hintergrund-video] { pointer-events: none; transition: opacity 0.45s ease; }
+/* Steht das Video still, bleibt das Standbild darunter allein sichtbar. */
+video[data-hintergrund-video].kein-autostart { opacity: 0; }
+/* Standbild hinter dem Imagefilm im Abschnitt "Wir sind PUTZ Real Estate". */
+.buero-foto { background: var(--black) url("../assets/img/buero-1600.webp") center / cover no-repeat; }
 video[data-hintergrund-video]::-webkit-media-controls,
 video[data-hintergrund-video]::-webkit-media-controls-panel,
 video[data-hintergrund-video]::-webkit-media-controls-panel-container,

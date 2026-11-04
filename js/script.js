@@ -768,6 +768,19 @@ document.querySelectorAll("form[data-contact-form]").forEach((form) => {
 (function () {
   const videos = [...document.querySelectorAll("video[data-hintergrund-video]")];
   if (!videos.length) return;
+
+  // Manche Browser lassen Autostart grundsaetzlich nicht zu: Chrome auf dem
+  // iPhone, der Energiesparmodus, der Datensparmodus. Sie legen dann ihre
+  // eigene Abspieltaste ueber das Bild. Deshalb blenden wir ein stehendes
+  // Video aus — darunter liegt ueberall dasselbe Standbild. Laeuft es doch
+  // los, kommt es weich zurueck.
+  const standbild = (v) => v.classList.toggle("kein-autostart", v.paused);
+  videos.forEach((v) => {
+    v.addEventListener("play", () => v.classList.remove("kein-autostart"));
+    v.addEventListener("pause", () => setTimeout(() => standbild(v), 400));
+  });
+  setTimeout(() => videos.forEach(standbild), 1600);
+
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const netz = navigator.connection;
   if (netz && (netz.saveData || /(^|-)2g$/.test(netz.effectiveType || ""))) return;
