@@ -603,6 +603,24 @@ body.nav-open { overflow: hidden; }
   .hero-video { display: none; }
 }
 
+/* Hintergrundvideos sind Dekoration, keine Abspieler. Verweigert ein Handy
+   den Autostart (iOS-Energiesparmodus, Datensparmodus), legt der Browser
+   sonst eine eigene Abspieltaste ueber das Bild — die stoeren wir weg, damit
+   dort im Zweifel einfach das Standbild steht. Tippen darf das Video weder
+   anhalten noch die Systemsteuerung oeffnen.  */
+video[data-hintergrund-video] { pointer-events: none; }
+video[data-hintergrund-video]::-webkit-media-controls,
+video[data-hintergrund-video]::-webkit-media-controls-panel,
+video[data-hintergrund-video]::-webkit-media-controls-panel-container,
+video[data-hintergrund-video]::-webkit-media-controls-play-button,
+video[data-hintergrund-video]::-webkit-media-controls-overlay-play-button,
+video[data-hintergrund-video]::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .hero-bg::before {
   content: "";
   position: absolute;
