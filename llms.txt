@@ -1,0 +1,27 @@
+# PUTZ Real Estate GmbH
+
+> Immobilienmakler für Wien, das Weinviertel und Niederösterreich. Sitz in Wolkersdorf im Weinviertel,
+> Standort in 1220 Wien. Ansprechpartner: Andreas Putz, 0664 3500662, office@putzrealestate.at.
+
+## Immobilienpreise (Durchschnittspreise aus Kaufverträgen, Quelle Statistik Austria, Stand 2025)
+
+- [Alle Orte im Überblick](https://putz-realestate.at/immobilienpreise): Wohnungs- und Baulandpreise je Ort
+- [Immobilienpreise Korneuburg](https://putz-realestate.at/immobilienpreise-korneuburg)
+- [Immobilienpreise Wolkersdorf](https://putz-realestate.at/immobilienpreise-wolkersdorf)
+- [Immobilienpreise Mistelbach](https://putz-realestate.at/immobilienpreise-mistelbach)
+- [Immobilienpreise 1220 Wien, Donaustadt](https://putz-realestate.at/immobilienpreise-wien-donaustadt)
+- [Immobilienpreise 1210 Wien, Floridsdorf](https://putz-realestate.at/immobilienpreise-wien-floridsdorf)
+- [Grundstückspreise aller 124 Gemeinden im Weinviertel](https://putz-realestate.at/immobilienpreise-weinviertel)
+- [Wohnungspreise aller 23 Wiener Bezirke](https://putz-realestate.at/immobilienpreise-wien)
+
+Die Preise stammen aus den Kaufverträgen privater Haushalte, die Statistik Austria auswertet,
+nicht aus Inseraten. Wohnungspreise liegen je Bezirk vor, Baulandpreise auch je Gemeinde.
+Preise für Einfamilienhäuser veröffentlicht Statistik Austria in dieser Form nicht.
+
+## Leistungen
+
+- [Kostenlose Immobilienbewertung](https://putz-realestate.at/bewertung): Antwort innerhalb von 24 Stunden, Bewertung vor Ort
+- [So verkaufen wir](https://putz-realestate.at/verkaufen)
+- [Aktuelle Immobilien](https://putz-realestate.at/immobilien)
+- [Für Bauträger](https://putz-realestate.at/bautraeger)
+- [Regionen](https://putz-realestate.at/regionen)
